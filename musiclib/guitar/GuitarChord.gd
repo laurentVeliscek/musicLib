@@ -461,11 +461,19 @@ func get_arp_note(idx:int)-> int:
 			2: return notes[-(3 % size)]
 			1: return notes[-(4 % size)]
 			0:
-				if notes.size() > 4:
+				if notes.size() > 5:
 					return notes[-5]
-				else:
+				elif notes.size() > 4:
 					return notes[-4]
-			_:
+				elif notes.size() > 3:
+					return notes[-3]				
+				elif notes.size() > 2:
+					return notes[-2]
+				elif notes.size() > 1:
+					return notes[-1]
+				else: 
+					return notes[0]
+			_:	
 				return notes[idx % size]
 		
 		

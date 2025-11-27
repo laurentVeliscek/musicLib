@@ -21,6 +21,9 @@ var satb_request_data:Dictionary = {}
 # ---- Contenu : chaque entrée = { track: Track, offset_beats: float }
 var _entries: Array = []
 
+var strum_pattern_array: Array
+
+
 const PROGRESSION_TRACK_NAME:String= "Chord Progression"
 const SATB_TRACK_NAME:String= "SATB"
 const SATB_SOPRANO:String= "SATB Soprano"
@@ -29,6 +32,7 @@ const SATB_TENOR:String= "SATB Tenor"
 const SATB_BASS:String= "SATB Bass"
 const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
 const FRACTAL_TRACK:String= "fractal SATB"
+const MELODY_TRACK:String= "Melody"
 
 
 func clone() -> Song:
@@ -46,8 +50,9 @@ func clone() -> Song:
 	s.satb_solutions_index =  satb_solutions_index
 	# Pour fratcalizer
 	s.satb_request_data = satb_request_data
-
-
+	
+	for sp in strum_pattern_array:	
+		s.strum_pattern_array.append(sp.clone())
 
 	# --- Tempo map ---
 	s.tempo_changes = []
