@@ -1,0 +1,5221 @@
+
+Test Fractalizer
+
+===== SATB Fractalizer Test =====
+Loaded 30 chords from chords.json
+
+===== FIRST PASS =====
+=== SATB Fractalizer: Starting ===
+RNG seed: 42 (for reproducibility)
+Converting JSON array to Progression (30 chords)
+DEBUG|TimeGrid|Created TimeGrid: 4/4 grid_unit=0.25
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=minor real_scale=[0, 2, 3, 5, 7, 8, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 2, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 8, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=8 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=11 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 4, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 4, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=melodic_minor real_scale=[0, 2, 3, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=9 name=hungarian_major real_scale=[0, 3, 4, 6, 7, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+Conversion complete: 30 chords
+Converted to Progression: 30 chords
+Processing window 0: [0, 4]
+DEBUG|Planner|Pattern voice for window 0: S
+Applying technique: appoggiatura on voice S
+Applying appoggiatura technique
+DEBUG|Appoggiatura|Appoggiatura pitch: 79 resolving to 77
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=8 technique=appoggiatura
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1.5, 0.5], triplet:False} (score=150)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 0 and 1
+Successfully applied appoggiatura: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 1: [4, 8]
+DEBUG|Planner|Pattern voice for window 1: A
+Applying technique: chromatic_passing_tone on voice A
+Applying chromatic_passing_tone technique
+DEBUG|ChromaticPassingTone|Found chromatic passing pitch: 68
+DEBUG|Progression|insert_chords_between: inserted 1 chords between 4 and 5
+Successfully applied chromatic_passing_tone: 1 chords inserted
+Technique applied successfully: 1 chords added
+Processing window 2: [8, 12]
+DEBUG|Planner|Pattern voice for window 2: T
+Applying technique: passing_tone on voice T
+Applying passing_tone technique
+WARN|PassingTone|No diatonic passing pitches found between 59 and 60
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 3: [12, 16]
+DEBUG|Planner|Pattern voice for window 3: B
+Applying technique: passing_tone on voice B
+Applying passing_tone technique
+WARN|PassingTone|No diatonic passing pitches found between 50 and 48
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 4: [16, 20]
+DEBUG|Planner|Pattern voice for window 4: S
+Applying technique: appoggiatura on voice S
+Applying appoggiatura technique
+DEBUG|Appoggiatura|Appoggiatura pitch: 79 resolving to 77
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=8 technique=appoggiatura
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1.5, 0.5], triplet:False} (score=150)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 11 and 12
+Successfully applied appoggiatura: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 5: [20, 24]
+DEBUG|Planner|Pattern voice for window 5: A
+Applying technique: neighbor_tone on voice A
+Applying neighbor_tone technique
+WARN|NeighborTone|Neighbor tone requires same pitch (from=67, to=68)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 6: [24, 28]
+DEBUG|Planner|Pattern voice for window 6: T
+Applying technique: chromatic_passing_tone on voice T
+Applying chromatic_passing_tone technique
+WARN|ChromaticPassingTone|Chromatic passing tone requires whole tone interval (got 1 semitones)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 7: [28, 32]
+DEBUG|Planner|Pattern voice for window 7: B
+Applying technique: chromatic_passing_tone on voice B
+Applying chromatic_passing_tone technique
+DEBUG|ChromaticPassingTone|Found chromatic passing pitch: 49
+DEBUG|Progression|insert_chords_between: inserted 1 chords between 19 and 20
+Successfully applied chromatic_passing_tone: 1 chords inserted
+Technique applied successfully: 1 chords added
+Processing window 8: [32, 36]
+DEBUG|Planner|Pattern voice for window 8: S
+Applying technique: double_neighbor on voice S
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=72, lower=69
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=8 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1, 1], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 22 and 23
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Processing window 9: [36, 40]
+DEBUG|Planner|Pattern voice for window 9: A
+Applying technique: neighbor_tone on voice A
+Applying neighbor_tone technique
+DEBUG|NeighborTone|Found neighbor pitch: 69 (upper)
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=3 technique=neighbor_tone
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.375, 0.375], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 25 and 26
+Successfully applied neighbor_tone: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 10: [40, 44]
+DEBUG|Planner|Pattern voice for window 10: T
+Applying technique: appoggiatura on voice T
+Applying appoggiatura technique
+WARN|ScaleContext|is_diatonic FALSE: pitch=55 pitch_class=7 root=8 root_class=8 relative_pitch=11 real_scale=[0, 2, 4, 5, 8, 9, 10]
+WARN|ScaleContext|get_neighbor_pitches: anchor_pitch 55 is not diatonic
+WARN|Appoggiatura|No diatonic neighbor found for resolution 55 in direction upper
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 11: [44, 48]
+DEBUG|Planner|Pattern voice for window 11: B
+Applying technique: appoggiatura on voice B
+Applying appoggiatura technique
+WARN|ScaleContext|is_diatonic FALSE: pitch=47 pitch_class=11 root=0 root_class=0 relative_pitch=11 real_scale=[0, 2, 4, 4, 8, 9, 10]
+WARN|ScaleContext|get_neighbor_pitches: anchor_pitch 47 is not diatonic
+WARN|Appoggiatura|No diatonic neighbor found for resolution 47 in direction upper
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 12: [48, 52]
+DEBUG|Planner|Pattern voice for window 12: S
+Applying technique: double_neighbor on voice S
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=72, lower=69
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=8 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1, 1], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 37 and 38
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Processing window 13: [52, 56]
+DEBUG|Planner|Pattern voice for window 13: A
+Applying technique: appoggiatura on voice A
+Applying appoggiatura technique
+DEBUG|Appoggiatura|Appoggiatura pitch: 65 resolving to 64
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=3 technique=appoggiatura
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.5625, 0.1875], triplet:False} (score=150)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 40 and 41
+Successfully applied appoggiatura: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 14: [56, 60]
+DEBUG|Planner|Pattern voice for window 14: T
+Applying technique: double_neighbor on voice T
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=60, lower=57
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=8 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1, 1], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 48 and 49
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Converting Progression to JSON array (55 chords)
+Conversion complete: 55 chords
+=== SATB Fractalizer: Complete ===
+
+===== SECOND PASS (RE-INJECTION) =====
+=== SATB Fractalizer: Starting ===
+RNG seed: 55 (for reproducibility)
+Converting JSON array to Progression (55 chords)
+DEBUG|TimeGrid|Created TimeGrid: 4/4 grid_unit=0.125
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=minor real_scale=[0, 2, 3, 5, 7, 8, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 2, 5, 7, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=7 name=harmonic_minor real_scale=[0, 2, 3, 5, 8, 8, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=8 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=11 name=major real_scale=[0, 2, 4, 5, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 4, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 4, 8, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=5 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=melodic_minor real_scale=[0, 2, 3, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=9 name=hungarian_major real_scale=[0, 3, 4, 6, 7, 9, 10]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+DEBUG|ScaleContext|Created ScaleContext: root=0 name=major real_scale=[0, 2, 4, 5, 7, 9, 11]
+Conversion complete: 55 chords
+Converted to Progression: 55 chords
+Processing window 0: [0, 4]
+DEBUG|Planner|Pattern voice for window 0: S
+Applying technique: neighbor_tone on voice S
+Applying neighbor_tone technique
+WARN|NeighborTone|Neighbor tone requires same pitch (from=79, to=77)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 1: [4, 8]
+DEBUG|Planner|Pattern voice for window 1: A
+Applying technique: chromatic_passing_tone on voice A
+Applying chromatic_passing_tone technique
+WARN|ChromaticPassingTone|Chromatic passing tone requires whole tone interval (got 1 semitones)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 2: [8, 12]
+DEBUG|Planner|Pattern voice for window 2: T
+Applying technique: passing_tone on voice T
+Applying passing_tone technique
+WARN|PassingTone|No diatonic passing pitches found between 59 and 60
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 3: [12, 16]
+DEBUG|Planner|Pattern voice for window 3: B
+Applying technique: double_neighbor on voice B
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=52, lower=48
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=16 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1, 1], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 9 and 10
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Processing window 4: [16, 20]
+DEBUG|Planner|Pattern voice for window 4: S
+Applying technique: passing_tone on voice S
+Applying passing_tone technique
+WARN|PassingTone|Passing tone requires different pitches (from=71, to=71)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 5: [20, 24]
+DEBUG|Planner|Pattern voice for window 5: A
+Applying technique: chromatic_passing_tone on voice A
+Applying chromatic_passing_tone technique
+WARN|ChromaticPassingTone|Chromatic passing tone requires different pitches (from=65, to=65)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 6: [24, 28]
+DEBUG|Planner|Pattern voice for window 6: T
+Applying technique: neighbor_tone on voice T
+Applying neighbor_tone technique
+DEBUG|NeighborTone|Found neighbor pitch: 64 (upper)
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=6 technique=neighbor_tone
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.375, 0.375], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 13 and 14
+Successfully applied neighbor_tone: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 7: [28, 32]
+DEBUG|Planner|Pattern voice for window 7: B
+Applying technique: passing_tone on voice B
+Applying passing_tone technique
+WARN|ScaleContext|is_diatonic FALSE: pitch=49 pitch_class=1 root=0 root_class=0 relative_pitch=1 real_scale=[0, 2, 3, 5, 7, 8, 11]
+WARN|ScaleContext|get_neighbor_pitches: anchor_pitch 49 is not diatonic
+WARN|PassingTone|No diatonic passing pitches found between 49 and 48
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 8: [32, 36]
+DEBUG|Planner|Pattern voice for window 8: S
+Applying technique: double_neighbor on voice S
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=72, lower=69
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=13 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.8125, 0.8125], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 30 and 31
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Processing window 9: [36, 40]
+DEBUG|Planner|Pattern voice for window 9: A
+Applying technique: neighbor_tone on voice A
+Applying neighbor_tone technique
+DEBUG|NeighborTone|Found neighbor pitch: 69 (upper)
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=10 technique=neighbor_tone
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.625, 0.625], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 2 chords between 32 and 33
+Successfully applied neighbor_tone: 2 chords inserted
+Technique applied successfully: 2 chords added
+Processing window 10: [40, 44]
+DEBUG|Planner|Pattern voice for window 10: T
+Applying technique: appoggiatura on voice T
+Applying appoggiatura technique
+DEBUG|Appoggiatura|Appoggiatura pitch: 75 resolving to 62
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=19 technique=appoggiatura
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[1.78125, 0.59375], triplet:False} (score=150)
+WARN|TechniqueBase|_validate_nct_pitches: pitch 75 exceeds ±1 octave from original 62
+WARN|Appoggiatura|NCT validation failed
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 11: [44, 48]
+DEBUG|Planner|Pattern voice for window 11: B
+Applying technique: chromatic_passing_tone on voice B
+Applying chromatic_passing_tone technique
+WARN|ChromaticPassingTone|Chromatic passing tone requires whole tone interval (got 3 semitones)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 12: [48, 52]
+DEBUG|Planner|Pattern voice for window 12: S
+Applying technique: neighbor_tone on voice S
+Applying neighbor_tone technique
+WARN|NeighborTone|Neighbor tone requires same pitch (from=70, to=72)
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 13: [52, 56]
+DEBUG|Planner|Pattern voice for window 13: A
+Applying technique: appoggiatura on voice A
+Applying appoggiatura technique
+WARN|ScaleContext|is_diatonic FALSE: pitch=64 pitch_class=4 root=0 root_class=0 relative_pitch=4 real_scale=[0, 2, 3, 5, 7, 9, 11]
+WARN|ScaleContext|get_neighbor_pitches: anchor_pitch 64 is not diatonic
+WARN|Appoggiatura|No diatonic neighbor found for resolution 64 in direction upper
+WARN|Planner|Technique was not applied (conditions not met)
+Processing window 14: [56, 60]
+DEBUG|Planner|Pattern voice for window 14: T
+Applying technique: double_neighbor on voice T
+Applying double_neighbor technique
+DEBUG|DoubleNeighbor|Found neighbors: upper=60, lower=57
+DEBUG|RhythmPattern|choose_rhythm_pattern: n_cells=13 technique=double_neighbor
+DEBUG|RhythmPattern|choose_rhythm_pattern: selected pattern {pattern:[0.8125, 0.8125], triplet:False} (score=140)
+DEBUG|Progression|insert_chords_between: inserted 5 chords between 63 and 64
+Successfully applied double_neighbor: 5 chords inserted
+Technique applied successfully: 5 chords added
+Converting Progression to JSON array (74 chords)
+Conversion complete: 74 chords
+=== SATB Fractalizer: Complete ===
+
+===== Test Complete =====
+
+===== Bilan =====
+
+===== PASS 1 =====
+Total chords: 55
+
+===== PASS 2 =====
+Total chords: 74
+
+
+*******************************************
+
+
+===== Result (full) =====
+
+Result (full): {
+	"chords": [
+		{
+			"pos": 0,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 79,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 0,
+			"length_beats": 1.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 79,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in S between chord 0 and 1",
+				"source_chord_a": 0,
+				"source_chord_b": 1,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "strong",
+					"scale_degree": 5,
+					"generated_at_time": 0,
+					"from_chord": 0,
+					"to_chord": 1,
+					"pattern_index": 0,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 1.5,
+			"length_beats": 0.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 77,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in S between chord 0 and 1",
+				"source_chord_a": 0,
+				"source_chord_b": 1,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 1.5,
+					"from_chord": 0,
+					"to_chord": 1,
+					"pattern_index": 1,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 2,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 69,
+			"Tenor": 65,
+			"Bass": 50
+		},
+		{
+			"pos": 4,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 76,
+			"Alto": 67,
+			"Tenor": 59,
+			"Bass": 52
+		},
+		{
+			"pos": 4,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 76,
+			"Alto": 68,
+			"Tenor": 59,
+			"Bass": 52,
+			"chord_metadata": {
+				"generated_by": "chromatic_passing_tone",
+				"generation_depth": 1,
+				"comments": "chromatic_passing_tone in A between chord 2 and 3",
+				"source_chord_a": 2,
+				"source_chord_b": 3,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"A": {
+					"beat_strength": "strong",
+					"scale_degree": -1,
+					"generated_at_time": 4,
+					"from_chord": 2,
+					"to_chord": 3,
+					"pattern_index": 0,
+					"pattern_total": 1
+				}
+			}
+		},
+		{
+			"pos": 6,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 69,
+			"Tenor": 60,
+			"Bass": 41
+		},
+		{
+			"pos": 8,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 74,
+			"Alto": 67,
+			"Tenor": 59,
+			"Bass": 43
+		},
+		{
+			"pos": 10,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 64,
+			"Tenor": 60,
+			"Bass": 45
+		},
+		{
+			"pos": 12,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 14,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 16,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 75,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 16,
+			"length_beats": 1.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 79,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in S between chord 8 and 9",
+				"source_chord_a": 8,
+				"source_chord_b": 9,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "strong",
+					"scale_degree": 5,
+					"generated_at_time": 16,
+					"from_chord": 8,
+					"to_chord": 9,
+					"pattern_index": 0,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 17.5,
+			"length_beats": 0.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 77,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in S between chord 8 and 9",
+				"source_chord_a": 8,
+				"source_chord_b": 9,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 17.5,
+					"from_chord": 8,
+					"to_chord": 9,
+					"pattern_index": 1,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 18,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 68,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 20,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				10
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "minor",
+			"kind": "diatonic",
+			"Soprano": 75,
+			"Alto": 67,
+			"Tenor": 58,
+			"Bass": 51
+		},
+		{
+			"pos": 22,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 56,
+			"Bass": 53
+		},
+		{
+			"pos": 24,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 26,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 63,
+			"Bass": 44
+		},
+		{
+			"pos": 28,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 28,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 49,
+			"chord_metadata": {
+				"generated_by": "chromatic_passing_tone",
+				"generation_depth": 1,
+				"comments": "chromatic_passing_tone in B between chord 14 and 15",
+				"source_chord_a": 14,
+				"source_chord_b": 15,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "strong",
+					"scale_degree": -1,
+					"generated_at_time": 28,
+					"from_chord": 14,
+					"to_chord": 15,
+					"pattern_index": 0,
+					"pattern_total": 1
+				}
+			}
+		},
+		{
+			"pos": 30,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 32,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 32,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 16 and 17",
+				"source_chord_a": 16,
+				"source_chord_b": 17,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "strong",
+					"scale_degree": 3,
+					"generated_at_time": 32,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 33.6,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 16 and 17",
+				"source_chord_a": 16,
+				"source_chord_b": 17,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 33.6,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 35.2,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 16 and 17",
+				"source_chord_a": 16,
+				"source_chord_b": 17,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 35.2,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 35.2,
+			"length_beats": 0.375,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 35.2,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 2,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 35.2,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 0,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 35.575,
+			"length_beats": 0.375,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 69,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 35.2,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 2,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 35.575,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 1,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 36.8,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 16 and 17",
+				"source_chord_a": 16,
+				"source_chord_b": 17,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 36.8,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 38.4,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 16 and 17",
+				"source_chord_a": 16,
+				"source_chord_b": 17,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 38.4,
+					"from_chord": 16,
+					"to_chord": 17,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 34,
+			"length_beats": 2,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+				"2": -1
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "N6",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 36,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "It+6",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 53,
+			"Bass": 49
+		},
+		{
+			"pos": 38,
+			"length_beats": 2,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+				"4": 1
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "It+6inv",
+			"Soprano": 67,
+			"Alto": 63,
+			"Tenor": 55,
+			"Bass": 49
+		},
+		{
+			"pos": 40,
+			"length_beats": 2,
+			"key_midi_root": 8,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Fr+6",
+			"Soprano": 70,
+			"Alto": 62,
+			"Tenor": 56,
+			"Bass": 52
+		},
+		{
+			"pos": 42,
+			"length_beats": 2,
+			"key_midi_root": 11,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Fr+6inv",
+			"Soprano": 71,
+			"Alto": 61,
+			"Tenor": 55,
+			"Bass": 53
+		},
+		{
+			"pos": 44,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"3": -1,
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Ger+6",
+			"Soprano": 72,
+			"Alto": 60,
+			"Tenor": 54,
+			"Bass": 44
+		},
+		{
+			"pos": 46,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"3": -1,
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Ger+6inv",
+			"Soprano": 68,
+			"Alto": 61,
+			"Tenor": 53,
+			"Bass": 47
+		},
+		{
+			"pos": 48,
+			"length_beats": 0,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "sus4",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 48,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 24 and 25",
+				"source_chord_a": 24,
+				"source_chord_b": 25,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "strong",
+					"scale_degree": 4,
+					"generated_at_time": 48,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 49.6,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 24 and 25",
+				"source_chord_a": 24,
+				"source_chord_b": 25,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 5,
+					"generated_at_time": 49.6,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 51.2,
+			"length_beats": 0,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 24 and 25",
+				"source_chord_a": 24,
+				"source_chord_b": 25,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 51.2,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 51.2,
+			"length_beats": 0.5625,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 65,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 51.2,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 2,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 51.2,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 0,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 51.7625,
+			"length_beats": 0.1875,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "appoggiatura",
+				"generation_depth": 1,
+				"comments": "appoggiatura in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 51.2,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 2,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 7,
+					"generated_at_time": 51.7625,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 1,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 52.8,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 24 and 25",
+				"source_chord_a": 24,
+				"source_chord_b": 25,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 52.8,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 54.4,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 24 and 25",
+				"source_chord_a": 24,
+				"source_chord_b": 25,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 54.4,
+					"from_chord": 24,
+					"to_chord": 25,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 50,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "sus2",
+			"Soprano": 70,
+			"Alto": 65,
+			"Tenor": 60,
+			"Bass": 46
+		},
+		{
+			"pos": 52,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "melodic_minor",
+			"kind": "diatonic",
+			"Soprano": 69,
+			"Alto": 63,
+			"Tenor": 60,
+			"Bass": 53
+		},
+		{
+			"pos": 54,
+			"length_beats": 2,
+			"key_midi_root": 9,
+			"scale_array": [
+				0,
+				3,
+				4,
+				6,
+				7,
+				9,
+				10
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "hungarian_major",
+			"kind": "diatonic",
+			"Soprano": 67,
+			"Alto": 64,
+			"Tenor": 60,
+			"Bass": 52
+		},
+		{
+			"pos": 56,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "add9",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55
+		},
+		{
+			"pos": 56,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 28 and 29",
+				"source_chord_a": 28,
+				"source_chord_b": 29,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "strong",
+					"scale_degree": 7,
+					"generated_at_time": 56,
+					"from_chord": 28,
+					"to_chord": 29,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 57.6,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 60,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 28 and 29",
+				"source_chord_a": 28,
+				"source_chord_b": 29,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 57.6,
+					"from_chord": 28,
+					"to_chord": 29,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 59.2,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 28 and 29",
+				"source_chord_a": 28,
+				"source_chord_b": 29,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 7,
+					"generated_at_time": 59.2,
+					"from_chord": 28,
+					"to_chord": 29,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 60.8,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 57,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 28 and 29",
+				"source_chord_a": 28,
+				"source_chord_b": 29,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 6,
+					"generated_at_time": 60.8,
+					"from_chord": 28,
+					"to_chord": 29,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 62.4,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 28 and 29",
+				"source_chord_a": 28,
+				"source_chord_b": 29,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 7,
+					"generated_at_time": 62.4,
+					"from_chord": 28,
+					"to_chord": 29,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 58,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "add11",
+			"Soprano": 72,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 55
+		}
+	],
+	"metadata": {
+		"history": [
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 0,
+				"window_start": 0,
+				"window_end": 4,
+				"voice": "S",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 1,
+				"window_start": 4,
+				"window_end": 8,
+				"voice": "A",
+				"status": "success",
+				"chords_added": 1
+			},
+			{
+				"op": "apply_passing_tone",
+				"window_index": 2,
+				"window_start": 8,
+				"window_end": 12,
+				"voice": "T",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_passing_tone",
+				"window_index": 3,
+				"window_start": 12,
+				"window_end": 16,
+				"voice": "B",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 4,
+				"window_start": 16,
+				"window_end": 20,
+				"voice": "S",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 5,
+				"window_start": 20,
+				"window_end": 24,
+				"voice": "A",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 6,
+				"window_start": 24,
+				"window_end": 28,
+				"voice": "T",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 7,
+				"window_start": 28,
+				"window_end": 32,
+				"voice": "B",
+				"status": "success",
+				"chords_added": 1
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 8,
+				"window_start": 32,
+				"window_end": 36,
+				"voice": "S",
+				"status": "success",
+				"chords_added": 5
+			},
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 9,
+				"window_start": 36,
+				"window_end": 40,
+				"voice": "A",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 10,
+				"window_start": 40,
+				"window_end": 44,
+				"voice": "T",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 11,
+				"window_start": 44,
+				"window_end": 48,
+				"voice": "B",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 12,
+				"window_start": 48,
+				"window_end": 52,
+				"voice": "S",
+				"status": "success",
+				"chords_added": 5
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 13,
+				"window_start": 52,
+				"window_end": 56,
+				"voice": "A",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 14,
+				"window_start": 56,
+				"window_end": 60,
+				"voice": "T",
+				"status": "success",
+				"chords_added": 5
+			}
+		],
+		"technique_report": {
+			"time_windows": [
+				{
+					"start": 0,
+					"end": 4,
+					"window_index": 0,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 4,
+					"end": 8,
+					"window_index": 1,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 8,
+					"end": 12,
+					"window_index": 2,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 12,
+					"end": 16,
+					"window_index": 3,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 16,
+					"end": 20,
+					"window_index": 4,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 20,
+					"end": 24,
+					"window_index": 5,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 24,
+					"end": 28,
+					"window_index": 6,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 28,
+					"end": 32,
+					"window_index": 7,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 32,
+					"end": 36,
+					"window_index": 8,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 36,
+					"end": 40,
+					"window_index": 9,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 40,
+					"end": 44,
+					"window_index": 10,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 44,
+					"end": 48,
+					"window_index": 11,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 48,
+					"end": 52,
+					"window_index": 12,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 52,
+					"end": 56,
+					"window_index": 13,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 56,
+					"end": 60,
+					"window_index": 14,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				}
+			]
+		},
+		"generation_depth": 0,
+		"rng_seed": 42,
+		"global_params": {
+			"time_num": 4,
+			"time_den": 4,
+			"grid_unit": 0.25,
+			"voice_window_pattern": "SATB",
+			"triplet_allowed": false,
+			"pair_selection_strategy": "earliest",
+			"allowed_techniques": [
+				"passing_tone",
+				"neighbor_tone",
+				"appoggiatura",
+				"chromatic_passing_tone",
+				"double_neighbor"
+			]
+		}
+	}
+}
+
+
+===== Result2 (full) =====
+Result2 (full): {
+	"chords": [
+		{
+			"pos": 0,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 79,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 0,
+			"length_beats": 1.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 79,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 1.5,
+			"length_beats": 0.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 77,
+			"Alto": 72,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 2,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 69,
+			"Tenor": 65,
+			"Bass": 50
+		},
+		{
+			"pos": 4,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 76,
+			"Alto": 67,
+			"Tenor": 59,
+			"Bass": 52
+		},
+		{
+			"pos": 4,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 76,
+			"Alto": 68,
+			"Tenor": 59,
+			"Bass": 52
+		},
+		{
+			"pos": 6,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 69,
+			"Tenor": 60,
+			"Bass": 41
+		},
+		{
+			"pos": 8,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 74,
+			"Alto": 67,
+			"Tenor": 59,
+			"Bass": 43
+		},
+		{
+			"pos": 10,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 64,
+			"Tenor": 60,
+			"Bass": 45
+		},
+		{
+			"pos": 12,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 12,
+			"length_beats": 3.2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in B between chord 9 and 10",
+				"source_chord_a": 9,
+				"source_chord_b": 10,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "strong",
+					"scale_degree": 2,
+					"generated_at_time": 12,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 15.2,
+			"length_beats": 3.2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 52,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in B between chord 9 and 10",
+				"source_chord_a": 9,
+				"source_chord_b": 10,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 15.2,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 18.4,
+			"length_beats": 3.2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in B between chord 9 and 10",
+				"source_chord_a": 9,
+				"source_chord_b": 10,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 18.4,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 21.6,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in B between chord 9 and 10",
+				"source_chord_a": 9,
+				"source_chord_b": 10,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 21.6,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 21.6,
+			"length_beats": 0.375,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in T between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 21.6,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 0,
+					"pattern_total": 2
+				},
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 21.6,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 21.975,
+			"length_beats": 0.375,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 64,
+			"Bass": 48,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in T between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "medium",
+					"scale_degree": 3,
+					"generated_at_time": 21.975,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 1,
+					"pattern_total": 2
+				},
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 21.6,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 24.8,
+			"length_beats": 3.2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in B between chord 9 and 10",
+				"source_chord_a": 9,
+				"source_chord_b": 10,
+				"modified_voice": "B",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"B": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 24.8,
+					"from_chord": 9,
+					"to_chord": 10,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 14,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 64,
+			"Bass": 48
+		},
+		{
+			"pos": 16,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 75,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 16,
+			"length_beats": 1.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 79,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 17.5,
+			"length_beats": 0.5,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 77,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 18,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 77,
+			"Alto": 68,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 20,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				10
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "minor",
+			"kind": "diatonic",
+			"Soprano": 75,
+			"Alto": 67,
+			"Tenor": 58,
+			"Bass": 51
+		},
+		{
+			"pos": 22,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 56,
+			"Bass": 53
+		},
+		{
+			"pos": 24,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 26,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 63,
+			"Bass": 44
+		},
+		{
+			"pos": 28,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 50
+		},
+		{
+			"pos": 28,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 49
+		},
+		{
+			"pos": 30,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 32,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "diatonic",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 32,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 32,
+			"length_beats": 2.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 23 and 24",
+				"source_chord_a": 23,
+				"source_chord_b": 24,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "strong",
+					"scale_degree": 3,
+					"generated_at_time": 32,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 34.6,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 23 and 24",
+				"source_chord_a": 23,
+				"source_chord_b": 24,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 34.6,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 34.6,
+			"length_beats": 0.625,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 34.6,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 1,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 34.6,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 0,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 35.225,
+			"length_beats": 0.625,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 69,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "neighbor_tone",
+				"generation_depth": 1,
+				"comments": "neighbor_tone in A between chord -1 and -1",
+				"source_chord_a": -1,
+				"source_chord_b": -1,
+				"modified_voice": "A",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 4,
+					"generated_at_time": 34.6,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 1,
+					"pattern_total": 5
+				},
+				"A": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 35.225,
+					"from_chord": -1,
+					"to_chord": -1,
+					"pattern_index": 1,
+					"pattern_total": 2
+				}
+			}
+		},
+		{
+			"pos": 37.2,
+			"length_beats": 2.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 23 and 24",
+				"source_chord_a": 23,
+				"source_chord_b": 24,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 37.2,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 39.8,
+			"length_beats": 2.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 23 and 24",
+				"source_chord_a": 23,
+				"source_chord_b": 24,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 2,
+					"generated_at_time": 39.8,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 42.4,
+			"length_beats": 2.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in S between chord 23 and 24",
+				"source_chord_a": 23,
+				"source_chord_b": 24,
+				"modified_voice": "S",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"S": {
+					"beat_strength": "weak",
+					"scale_degree": 3,
+					"generated_at_time": 42.4,
+					"from_chord": 23,
+					"to_chord": 24,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 33.6,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 34,
+			"length_beats": 2,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+				"2": -1
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "N6",
+			"Soprano": 72,
+			"Alto": 68,
+			"Tenor": 63,
+			"Bass": 48
+		},
+		{
+			"pos": 35.2,
+			"length_beats": 0.375,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 35.2,
+			"length_beats": 0,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 35.575,
+			"length_beats": 0.375,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 69,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 36,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "It+6",
+			"Soprano": 71,
+			"Alto": 65,
+			"Tenor": 53,
+			"Bass": 49
+		},
+		{
+			"pos": 36.8,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 38,
+			"length_beats": 2,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+				"4": 1
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "It+6inv",
+			"Soprano": 67,
+			"Alto": 63,
+			"Tenor": 55,
+			"Bass": 49
+		},
+		{
+			"pos": 38.4,
+			"length_beats": 1.6,
+			"key_midi_root": 7,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				8,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "harmonic_minor",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 67,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 40,
+			"length_beats": 2,
+			"key_midi_root": 8,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Fr+6",
+			"Soprano": 70,
+			"Alto": 62,
+			"Tenor": 56,
+			"Bass": 52
+		},
+		{
+			"pos": 42,
+			"length_beats": 2,
+			"key_midi_root": 11,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Fr+6inv",
+			"Soprano": 71,
+			"Alto": 61,
+			"Tenor": 55,
+			"Bass": 53
+		},
+		{
+			"pos": 44,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"3": -1,
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Ger+6",
+			"Soprano": 72,
+			"Alto": 60,
+			"Tenor": 54,
+			"Bass": 44
+		},
+		{
+			"pos": 46,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+				"3": -1,
+				"4": 1,
+				"6": -1
+			},
+			"key_scale_name": "major",
+			"kind": "Ger+6inv",
+			"Soprano": 68,
+			"Alto": 61,
+			"Tenor": 53,
+			"Bass": 47
+		},
+		{
+			"pos": 48,
+			"length_beats": 0,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "sus4",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 48,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 49.6,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 72,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 50,
+			"length_beats": 2,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "sus2",
+			"Soprano": 70,
+			"Alto": 65,
+			"Tenor": 60,
+			"Bass": 46
+		},
+		{
+			"pos": 51.2,
+			"length_beats": 0.5625,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 65,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 51.2,
+			"length_beats": 0,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 51.7625,
+			"length_beats": 0.1875,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 52,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				3,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "melodic_minor",
+			"kind": "diatonic",
+			"Soprano": 69,
+			"Alto": 63,
+			"Tenor": 60,
+			"Bass": 53
+		},
+		{
+			"pos": 52.8,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 54,
+			"length_beats": 2,
+			"key_midi_root": 9,
+			"scale_array": [
+				0,
+				3,
+				4,
+				6,
+				7,
+				9,
+				10
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "hungarian_major",
+			"kind": "diatonic",
+			"Soprano": 67,
+			"Alto": 64,
+			"Tenor": 60,
+			"Bass": 52
+		},
+		{
+			"pos": 54.4,
+			"length_beats": 1.6,
+			"key_midi_root": 5,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 70,
+			"Alto": 64,
+			"Tenor": 53,
+			"Bass": 46
+		},
+		{
+			"pos": 56,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "add9",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55
+		},
+		{
+			"pos": 56,
+			"length_beats": 0,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55
+		},
+		{
+			"pos": 56,
+			"length_beats": 2.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 49 and 50",
+				"source_chord_a": 49,
+				"source_chord_b": 50,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "strong",
+					"scale_degree": 7,
+					"generated_at_time": 56,
+					"from_chord": 49,
+					"to_chord": 50,
+					"pattern_index": 0,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 58.6,
+			"length_beats": 2.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 60,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 49 and 50",
+				"source_chord_a": 49,
+				"source_chord_b": 50,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 1,
+					"generated_at_time": 58.6,
+					"from_chord": 49,
+					"to_chord": 50,
+					"pattern_index": 1,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 61.2,
+			"length_beats": 2.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 49 and 50",
+				"source_chord_a": 49,
+				"source_chord_b": 50,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 7,
+					"generated_at_time": 61.2,
+					"from_chord": 49,
+					"to_chord": 50,
+					"pattern_index": 2,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 63.8,
+			"length_beats": 2.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 57,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 49 and 50",
+				"source_chord_a": 49,
+				"source_chord_b": 50,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 6,
+					"generated_at_time": 63.8,
+					"from_chord": 49,
+					"to_chord": 50,
+					"pattern_index": 3,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 66.4,
+			"length_beats": 2.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55,
+			"chord_metadata": {
+				"generated_by": "double_neighbor",
+				"generation_depth": 1,
+				"comments": "double_neighbor in T between chord 49 and 50",
+				"source_chord_a": 49,
+				"source_chord_b": 50,
+				"modified_voice": "T",
+				"triplet": false
+			},
+			"voices_metadata": {
+				"T": {
+					"beat_strength": "weak",
+					"scale_degree": 7,
+					"generated_at_time": 66.4,
+					"from_chord": 49,
+					"to_chord": 50,
+					"pattern_index": 4,
+					"pattern_total": 5
+				}
+			}
+		},
+		{
+			"pos": 57.6,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 60,
+			"Bass": 55
+		},
+		{
+			"pos": 58,
+			"length_beats": 2,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "add11",
+			"Soprano": 72,
+			"Alto": 65,
+			"Tenor": 62,
+			"Bass": 55
+		},
+		{
+			"pos": 59.2,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55
+		},
+		{
+			"pos": 60.8,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 57,
+			"Bass": 55
+		},
+		{
+			"pos": 62.4,
+			"length_beats": 1.6,
+			"key_midi_root": 0,
+			"scale_array": [
+				0,
+				2,
+				4,
+				5,
+				7,
+				9,
+				11
+			],
+			"key_alterations": {
+
+			},
+			"key_scale_name": "major",
+			"kind": "decorative",
+			"Soprano": 69,
+			"Alto": 65,
+			"Tenor": 59,
+			"Bass": 55
+		}
+	],
+	"metadata": {
+		"history": [
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 0,
+				"window_start": 0,
+				"window_end": 4,
+				"voice": "S",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 1,
+				"window_start": 4,
+				"window_end": 8,
+				"voice": "A",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_passing_tone",
+				"window_index": 2,
+				"window_start": 8,
+				"window_end": 12,
+				"voice": "T",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 3,
+				"window_start": 12,
+				"window_end": 16,
+				"voice": "B",
+				"status": "success",
+				"chords_added": 5
+			},
+			{
+				"op": "apply_passing_tone",
+				"window_index": 4,
+				"window_start": 16,
+				"window_end": 20,
+				"voice": "S",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 5,
+				"window_start": 20,
+				"window_end": 24,
+				"voice": "A",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 6,
+				"window_start": 24,
+				"window_end": 28,
+				"voice": "T",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_passing_tone",
+				"window_index": 7,
+				"window_start": 28,
+				"window_end": 32,
+				"voice": "B",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 8,
+				"window_start": 32,
+				"window_end": 36,
+				"voice": "S",
+				"status": "success",
+				"chords_added": 5
+			},
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 9,
+				"window_start": 36,
+				"window_end": 40,
+				"voice": "A",
+				"status": "success",
+				"chords_added": 2
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 10,
+				"window_start": 40,
+				"window_end": 44,
+				"voice": "T",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_chromatic_passing_tone",
+				"window_index": 11,
+				"window_start": 44,
+				"window_end": 48,
+				"voice": "B",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_neighbor_tone",
+				"window_index": 12,
+				"window_start": 48,
+				"window_end": 52,
+				"voice": "S",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_appoggiatura",
+				"window_index": 13,
+				"window_start": 52,
+				"window_end": 56,
+				"voice": "A",
+				"status": "skipped"
+			},
+			{
+				"op": "apply_double_neighbor",
+				"window_index": 14,
+				"window_start": 56,
+				"window_end": 60,
+				"voice": "T",
+				"status": "success",
+				"chords_added": 5
+			}
+		],
+		"technique_report": {
+			"time_windows": [
+				{
+					"start": 0,
+					"end": 4,
+					"window_index": 0,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 4,
+					"end": 8,
+					"window_index": 1,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 8,
+					"end": 12,
+					"window_index": 2,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 12,
+					"end": 16,
+					"window_index": 3,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 16,
+					"end": 20,
+					"window_index": 4,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 20,
+					"end": 24,
+					"window_index": 5,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 24,
+					"end": 28,
+					"window_index": 6,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 28,
+					"end": 32,
+					"window_index": 7,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 32,
+					"end": 36,
+					"window_index": 8,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 36,
+					"end": 40,
+					"window_index": 9,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				},
+				{
+					"start": 40,
+					"end": 44,
+					"window_index": 10,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 44,
+					"end": 48,
+					"window_index": 11,
+					"pattern_voice": "B",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"B"
+					],
+					"chosen_technique": "chromatic_passing_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 48,
+					"end": 52,
+					"window_index": 12,
+					"pattern_voice": "S",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"S"
+					],
+					"chosen_technique": "neighbor_tone",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 52,
+					"end": 56,
+					"window_index": 13,
+					"pattern_voice": "A",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"A"
+					],
+					"chosen_technique": "appoggiatura",
+					"chosen_span": null,
+					"applied": false,
+					"reason_if_skipped": "technique_conditions_not_met"
+				},
+				{
+					"start": 56,
+					"end": 60,
+					"window_index": 14,
+					"pattern_voice": "T",
+					"candidate_techniques": [
+						"passing_tone",
+						"neighbor_tone",
+						"appoggiatura",
+						"chromatic_passing_tone",
+						"double_neighbor"
+					],
+					"candidate_voices": [
+						"T"
+					],
+					"chosen_technique": "double_neighbor",
+					"chosen_span": null,
+					"applied": true,
+					"reason_if_skipped": null
+				}
+			]
+		},
+		"generation_depth": 0,
+		"rng_seed": 55,
+		"global_params": {
+			"time_num": 4,
+			"time_den": 4,
+			"grid_unit": 0.125,
+			"voice_window_pattern": "SATB",
+			"triplet_allowed": false,
+			"pair_selection_strategy": "earliest",
+			"allowed_techniques": [
+				"passing_tone",
+				"neighbor_tone",
+				"appoggiatura",
+				"chromatic_passing_tone",
+				"double_neighbor"
+			]
+		}
+	}
+}

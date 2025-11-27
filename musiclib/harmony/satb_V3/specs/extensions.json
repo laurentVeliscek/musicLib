@@ -1,0 +1,653 @@
+{
+  "version": "ext-spec.v1",
+  "style_switch": [
+    "classique",
+    "moderne"
+  ],
+  "notes": {
+    "legend": "roles are chord-relative: R,3,5,7,9,11,13; SATB prefers soprano slot for listed pitches"
+  },
+  "extensions": [
+    {
+      "id": "9",
+      "labels": [
+        "V9",
+        "ii9",
+        "IΔ9"
+      ],
+      "variants": [
+        {
+          "name": "V9",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "3",
+            "7",
+            "9"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "7": {
+              "tendency": "down"
+            },
+            "9": {
+              "tendency": "down",
+              "interval": 1
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "essential"
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        },
+        {
+          "name": "ii9 (minor-7 + M9)",
+          "roman_scope": [
+            "ii"
+          ],
+          "family": "non_dominant_minor",
+          "core": [
+            "R",
+            "b3",
+            "5",
+            "b7",
+            "9"
+          ],
+          "omit_preferred": [],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "9"
+          ],
+          "inversions_preferred": [
+            "root",
+            "65"
+          ],
+          "resolution_hints": {
+            "9": {
+              "tendency": "down",
+              "interval": 1
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "essential"
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        },
+        {
+          "name": "IΔ9 / IVΔ9",
+          "roman_scope": [
+            "I",
+            "IV"
+          ],
+          "family": "major_major",
+          "core": [
+            "R",
+            "3",
+            "5",
+            "7",
+            "9"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {},
+          "style": {
+            "classique": {
+              "treatment": "essential",
+              "limit_beyond_9": true
+            },
+            "moderne": {
+              "treatment": "essential",
+              "limit_beyond_9": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "b9",
+      "labels": [
+        "V♭9"
+      ],
+      "variants": [
+        {
+          "name": "V♭9",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "3",
+            "7",
+            "b9"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "b9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "7": {
+              "tendency": "down"
+            },
+            "b9": {
+              "tendency": "down",
+              "interval": 1
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "essential"
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "#9",
+      "labels": [
+        "V#9"
+      ],
+      "variants": [
+        {
+          "name": "V#9",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "3",
+            "7",
+            "#9"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "#9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "7": {
+              "tendency": "down"
+            },
+            "#9": {
+              "tendency": "down",
+              "note_spelling": "minor-10th respell allowed"
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "essential"
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "labels": [
+        "V11",
+        "minor11"
+      ],
+      "variants": [
+        {
+          "name": "V11",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "7",
+            "11"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [
+            "9"
+          ],
+          "must_absent": [
+            "3"
+          ],
+          "soprano_preferred": [
+            "11"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "11": {
+              "tendency": "down",
+              "targets": [
+                "10",
+                "9"
+              ],
+              "soprano_preferred": true
+            },
+            "7": {
+              "tendency": "down"
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "nct_appoggiatura",
+              "require_immediate_resolution": true
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        },
+        {
+          "name": "minor11 (non-dominant)",
+          "roman_scope": [
+            "i",
+            "iv",
+            "ii"
+          ],
+          "family": "non_dominant_minor",
+          "core": [
+            "R",
+            "b3",
+            "5",
+            "b7",
+            "11"
+          ],
+          "omit_preferred": [],
+          "optional": [
+            "3"
+          ],
+          "must_absent": [],
+          "soprano_preferred": [
+            "11"
+          ],
+          "inversions_preferred": [
+            "root",
+            "65"
+          ],
+          "resolution_hints": {
+            "11": {
+              "tendency": "down",
+              "softer_clash_with_3": true
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "essential"
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "#11",
+      "labels": [
+        "V#11"
+      ],
+      "variants": [
+        {
+          "name": "V#11",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "7",
+            "#11"
+          ],
+          "omit_preferred": [
+            "5"
+          ],
+          "optional": [
+            "9"
+          ],
+          "must_absent": [
+            "3"
+          ],
+          "soprano_preferred": [
+            "#11"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "#11": {
+              "tendency": "down",
+              "targets": [
+                "10",
+                "9"
+              ]
+            },
+            "7": {
+              "tendency": "down"
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "nct_appoggiatura",
+              "require_immediate_resolution": true
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "labels": [
+        "V13"
+      ],
+      "variants": [
+        {
+          "name": "V13",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "3",
+            "7",
+            "13"
+          ],
+          "omit_preferred": [
+            "5",
+            "11"
+          ],
+          "optional": [
+            "9"
+          ],
+          "must_absent": [
+            "11"
+          ],
+          "soprano_preferred": [
+            "13"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "13": {
+              "tendency": "to5_or_down"
+            },
+            "7": {
+              "tendency": "down"
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "nct_appoggiatura",
+              "allow_as_chord_tone": false
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "b13",
+      "labels": [
+        "V♭13"
+      ],
+      "variants": [
+        {
+          "name": "V♭13",
+          "roman_scope": [
+            "V",
+            "V/deg"
+          ],
+          "family": "dominant",
+          "core": [
+            "R",
+            "3",
+            "7",
+            "b13"
+          ],
+          "omit_preferred": [
+            "5",
+            "11"
+          ],
+          "optional": [
+            "9"
+          ],
+          "must_absent": [
+            "11"
+          ],
+          "soprano_preferred": [
+            "b13"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "b13": {
+              "tendency": "to5_or_down"
+            },
+            "7": {
+              "tendency": "down"
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "nct_appoggiatura",
+              "allow_as_chord_tone": false
+            },
+            "moderne": {
+              "treatment": "essential"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "add6",
+      "labels": [
+        "I(add6)",
+        "IV(add6)"
+      ],
+      "variants": [
+        {
+          "name": "Major triad + add6",
+          "roman_scope": [
+            "I",
+            "IV"
+          ],
+          "family": "added_note",
+          "core": [
+            "R",
+            "3",
+            "5",
+            "6"
+          ],
+          "omit_preferred": [],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "6"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "6": {
+              "tendency": "6_to5_or_pedal",
+              "sustain_long_enough": true
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "added_note"
+            },
+            "moderne": {
+              "treatment": "added_note"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "add9",
+      "labels": [
+        "I(add9)",
+        "IV(add9)"
+      ],
+      "variants": [
+        {
+          "name": "Major triad + add9",
+          "roman_scope": [
+            "I",
+            "IV"
+          ],
+          "family": "added_note",
+          "core": [
+            "R",
+            "3",
+            "5",
+            "9"
+          ],
+          "omit_preferred": [],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {},
+          "style": {
+            "classique": {
+              "treatment": "added_note"
+            },
+            "moderne": {
+              "treatment": "added_note"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "6/9",
+      "labels": [
+        "I(6/9)"
+      ],
+      "variants": [
+        {
+          "name": "Major triad + 6 and 9",
+          "roman_scope": [
+            "I"
+          ],
+          "family": "added_note",
+          "core": [
+            "R",
+            "3",
+            "5",
+            "6",
+            "9"
+          ],
+          "omit_preferred": [],
+          "optional": [],
+          "must_absent": [],
+          "soprano_preferred": [
+            "6",
+            "9"
+          ],
+          "inversions_preferred": [
+            "root"
+          ],
+          "resolution_hints": {
+            "6": {
+              "tendency": "6_to5_or_pedal",
+              "sustain_long_enough": true
+            }
+          },
+          "style": {
+            "classique": {
+              "treatment": "added_note"
+            },
+            "moderne": {
+              "treatment": "added_note"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "global_rules": {
+    "dominant_extensions_prefer_root": true,
+    "classique_mode_defaults": {
+      "V11": "nct_appoggiatura",
+      "V13": "nct_appoggiatura",
+      "others": "essential"
+    },
+    "major_major_limit_beyond_9": true,
+    "resolution_enforcement": {
+      "seventh_descends": true,
+      "ninth_descends_on_V": true
+    }
+  }
+}

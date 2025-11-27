@@ -1,0 +1,59 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Themes/musicLab_theme.tres" type="Theme" id=1]
+[ext_resource path="res://addons/musiclib/guitar/GuitarChordView.gd" type="Script" id=2]
+[ext_resource path="res://addons/musiclib/guitar/demo/GuitarChordDemo.gd" type="Script" id=3]
+
+[node name="GuitarChordDemo" type="VBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 12
+script = ExtResource( 3 )
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+margin_right = 1280.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+custom_constants/separation = 8
+
+[node name="Label" type="Label" parent="TopBar"]
+margin_top = 3.0
+margin_right = 41.0
+margin_bottom = 17.0
+text = "Chord:"
+
+[node name="ChordSelect" type="OptionButton" parent="TopBar"]
+margin_left = 49.0
+margin_right = 660.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Status" type="Label" parent="TopBar"]
+margin_left = 668.0
+margin_top = 3.0
+margin_right = 1280.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "—"
+align = 2
+
+[node name="Voicings" type="HBoxContainer" parent="."]
+margin_top = 32.0
+margin_right = 1280.0
+margin_bottom = 608.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 24
+script = ExtResource( 2 )
+
+[node name="Loader" type="Node" parent="."]
+
+[node name="playChordBTN" type="Button" parent="."]
+margin_top = 620.0
+margin_right = 1280.0
+margin_bottom = 720.0
+rect_min_size = Vector2( 0, 100 )
+theme = ExtResource( 1 )
+text = "Play"
+
+[connection signal="pressed" from="playChordBTN" to="." method="_on_playChordBTN_pressed"]

@@ -1,0 +1,683 @@
+[
+  {
+    "Alto": 72,
+    "Bass": 48,
+    "Soprano": 79,
+    "Tenor": 64,
+    "index": 0,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 0,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 69,
+    "Bass": 50,
+    "Soprano": 77,
+    "Tenor": 65,
+    "index": 1,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 2,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 52,
+    "Soprano": 76,
+    "Tenor": 59,
+    "index": 2,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 4,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 69,
+    "Bass": 41,
+    "Soprano": 77,
+    "Tenor": 60,
+    "index": 3,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 6,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 43,
+    "Soprano": 74,
+    "Tenor": 59,
+    "index": 4,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 8,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 64,
+    "Bass": 45,
+    "Soprano": 72,
+    "Tenor": 60,
+    "index": 5,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 10,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 50,
+    "Soprano": 71,
+    "Tenor": 62,
+    "index": 6,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 12,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 48,
+    "Soprano": 72,
+    "Tenor": 64,
+    "index": 7,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 14,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 48,
+    "Soprano": 75,
+    "Tenor": 63,
+    "index": 8,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 16,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 68,
+    "Bass": 50,
+    "Soprano": 77,
+    "Tenor": 62,
+    "index": 9,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 18,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 51,
+    "Soprano": 75,
+    "Tenor": 58,
+    "index": 10,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 20,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      10
+    ]
+  },
+  {
+    "Alto": 68,
+    "Bass": 53,
+    "Soprano": 72,
+    "Tenor": 56,
+    "index": 11,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 22,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 55,
+    "Soprano": 71,
+    "Tenor": 62,
+    "index": 12,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 24,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 68,
+    "Bass": 44,
+    "Soprano": 72,
+    "Tenor": 63,
+    "index": 13,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 26,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 50,
+    "Soprano": 71,
+    "Tenor": 62,
+    "index": 14,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 28,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 48,
+    "Soprano": 72,
+    "Tenor": 63,
+    "index": 15,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 30,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 67,
+    "Bass": 55,
+    "Soprano": 70,
+    "Tenor": 62,
+    "index": 16,
+    "key_alterations": {},
+    "key_midi_root": 7,
+    "key_scale_name": "harmonic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 32,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 68,
+    "Bass": 48,
+    "Soprano": 72,
+    "Tenor": 63,
+    "index": 17,
+    "key_alterations": {
+      "2": -1
+    },
+    "key_midi_root": 7,
+    "key_scale_name": "harmonic_minor",
+    "kind": "N6",
+    "length_beats": 2,
+    "pos": 34,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 49,
+    "Soprano": 71,
+    "Tenor": 53,
+    "index": 18,
+    "key_alterations": {
+      "4": 1,
+      "6": -1
+    },
+    "key_midi_root": 5,
+    "key_scale_name": "major",
+    "kind": "It+6",
+    "length_beats": 2,
+    "pos": 36,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 63,
+    "Bass": 49,
+    "Soprano": 67,
+    "Tenor": 55,
+    "index": 19,
+    "key_alterations": {
+      "4": 1
+    },
+    "key_midi_root": 7,
+    "key_scale_name": "harmonic_minor",
+    "kind": "It+6inv",
+    "length_beats": 2,
+    "pos": 38,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      8,
+      11
+    ]
+  },
+  {
+    "Alto": 62,
+    "Bass": 52,
+    "Soprano": 70,
+    "Tenor": 56,
+    "index": 20,
+    "key_alterations": {
+      "4": 1,
+      "6": -1
+    },
+    "key_midi_root": 8,
+    "key_scale_name": "major",
+    "kind": "Fr+6",
+    "length_beats": 2,
+    "pos": 40,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 61,
+    "Bass": 53,
+    "Soprano": 71,
+    "Tenor": 55,
+    "index": 21,
+    "key_alterations": {
+      "4": 1,
+      "6": -1
+    },
+    "key_midi_root": 11,
+    "key_scale_name": "major",
+    "kind": "Fr+6inv",
+    "length_beats": 2,
+    "pos": 42,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 60,
+    "Bass": 44,
+    "Soprano": 72,
+    "Tenor": 54,
+    "index": 22,
+    "key_alterations": {
+      "3": -1,
+      "4": 1,
+      "6": -1
+    },
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "Ger+6",
+    "length_beats": 2,
+    "pos": 44,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 61,
+    "Bass": 47,
+    "Soprano": 68,
+    "Tenor": 53,
+    "index": 23,
+    "key_alterations": {
+      "3": -1,
+      "4": 1,
+      "6": -1
+    },
+    "key_midi_root": 5,
+    "key_scale_name": "major",
+    "kind": "Ger+6inv",
+    "length_beats": 2,
+    "pos": 46,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 64,
+    "Bass": 46,
+    "Soprano": 70,
+    "Tenor": 53,
+    "index": 24,
+    "key_alterations": {},
+    "key_midi_root": 5,
+    "key_scale_name": "major",
+    "kind": "sus4",
+    "length_beats": 2,
+    "pos": 48,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 46,
+    "Soprano": 70,
+    "Tenor": 60,
+    "index": 25,
+    "key_alterations": {},
+    "key_midi_root": 5,
+    "key_scale_name": "major",
+    "kind": "sus2",
+    "length_beats": 2,
+    "pos": 50,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 63,
+    "Bass": 53,
+    "Soprano": 69,
+    "Tenor": 60,
+    "index": 26,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "melodic_minor",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 52,
+    "scale_array": [
+      0,
+      2,
+      3,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 64,
+    "Bass": 52,
+    "Soprano": 67,
+    "Tenor": 60,
+    "index": 27,
+    "key_alterations": {},
+    "key_midi_root": 9,
+    "key_scale_name": "hungarian_major",
+    "kind": "diatonic",
+    "length_beats": 2,
+    "pos": 54,
+    "scale_array": [
+      0,
+      3,
+      4,
+      6,
+      7,
+      9,
+      10
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 55,
+    "Soprano": 69,
+    "Tenor": 59,
+    "index": 28,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "add9",
+    "length_beats": 2,
+    "pos": 56,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  },
+  {
+    "Alto": 65,
+    "Bass": 55,
+    "Soprano": 72,
+    "Tenor": 62,
+    "index": 29,
+    "key_alterations": {},
+    "key_midi_root": 0,
+    "key_scale_name": "major",
+    "kind": "add11",
+    "length_beats": 2,
+    "pos": 58,
+    "scale_array": [
+      0,
+      2,
+      4,
+      5,
+      7,
+      9,
+      11
+    ]
+  }
+]
