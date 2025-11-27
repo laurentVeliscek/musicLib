@@ -23,6 +23,9 @@ var strum_pattern_array:Array = []
 # ---- Contenu : chaque entrée = { track: Track, offset_beats: float }
 var _entries: Array = []
 
+var strum_pattern_array: Array
+
+
 const PROGRESSION_TRACK_NAME:String= "Chord Progression"
 const SATB_TRACK_NAME:String= "SATB"
 const SATB_SOPRANO:String= "SATB Soprano"
@@ -31,6 +34,7 @@ const SATB_TENOR:String= "SATB Tenor"
 const SATB_BASS:String= "SATB Bass"
 const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
 const FRACTAL_TRACK:String= "fractal SATB"
+const MELODY_TRACK:String= "Melody"
 
 
 func clone() -> Song:
@@ -44,10 +48,20 @@ func clone() -> Song:
 	s.time_num = int(time_num)
 	s.time_den = int(time_den)
 
-	s.satb_solutions_array = satb_solutions_array
-	s.satb_solutions_index =  satb_solutions_index
-	# Pour fratcalizer
-	s.satb_request_data = satb_request_data
+        s.satb_solutions_array = satb_solutions_array
+        s.satb_solutions_index =  satb_solutions_index
+        # Pour fratcalizer
+        s.satb_request_data = satb_request_data
+
+        # Patterns de strumming
+        s.strum_pattern_array = []
+        if typeof(strum_pattern_array) == TYPE_ARRAY:
+                for pat in strum_pattern_array:
+                        if pat != null and typeof(pat) == TYPE_OBJECT:
+                                if pat.has_method("clone"):
+                                        s.strum_pattern_array.append(pat.clone())
+                                elif pat.has_method("duplicate"):
+                                        s.strum_pattern_array.append(pat.duplicate(true))
 
 	# Patterns de strumming
 	s.strum_pattern_array = []
