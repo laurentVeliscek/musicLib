@@ -421,7 +421,7 @@ func get_realization():
 
 func set_kind(k:String):
 	# bérifie que le kind existe bien
-	var kinds = ["diatonic","secondary","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
+	var kinds = ["melodic","diatonic","secondary","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 	if kinds.has(k):
 		kind = k
 	else:
@@ -545,6 +545,9 @@ func set_add11():
 	realization = [1,5,7,11]
 	degree_number = n
 
+func set_melodic():
+	realization = [1]
+	kind = "melodic"
 
 # C'est le premier degré de la tonalité majeure un 1/2 ton au dessus	
 func set_cad64():
