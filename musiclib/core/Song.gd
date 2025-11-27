@@ -18,6 +18,8 @@ var satb_solutions_array:Array = []
 var satb_solutions_index =  -1
 #pour fractalizer
 var satb_request_data:Dictionary = {}
+# Patterns de strumming (Array de StrumPattern)
+var strum_pattern_array:Array = []
 # ---- Contenu : chaque entrée = { track: Track, offset_beats: float }
 var _entries: Array = []
 
@@ -46,13 +48,22 @@ func clone() -> Song:
 	s.time_num = int(time_num)
 	s.time_den = int(time_den)
 
-	s.satb_solutions_array = satb_solutions_array
-	s.satb_solutions_index =  satb_solutions_index
-	# Pour fratcalizer
-	s.satb_request_data = satb_request_data
-	
-	for sp in strum_pattern_array:	
-		s.strum_pattern_array.append(sp.clone())
+        s.satb_solutions_array = satb_solutions_array
+        s.satb_solutions_index =  satb_solutions_index
+        # Pour fratcalizer
+        s.satb_request_data = satb_request_data
+
+        # Patterns de strumming
+        s.strum_pattern_array = []
+        if typeof(strum_pattern_array) == TYPE_ARRAY:
+                for pat in strum_pattern_array:
+                        if pat != null and typeof(pat) == TYPE_OBJECT:
+                                if pat.has_method("clone"):
+                                        s.strum_pattern_array.append(pat.clone())
+                                elif pat.has_method("duplicate"):
+                                        s.strum_pattern_array.append(pat.duplicate(true))
+
+
 
 	# --- Tempo map ---
 	s.tempo_changes = []
@@ -107,12 +118,19 @@ func to_dict() -> Dictionary:
 	# Solutions complètes (Array de solutions)
 	dic["satb_solutions_array"] = satb_solutions_array.duplicate(true)
 	# Index de la solution courante
-	dic["satb_solutions_index"] = satb_solutions_index
-	# Requête SATB (paramètres de génération)
-	dic["satb_request_data"] = satb_request_data.duplicate(true)
-	
-	# --- Entries / Tracks ---
-	var entries_array:Array = []
+        dic["satb_solutions_index"] = satb_solutions_index
+        # Requête SATB (paramètres de génération)
+        dic["satb_request_data"] = satb_request_data.duplicate(true)
+
+        # --- Strum patterns ---
+        var strums_array:Array = []
+        for pat in strum_pattern_array:
+                if pat != null and typeof(pat) == TYPE_OBJECT and pat.has_method("to_dict"):
+                        strums_array.append(pat.to_dict())
+        dic["strum_pattern_array"] = strums_array
+
+        # --- Entries / Tracks ---
+        var entries_array:Array = []
 	for entry in _entries:
 		if typeof(entry) != TYPE_DICTIONARY:
 			continue
@@ -172,14 +190,23 @@ func from_dict(dic) -> Song:
 		s.satb_solutions_index = -1
 	
 	# Requête SATB
-	var req = dic.get("satb_request_data", {})
-	if typeof(req) == TYPE_DICTIONARY:
-		s.satb_request_data = req.duplicate(true)
-	else:
-		s.satb_request_data = {}
-	
-	# --- Entries / Tracks ---
-	s._entries.clear()
+        var req = dic.get("satb_request_data", {})
+        if typeof(req) == TYPE_DICTIONARY:
+                s.satb_request_data = req.duplicate(true)
+        else:
+                s.satb_request_data = {}
+
+        # --- Strum patterns ---
+        s.strum_pattern_array.clear()
+        var strums_array = dic.get("strum_pattern_array", [])
+        if typeof(strums_array) == TYPE_ARRAY:
+                for pat_data in strums_array:
+                        if typeof(pat_data) == TYPE_DICTIONARY:
+                                var dummy_sp = StrumPattern.new()
+                                s.strum_pattern_array.append(dummy_sp.from_dict(pat_data))
+
+        # --- Entries / Tracks ---
+        s._entries.clear()
 	var entries_array = dic.get("entries", [])
 	if typeof(entries_array) == TYPE_ARRAY:
 		for e in entries_array:
