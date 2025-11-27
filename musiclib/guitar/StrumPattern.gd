@@ -5,28 +5,28 @@ class_name StrumPattern
 Represents a 16-step strumming pattern with its own timing and configuration.
 
 Pattern symbols:
-  Strums:
+	Strums:
 	D = Down fort (strong downstroke)
 	d = Down léger (light downstroke)
 	U = Up fort (strong upstroke)
 	u = Up léger (light upstroke)
 
-  Mutes:
+	Mutes:
 	X = Muté fort (strong muted strum)
 	x = Muté léger (light muted strum, shorter and softer)
 	W = Double mute fort (two fast muted strums: down+up, strong)
 	w = Double mute léger (two fast muted strums: down+up, light)
 
-  Flams:
+	Flams:
 	F = Flam DU (rapid Down-Up, strong, legato)
 	f = Flam du (rapid down-up, light, legato)
 
-  Bass & Arpeggios:
+	Bass & Arpeggios:
 	B = Basse principale (main bass note - lowest)
 	b = Basse alternative (alternative bass note)
 	0, 1, 2, 3, 4 = Arpeggio notes (0=lowest, 4=highest)
 
-  Other:
+	Other:
 	. = Laisser sonner (let ring / sustain)
 	' ' = Silence (space = rest)
 
@@ -102,6 +102,25 @@ func from_dict(data: Dictionary) -> StrumPattern:
                 s.config_override = data["config_override"].duplicate(true)
 
         return s
+
+
+func to_dict() -> Dictionary:
+	return {
+		"pattern": String(pattern),
+		"step_beat_length": float(step_beat_length),
+		"config_override": config_override.duplicate(true)
+	}
+
+
+func from_dict(data: Dictionary) -> StrumPattern:
+	var s: StrumPattern = get_script().new()
+	s.pattern = data.get("pattern", "D...u...D...u...")
+	s.step_beat_length = data.get("step_beat_length", 0.5)
+
+	if data.has("config_override") and typeof(data["config_override"]) == TYPE_DICTIONARY:
+		s.config_override = data["config_override"].duplicate(true)
+
+	return s
 
 func set_pattern(value: String) -> void:
 	if value.length() != 16:
