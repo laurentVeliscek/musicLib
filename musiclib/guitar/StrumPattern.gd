@@ -78,11 +78,30 @@ var config_override = {
 }
 
 func clone()->StrumPattern:
-	var s:StrumPattern = get_script().new()
-	s.pattern = pattern
-	s.step_beat_length = step_beat_length
-	s.config_override = config_override.duplicate(true)
-	return s
+        var s:StrumPattern = get_script().new()
+        s.pattern = pattern
+        s.step_beat_length = step_beat_length
+        s.config_override = config_override.duplicate(true)
+        return s
+
+
+func to_dict() -> Dictionary:
+        return {
+                "pattern": String(pattern),
+                "step_beat_length": float(step_beat_length),
+                "config_override": config_override.duplicate(true)
+        }
+
+
+func from_dict(data: Dictionary) -> StrumPattern:
+        var s: StrumPattern = get_script().new()
+        s.pattern = data.get("pattern", "D...u...D...u...")
+        s.step_beat_length = data.get("step_beat_length", 0.5)
+
+        if data.has("config_override") and typeof(data["config_override"]) == TYPE_DICTIONARY:
+                s.config_override = data["config_override"].duplicate(true)
+
+        return s
 
 func set_pattern(value: String) -> void:
 	if value.length() != 16:
