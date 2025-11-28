@@ -290,7 +290,7 @@ func from_dict(data:Dictionary) -> Degree:
 		d.comment = str(data["comment"])
 		
 	# Commentaire texte
-	if data.has("chord_voicing"):
+	if data.has("chord_voicing_index"):
 		d.chord_voicing_index = int(data["chord_voicing_index"])
 	
 	return d
