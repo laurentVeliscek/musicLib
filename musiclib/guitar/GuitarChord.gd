@@ -14,8 +14,8 @@ export(Array) var barres = []						# [{ "fret": n, "from_string": 6, "to_string"
 export(int) var root_pc = -1  # 0..11 ; si -1 => on tente de déduire
 
 
-var time:float = 0 setget set_time,get_time
-var beat_length:float = 1 setget set_beat_length, get_beat_length
+var start:float = 0 setget set_start,get_start
+var length_beats:float = 1 setget set_length_beats, get_length_beats
 var midiNotes:PoolIntArray = ([]) setget set_midiNotes, get_midiNotes
 var notes:Array = [] setget set_notes,get_notes
 
@@ -37,17 +37,17 @@ func to_dict() -> Dictionary:
 	
 
 
-func set_time(t:float):
-	time = t
+func set_start(t:float):
+	start = t
 
-func get_time()->float:
-	return time
+func get_start()->float:
+	return start
 
-func set_beat_length(t:float):
-	beat_length = t
+func set_length_beats(t:float):
+	length_beats = t
 
-func get_beat_length()->float:
-	return beat_length
+func get_length_beats()->float:
+	return length_beats
 	
 func set_midiNotes(p:PoolIntArray):
 	LogBus.error(TAG,"midiNotes cannot be set !")

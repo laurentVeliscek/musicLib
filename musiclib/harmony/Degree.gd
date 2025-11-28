@@ -102,6 +102,8 @@ var satb_dictionary:Dictionary = {}
 
 var comment:String = ""
 
+var chord_voicing_index:int = 0
+
 ########### CLONE ET TO STRING ##############
 
 func clone()-> Degree:
@@ -131,7 +133,7 @@ func clone()-> Degree:
 	
 	# String comment
 	d.comment = comment
-	
+	d.chord_voicing_index = chord_voicing_index
 	
 	return d
 	
@@ -185,6 +187,7 @@ func to_dict() -> Dictionary:
 	
 	# Commentaire texte
 	d["comment"] = comment
+	d["chord_voicing_index"] = chord_voicing_index
 	
 	return d
 
@@ -285,6 +288,10 @@ func from_dict(data:Dictionary) -> Degree:
 	# Commentaire texte
 	if data.has("comment"):
 		d.comment = str(data["comment"])
+		
+	# Commentaire texte
+	if data.has("chord_voicing"):
+		d.chord_voicing_index = int(data["chord_voicing_index"])
 	
 	return d
 
@@ -1044,7 +1051,6 @@ func _renverse_midi_chord_array(arr:Array, times:int) -> Array:
 
 
 func renverse_up():
-	#LogBus.debug(TAG,"renverse_up -> kind: " + kind)
 	if kind == "diatonic":
 		# par de second renversement pour les traides diatoniques
 		if realization.size() == 3  and inversion == 1:
@@ -1816,7 +1822,7 @@ func seventh_string_with_alter() -> String:
 	var midi_chord_seventh = key.degree_midi(degree_number + 6) + get_chord_alteration(7) 
 	var midi_chord_root = key.degree_midi(degree_number ) + get_chord_alteration(1) 
 	var distance = midi_chord_seventh - midi_chord_root
-	#LogBus.debug(TAG,"7 distance: " + str(distance))
+
 	
 	if distance == 10 or distance == 9:
 		roman_seven_string = "7"
@@ -1917,22 +1923,22 @@ func enharmonize():
 			key.root_midi = 60 + ((9 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 2
-			LogBus.debug(TAG,"to 2 minor")
+			#LogBus.debug(TAG,"to 2 minor")
 		elif (key.scale_name == "harmonic_minor" or key.scale_name == "minor")  and degree_number == 2:
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 7
-			LogBus.debug(TAG,"to 7 minor")
+			#LogBus.debug(TAG,"to 7 minor")
 		elif key.scale_name == "harmonic_minor" and degree_number == 7:
 			key.scale_name = "major"
 			degree_number = 7
-			LogBus.debug(TAG,"to 7 major")
+			#LogBus.debug(TAG,"to 7 major")
 		else :
 			var midi_root = (key.degree_midi(degree_number) + get_chord_alteration(1)) %12
 			key.root_midi = (midi_root + 1) %12
 			degree_number = 7
 			key.scale_name = "harmonic_minor"
-			LogBus.debug(TAG,"unknown to 7 minor")
+			#LogBus.debug(TAG,"unknown to 7 minor")
 	# test accord augmenté 
 	if midi_notes.size() == 3  and (midi_notes[1] - midi_notes[0] == 4) and  (midi_notes[2] - midi_notes[0] == 8): 
 		key.root_midi = 60 + ((4 + old_key_root) % 12)
@@ -2062,11 +2068,10 @@ func guitar_chords()-> Array :
 	# search by name
 	gc_array = ggb.search_by_name(chord_name)
 	if gc_array != null and gc_array.size() > 0:
-		LogBus.debug(TAG,"gc_array.size() " + str(gc_array.size() ))
 		return gc_array
 	else :
-		LogBus.debug(TAG,"gc_array.size() = 0 -> " + get_jazz_chord())
-		#LogBus.debug(TAG,"gc_array.size() = 0")
+		LogBus.error(TAG,"gc_array.size() = 0 -> " + get_jazz_chord())
+
 	
 	# search by notes
 	var midi_notes =  PoolIntArray(get_chord_midi())
@@ -2180,7 +2185,7 @@ func chromatizeUp():
 		comment = "chromatized chord"
 	elif quality_with_alter() == "maj":
 		var midi_root = key.degree_midi(degree_number) + get_chord_alteration(1)
-		LogBus.debug(TAG,"midi_root:" + str(midi_root))
+		#LogBus.debug(TAG,"midi_root:" + str(midi_root))
 		reset()
 		key.scale_name = "harmonic_minor"
 		key.root_midi = 60 + (midi_root + 9 ) % 12

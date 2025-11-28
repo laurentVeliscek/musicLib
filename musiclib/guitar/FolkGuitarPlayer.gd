@@ -309,7 +309,7 @@ func _calculate_chords_duration() -> float:
 
 	var max_end = 0.0
 	for chord in chord_grid:
-		var end = chord.time + chord.beat_length
+		var end = chord.start + chord.length_beats
 		if end > max_end:
 			max_end = end
 	return max_end
@@ -333,7 +333,7 @@ func _get_chord_at_time(time: float, chords_duration: float) -> GuitarChord:
 
 	# Trouver l'accord qui contient ce temps
 	for chord in chord_grid:
-		if looped_time >= chord.time and looped_time < chord.time + chord.beat_length:
+		if looped_time >= chord.start and looped_time < chord.start + chord.length_beats:
 			return chord
 
 	# Fallback: retourner le dernier accord
@@ -768,7 +768,7 @@ func _process_chord_transitions() -> void:
 		var chord_before = sorted_chords[i]
 		var chord_after = sorted_chords[i + 1]
 
-		var transition_time = chord_after.time
+		var transition_time = chord_after.start
 
 		# Obtenir les notes des deux accords
 		var notes_before = chord_before.get_notes()
@@ -783,7 +783,7 @@ func _process_chord_transitions() -> void:
 		# Raccourcir les notes non communes qui traversent la transition
 		for note in output_notes:
 			# Vérifier si la note appartient à l'accord précédent
-			if note.position >= chord_before.time and note.position < transition_time:
+			if note.position >= chord_before.start and note.position < transition_time:
 				var note_end = note.position + note.duration
 
 				# Si la note traverse la transition et n'est pas commune
@@ -954,7 +954,7 @@ func _prolong_active_notes(duration: float) -> void:
 
 func _sort_by_time(a: GuitarChord, b: GuitarChord) -> bool:
 	"""Trie les accords par time croissante."""
-	return a.time < b.time
+	return a.start < b.start
 
 
 func _sort_notes_by_position(a: Dictionary, b: Dictionary) -> bool:
