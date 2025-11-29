@@ -1234,3 +1234,21 @@ func _calculate_fret_from_midi(midi_pitch: int, string_idx: int) -> int:
 
 	var fret = midi_pitch - string_tuning[string_idx]
 	return int(clamp(fret, 0, 22))
+
+# Comme generate(), mais sort directement une track de Notes
+func generate_track(transpose:int = 0)-> Track:
+	var notes = generate()
+	var guitar_track:Track = Track.new()
+	guitar_track.name = Song.RYTHM_GUITAR_TRACK
+	
+	for n in notes:
+		var note:Note = Note.new()
+		note.midi = n["pitch"] + transpose
+		note.length_beats = n["duration"]
+		note.velocity = n["velocity"]
+		guitar_track.add_note( n["position"],note)
+
+	#MusicLabGlobals.save_text_html5(guitar_track.to_string(),"guitar_track_to_string.txt")
+	return guitar_track
+	
+	

@@ -62,11 +62,14 @@ func clone() -> Track:
 #			e2["start"] = e["start"]
 #			t.events.append(e2)
 		elif e.has("MidiCC"): 
-			e2["start"] =e["start"]
-			e2["length_beats"] = 0
-			e2["MidiCC"] = e2["MidiCC"].clone()
+			e["start"] =e["start"]
+			e["length_beats"] = 0
+			t.add_midiCC(pos, e["MidiCC"].clone())
 			
 	return t
+	
+	
+	
 func to_dict() -> Dictionary:
 	var dic:Dictionary = {}
 	dic["name"] = name
@@ -121,8 +124,7 @@ func to_dict() -> Dictionary:
 			ev_array.append(e)
 	
 	dic["events"] = ev_array
-	#LogBus.debug(TAG, "----------------  TO DICT -----------")
-	#LogBus.debug(TAG, JSON.print(dic, "\t"))
+
 	return dic
 
 
@@ -146,7 +148,7 @@ func from_dict(dic) -> Track:
 	t.events.clear()
 	
 	var ev_array = dic.get("events", [])
-	#LogBus.debug(TAG, "ev_array: " + str(ev_array))
+
 	if typeof(ev_array) == TYPE_ARRAY:
 		for e in ev_array:
 			if typeof(e) != TYPE_DICTIONARY:
@@ -193,8 +195,7 @@ func from_dict(dic) -> Track:
 			
 			t.events.append(ev)
 #
-#	LogBus.debug(TAG, "=========== FROM DICT ==========")
-#	LogBus.debug(TAG, "t.to_string()" + t.to_string())
+
 	return t
 
 
@@ -202,25 +203,25 @@ func set_length_beats(_n):
 	LogBus.error(TAG,"You cannot set Tracks.length_beats!")
 	
 func get_length_beats() -> float:
-	var end_pos = 0
+	var end_pos:float = 0
 	if events == null or events == []:
 		return end_pos
 	for e in events:
 		if e.has("start") and e["start"] >= end_pos :
 			end_pos = e["start"]
 
+		
+		var lb:float = 0
+		if e.has("note"):
+			var n:Note = e["note"]
+			lb = n.length_beats
+		elif e.has("degree"):
+			var d:Degree = e["degree"]
+			lb = d.length_beats
 			
-			var lb:float = 0
-			if e.has("note"):
-				var n:Note = e["note"]
-				lb = n.length_beats
-			elif e.has("degree"):
-				var d:Degree = e["degree"]
-				lb = d.length_beats
-			if lb != null  and lb > 0:
-				#LogBus.debug(TAG,"el.length_beats: " + str(el.length_beats))
-				if lb + e["start"] > end_pos:
-					end_pos = lb + e["start"]
+		if lb != null  and lb > 0:
+			if lb + e["start"] > end_pos:
+				end_pos = lb + e["start"]
 					
 	return end_pos		
 	
@@ -331,7 +332,7 @@ func half_time() -> void:
 				# Accès direct à la propriété
 				d.length_beats = .5 * float(d.length_beats)
 		e["start"] = max(0.0, .5 * float(e["start"]))
-	#LogBus.debug(TAG,"trackToString: " + to_string())
+
 
 
 func double_time() -> void:
@@ -1853,13 +1854,10 @@ func realize_degrees_to_notes() -> void:
 
 
 func extract(from:float,to:float,normalize:bool = false) -> Track:
-	#var tr = get_script().new()
 	
 	var tr = clone()
-	#LogBus.debug(TAG,"before: from:" + str(from)+"  to: " + str(to))
-	#LogBus.debug(TAG,tr.to_string())
 	tr.clear()
-	#tr.program_change = program_change
+
 	
 	for e in events:
 		var start = e["start"]
@@ -1906,20 +1904,13 @@ func extract(from:float,to:float,normalize:bool = false) -> Track:
 				LogBus.error(TAG," -> " + str(e) )
 				LogBus.error(TAG,'"extract() -> found a unknown element in track: ' + name + " !" )
 				
-			
-		#LogBus.debug(TAG,"after")
-		#LogBus.debug(TAG,tr.to_string())
+
 			
 	if normalize:
 		tr.shift_time(-1.0 * from)
 	return tr
 
-		# Event texte / meta déjà “plat”
-#		elif ev.has("meta"):
-#			e["kind"] = "meta"
-#			e["meta"] = ev.get("meta", 0)
-#			if ev.has("text"):
-#				e["text"] = String(ev["text"])
+
 
 
 # Fusionne les notes consécutives de même pitch en une seule note prolongée.
@@ -2059,3 +2050,41 @@ func _moyenne_tableau(t:Array)-> float:
 		somme += nombre
 	return somme / t.size()
 	
+func multiply(n:int, clone:bool = false):
+	var actual_Track_length = self.get_length_beats()
+	#LogBus.debug(TAG, "length_beats" + str(get_length_beats()))
+	
+	var new_events = []
+	for e in events :
+		for i in range(0,n):
+			if e.has("degree") or e.has("note"):
+				#LogBus.debug(TAG,"start: "  + str( e["start"]))
+				var ev
+				if clone == false :
+					ev = e.duplicate()
+				else :
+					ev = {}
+					if e.has("degree") :
+						ev["degree"] = e["degree"].clone()
+					elif e.has("note") :
+						ev["note"] = e["note"].clone()
+				
+				ev["start"] = e["start"] + ((i + 1 )* actual_Track_length)
+				#LogBus.debug(TAG,"start ev: "  + str( ev["start"]))
+				new_events.append(ev)
+	events.append_array(new_events)
+	events.sort_custom(self, "compare_events_by_time")
+			
+				
+				
+#func add_note(start_beats: float, note) -> int:
+#	var ev: Dictionary = {}
+#	var t = max(0.0, float(start_beats))
+#	ev["start"] = t
+#
+#	if adopt_channel and typeof(note) == TYPE_OBJECT and note != null and note.has_method("set"):
+#		note.channel = clamp(channel, 0, 15)
+#
+#	ev["note"] = note
+#	events.append(ev)
+#	return events.size() - 1

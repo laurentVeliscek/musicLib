@@ -72,7 +72,7 @@ var config_override = {
 	"pick_position": 0.75,  # Position du médiateur: -1.0 (graves) à 1.0 (aiguës), 0.0 = neutre
 	"pick_position_influence": .9,  # Intensité de l'effet (0.0 = aucun, 1.0 = maximum)
 	"swing_amount": 0.2,  # Swing: 0.0 = binaire pur, 1.0 = ternaire, entre = intermédiaire
-	"chord_transition_gap": 0.95,  # Facteur de raccourcissement des notes avant transition (0.8 = 80%)
+	"chord_transition_gap": .98,  # Facteur de raccourcissement des notes avant transition (0.8 = 80%)
 	"single_note_velocity": 90,  # Vélocité pour les notes simples (basses, arpèges)
 	"max_chords_strings": 4  # Nombre de cordes max pour accords/mutes (1-6), filtre les graves
 }

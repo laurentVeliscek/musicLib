@@ -22,7 +22,7 @@ var satb_request_data:Dictionary = {}
 var strum_pattern_array:Array = []
 # ---- Contenu : chaque entrée = { track: Track, offset_beats: float }
 var _entries: Array = []
-
+var guitar_player_scene_params:Dictionary = {}
 
 
 const PROGRESSION_TRACK_NAME:String= "Chord Progression"
@@ -100,6 +100,8 @@ func clone() -> Song:
 					tr_copy = tr.duplicate(true)
 			s._entries.append({"track": tr_copy, "offset_beats": off})
 	
+	s.guitar_player_scene_params = guitar_player_scene_params.duplicate()
+	
 	return s
 
 func to_dict() -> Dictionary:
@@ -131,6 +133,7 @@ func to_dict() -> Dictionary:
 	# Requête SATB (paramètres de génération)
 	dic["satb_request_data"] = satb_request_data.duplicate(true)
 
+
 	# --- Strum patterns ---
 	var strums_array:Array = []
 	for pat in strum_pattern_array:
@@ -156,6 +159,8 @@ func to_dict() -> Dictionary:
 		entries_array.append(e)
 	
 	dic["entries"] = entries_array
+	dic["guitar_player_scene_params"] = guitar_player_scene_params.duplicate()
+	
 	
 	#LogBus.debug(TAG, "Song.to_dict(): " + JSON.print(dic, "\t"))
 	return dic
@@ -233,6 +238,13 @@ func from_dict(dic) -> Song:
 					"track": tr,
 					"offset_beats": off
 				})
+	
+	# Requête SATB
+	var guitar_scene_params = dic.get("guitar_player_scene_params", {})
+	if typeof(guitar_scene_params) == TYPE_DICTIONARY:
+		s.guitar_player_scene_params = guitar_scene_params.duplicate(true)
+	else:
+		s.guitar_player_scene_params = {}
 	
 	#LogBus.debug(TAG, "Song.from_dict(): " + JSON.print(dic, "\t"))
 	#LogBus.debug(TAG, "Song rebuilt: " + s.to_string())

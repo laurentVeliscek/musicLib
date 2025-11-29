@@ -95,6 +95,10 @@ func _draw_text_center_font(p_center: Vector2, txt: String, col: Color, fnt):
 	draw_string(fnt, Vector2(x, y), txt, col)
 
 
+func get_current_guitar_chord()-> GuitarChord:
+	return _current_gc
+
+
 # appelé par ProgressionGenerator
 func set_voicings(a: Array) -> void:
 	

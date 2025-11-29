@@ -32,6 +32,8 @@ func to_dict() -> Dictionary:
 	d["fingers"] = fingers
 	d["barres"] = barres
 	d["root_pc"] = root_pc
+	d["start"] = start
+	d["length_beats"] = length_beats
 	
 	return d
 	
@@ -479,11 +481,12 @@ func get_arp_note(idx:int)-> int:
 		
 func get_arp_note_with_string(idx:int)-> Dictionary:
 	var notes = midiNotes_with_string()
+	var notes_size= notes.size()
 	match idx:
-			4: return notes[-1]
-			3: return notes[-2]
-			2: return notes[-3]
-			1: return notes[-4]
+			4: return notes[(notes_size -1) % notes_size]
+			3: return notes[(notes_size -2) % notes_size]
+			2: return notes[(notes_size -3) % notes_size]
+			1: return notes[(notes_size -4) % notes_size]
 			0: 
 				if notes.size() > 4:
 					return notes[-5]

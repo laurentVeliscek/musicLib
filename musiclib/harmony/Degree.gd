@@ -1763,7 +1763,7 @@ func quality_with_alter() -> String:
 	var midi_fifth = key.degree_midi(degree_number + 4) + get_chord_alteration(5)
 	var midi_seventh = key.degree_midi(degree_number + 6) + get_chord_alteration(7) 
 	
-	#LogBus.debug(TAG,"midi altered: " + str([midi_root,midi_third,midi_fifth,midi_seventh]))
+
 	
 	
 	if midi_third - midi_root == 3 and midi_fifth - midi_root == 6:
@@ -1779,7 +1779,6 @@ func quality_with_alter() -> String:
 	else : 
 		#LogBus.error(TAG,"quality_with_alter() -> Unknown quality" )
 		return "?"
-	#LogBus.debug(TAG,"quality_with_alter() -> " + q)
 	return q
 
 func triad_string_with_alter() -> String:
@@ -1923,22 +1922,19 @@ func enharmonize():
 			key.root_midi = 60 + ((9 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 2
-			#LogBus.debug(TAG,"to 2 minor")
 		elif (key.scale_name == "harmonic_minor" or key.scale_name == "minor")  and degree_number == 2:
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 7
-			#LogBus.debug(TAG,"to 7 minor")
 		elif key.scale_name == "harmonic_minor" and degree_number == 7:
 			key.scale_name = "major"
 			degree_number = 7
-			#LogBus.debug(TAG,"to 7 major")
 		else :
 			var midi_root = (key.degree_midi(degree_number) + get_chord_alteration(1)) %12
 			key.root_midi = (midi_root + 1) %12
 			degree_number = 7
 			key.scale_name = "harmonic_minor"
-			#LogBus.debug(TAG,"unknown to 7 minor")
+
 	# test accord augmenté 
 	if midi_notes.size() == 3  and (midi_notes[1] - midi_notes[0] == 4) and  (midi_notes[2] - midi_notes[0] == 8): 
 		key.root_midi = 60 + ((4 + old_key_root) % 12)
@@ -2052,6 +2048,7 @@ func enharmonize():
 #
 
 func guitar_chords()-> Array :
+	
 	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
 	var gc_array = []
 	var basePitch =  key.degree_midi(degree_number) % 12
@@ -2066,27 +2063,72 @@ func guitar_chords()-> Array :
 			chord_name = root_name+"major"
 	
 	# search by name
-	gc_array = ggb.search_by_name(chord_name)
-	if gc_array != null and gc_array.size() > 0:
-		return gc_array
-	else :
-		LogBus.error(TAG,"gc_array.size() = 0 -> " + get_jazz_chord())
+		gc_array = ggb.search_by_name(chord_name)
+	
+	# on ajoute les 6/9
+		if key.scale_name == "major":
+			if (degree_number == 1 or degree_number == 4 or degree_number == 5):
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+			elif degree_number == 2:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif key.scale_name == "minor":
+			if (degree_number == 3 or degree_number == 6 or degree_number == 7):
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+			elif degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif  key.scale_name == "harmonic_minor":
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif key.scale_name == "melodic_minor":
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+				
+				
+	# on ajoute les sus2 et sus4
+	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7:
+		gc_array.append_array(ggb.search_by_name(root_name+"sus2"))
+		gc_array.append_array(ggb.search_by_name(root_name+"sus4"))
+		
+		# et les 9emes et 11emes
+		if key.scale_name == "major":
+			if degree_number == 5:
+				gc_array.append_array(ggb.search_by_name(root_name+"7"))
+				gc_array.append_array(ggb.search_by_name(root_name+"9"))
+				
+			elif degree_number == 2 or degree_number == 6 or degree_number == 3 :
+				gc_array.append_array(ggb.search_by_name(root_name+"m9"))
+				if degree_number == 2 or degree_number == 6:
+					gc_array.append_array(ggb.search_by_name(root_name+"m11"))
+				elif degree_number == 5:
+					gc_array.append_array(ggb.search_by_name(root_name+"11"))
+		elif key.scale_name == "minor":	
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"m9"))	
+				gc_array.append_array(ggb.search_by_name(root_name+"m11"))
+			elif degree_number == 1:
+				gc_array.append_array(ggb.search_by_name(root_name+"m11"))
+		elif key.scale_name == "harmonic_minor":	
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"9"))	
 
 	
 	# search by notes
 	var midi_notes =  PoolIntArray(get_chord_midi())
-	gc_array = ggb.search_by_pitches(midi_notes)
-	if gc_array != null and gc_array.size()>0:
-		var filtered_gc_array = []
-		for c in gc_array:
-			#LogBus.info(TAG,c.chord_name + " -> " + str(c.midiNotes()))
-			if same_pitch_class(c.midiNotes()[0],get_chord_midi()[0]) :
-				filtered_gc_array.append(c)
-		if filtered_gc_array.size() > 0:
-			return filtered_gc_array
-		else :
-			return gc_array
-	return gc_array
+	var gc_by_pitch = ggb.search_by_pitches(midi_notes)
+	#LogBus.debug(TAG,"gc_by_pitch.size()" + str(gc_by_pitch.size()))
+	
+	var gc_array_midiNotes = []
+	for gc in gc_array:
+		gc_array_midiNotes.append(gc.midiNotes)
+	
+	
+	
+	# on ajoute en dédoublonnant
+	for gc in gc_by_pitch:
+		if pool_int_array_in_array(gc.midiNotes , gc_array_midiNotes) == false:
+			gc_array.append(gc)
+				
+	return gc_array.duplicate()
 	
 func same_pitch_class(p1:int,p2:int)->bool:
 	return ((p1 % 12) ==  (p2 % 12))
@@ -2185,7 +2227,7 @@ func chromatizeUp():
 		comment = "chromatized chord"
 	elif quality_with_alter() == "maj":
 		var midi_root = key.degree_midi(degree_number) + get_chord_alteration(1)
-		#LogBus.debug(TAG,"midi_root:" + str(midi_root))
+
 		reset()
 		key.scale_name = "harmonic_minor"
 		key.root_midi = 60 + (midi_root + 9 ) % 12
@@ -2202,3 +2244,8 @@ func chromatizeUp():
 	LogBus.info(TAG,"Cannot chromatize this chord")
 	return
 	
+func pool_int_array_in_array(needle: PoolIntArray, haystack: Array) -> bool:
+	for arr in haystack:
+		if arr == needle:
+			return true
+	return false

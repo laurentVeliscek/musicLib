@@ -185,3 +185,8 @@ func _format_label(index: int, name: String) -> String:
 	while s.length() < 3:
 		s = "0" + s
 	return s + " " + name
+
+func get_program_change()->ProgramChange:
+	var pc:ProgramChange = ProgramChange.new()
+	pc.set_program(get_program())
+	return pc
