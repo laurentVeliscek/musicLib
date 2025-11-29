@@ -970,16 +970,9 @@ func get_chord_midi() -> Array:
 
 	# on gere les inversions
 	var _inversion # <= pour effecturer les inversions sans perdre inversopn = -1  -> aléatoire
-	 
-	if inversion == -1:			# INVERSION ALEATOIRE
-		if realization.size() == 3:
-			_inversion = randi() % 2
-			
-		elif realization.size() == 4:
-			_inversion = randi() % 4
-		else:
-			LogBus.error(TAG,"chord_midi -> inversion -> realization.size() not 3 or 4")
-			return []
+	
+	if inversion == -1:
+		_inversion = 0
 	else :
 		_inversion = inversion
 	
