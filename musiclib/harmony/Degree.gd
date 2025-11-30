@@ -431,6 +431,15 @@ func set_kind(k:String):
 	var kinds = ["melodic","diatonic","secondary","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 	if kinds.has(k):
 		kind = k
+		match kind:
+			"it+6": set_aug6_It()
+			"Fr+6": set_aug6_Fr()
+			"Ger+6": set_aug6_Ger()			
+			"it+6Inv": set_aug6_It_inv()
+			"Fr+6Inv": set_aug6_Fr_inv()
+			"Ger+6Inv": set_aug6_Ger_inv()
+			
+			
 	else:
 		LogBus.error("Degree","set_kind of unknown kind ! -> "+ k)
 	
@@ -953,9 +962,9 @@ func get_chord_midi() -> Array:
 		return midi_pitches
 	
 
-        if realization.size() == 0 :
-                LogBus.warn("Degree","get_chord_midi: empty realization")
-                return []
+		if realization.size() == 0 :
+				LogBus.warn("Degree","get_chord_midi: empty realization")
+				return []
 	var midi_pitches = []
 	
 	for n in realization:
@@ -2024,27 +2033,31 @@ func guitar_chords()-> Array :
 			chord_name = root_name+"minor"
 		elif third_distance() == 4:
 			chord_name = root_name+"major"
+	elif kind == "It+6" or kind == "Fr+6" or kind == "Ger+6":
+		chord_name = root_name+"7"
+	elif kind == "It+6Inv" or kind == "Fr+6Inv" or kind == "Ger+6Inv":
+		chord_name = root_name+"7"
 	
 	# search by name
-		gc_array = ggb.search_by_name(chord_name)
-	
+	gc_array = ggb.search_by_name(chord_name)
+	LogBus.debug(TAG,"gc_array.size() (by_name) -> "+str(gc_array.size()))
 	# on ajoute les 6/9
-		if key.scale_name == "major":
-			if (degree_number == 1 or degree_number == 4 or degree_number == 5):
-				gc_array.append_array(ggb.search_by_name(root_name+"69"))
-			elif degree_number == 2:
-				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-		elif key.scale_name == "minor":
-			if (degree_number == 3 or degree_number == 6 or degree_number == 7):
-				gc_array.append_array(ggb.search_by_name(root_name+"69"))
-			elif degree_number == 4:
-				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-		elif  key.scale_name == "harmonic_minor":
-			if degree_number == 4:
-				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-		elif key.scale_name == "melodic_minor":
-			if degree_number == 4:
-				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+	if key.scale_name == "major":
+		if (degree_number == 1 or degree_number == 4 or degree_number == 5):
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+		elif degree_number == 2:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif key.scale_name == "minor":
+		if (degree_number == 3 or degree_number == 6 or degree_number == 7):
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+		elif degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif  key.scale_name == "harmonic_minor":
+		if degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif key.scale_name == "melodic_minor":
+		if degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
 				
 				
 	# on ajoute les sus2 et sus4
@@ -2091,7 +2104,8 @@ func guitar_chords()-> Array :
 		if pool_int_array_in_array(gc.midiNotes , gc_array_midiNotes) == false:
 			gc_array.append(gc)
 				
-	return gc_array.duplicate()
+	LogBus.debug(TAG,"gc_array.size() -> "+str(gc_array.size()))
+	return gc_array
 	
 func same_pitch_class(p1:int,p2:int)->bool:
 	return ((p1 % 12) ==  (p2 % 12))
