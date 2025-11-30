@@ -574,62 +574,137 @@ func set_aug6_It():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "It+6"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
-	
-	
+	degree_number = 4
+	realization = [1,3,5]
+	inversion = 1
+	var scale_name = key.scale_name
+	set_key_alteration(4,1)
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
+
+
 func set_aug6_Fr():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "Fr+6"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
+	degree_number = 4
+	realization = [1,3,5,6]
+	inversion = 1
+	var scale_name = key.scale_name
+	set_key_alteration(4,1)
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
 
 func set_aug6_Ger():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "Ger+6"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
+	degree_number = 4
+	realization = [1,3,5,7]
+	inversion = 1
+	var scale_name = key.scale_name
+	# Dans tous le cas
+	set_key_alteration(4,1)
+	if scale_name == "major":
+		set_key_alteration(3,-1)
+
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
 
 
 func set_aug6_It_inv():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "It+6inv"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
-	
-	
+	degree_number = 4
+	realization = [1,3,5]
+	inversion = 0
+	var scale_name = key.scale_name
+	set_key_alteration(4,1)
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
+
+
 func set_aug6_Fr_inv():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "Fr+6inv"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
+	degree_number = 4
+	realization = [1,3,5,6]
+	inversion = 0
+	var scale_name = key.scale_name
+	# Dans tous le cas
+	set_key_alteration(4,1)
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
 
 func set_aug6_Ger_inv():
 #	if ["minor", "harmonic_minor","melodic_minor","major"].has( key.get_scale_name()) == false:
 #		LogBus.error(TAG,"It+6 is only available in minor/major")
 #		return
+	var oct = _octave
+	var old_key = key
+	reset()
+	_octave = oct
+	key = old_key
 	kind = "Ger+6inv"
-	# Le reste se fait dans get_chord_midi !
-	# on force le passage
-	var c = get_chord_midi()
+	degree_number = 4
+	realization = [1,3,5,7]
+	inversion = 0
+	var scale_name = key.scale_name
+	# Dans tous le cas
+	set_key_alteration(4,1)
+	if scale_name == "major":
+		set_key_alteration(3,-1)
 
+	# si minor on ne touche pas à la sixte de la tonalité
+	if scale_name == "major" or scale_name == "melodic_minor" :
+		set_key_alteration(6,-1)
+	harmonic_function = "PD"
 
 
 func set_sus2():
+
 	var n = degree_number
 	reset()
 	kind = "sus2"
@@ -877,115 +952,10 @@ func get_chord_midi() -> Array:
 			
 		return midi_pitches
 	
-	# Commun à toutes les sixtes italiennes
-	elif kind == "It+6":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5]
-		inversion = 1
-		kind = "It+6"
-		var scale_name = key.scale_name
-		set_key_alteration(4,1)
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"
-		# Commun à toutes les sixtes italiennes
-	elif kind == "It+6inv":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5]
-		inversion = 0
-		kind = "It+6inv"
-		var scale_name = key.scale_name
-		set_key_alteration(4,1)
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"
-	
-		
-	elif kind == "Fr+6":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5,6]
-		inversion = 1
-		kind = "Fr+6"
-		var scale_name = key.scale_name
-		set_key_alteration(4,1)
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"	
-	
-	elif kind == "Fr+6inv":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5,6]
-		inversion = 0
-		kind = "Fr+6inv"
-		var scale_name = key.scale_name
-		#_octave = -1
-		# Dans tous le cas
-		set_key_alteration(4,1)
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"	
-				
-	elif kind == "Ger+6":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5,7]
-		inversion = 1
-		kind = "Ger+6"
-		var scale_name = key.scale_name
-		#_octave = -1
-		# Dans tous le cas
-		set_key_alteration(4,1)
-		if scale_name == "major":
-			set_key_alteration(3,-1)
-		
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"	
-			
-	elif kind == "Ger+6inv":
-		var oct = _octave
-		reset()
-		_octave = oct
-		degree_number = 4
-		realization = [1,3,5,7]
-		inversion = 0
-		kind = "Ger+6inv"
-		var scale_name = key.scale_name
-		#_octave = -1
-		# Dans tous le cas
-		set_key_alteration(4,1)
-		if scale_name == "major":
-			set_key_alteration(3,-1)
-		
-		# si minor on ne touche pas à la sixte de la tonalité
-		if scale_name == "major" or scale_name == "melodic_minor" :
-			set_key_alteration(6,-1)
-		harmonic_function = "PD"	
-			
-	
-		
-	if realization.size() == 0 :
-		LogBus.warn("Degree","get_chord_midi: empty realization")
-		return [] 
+
+        if realization.size() == 0 :
+                LogBus.warn("Degree","get_chord_midi: empty realization")
+                return []
 	var midi_pitches = []
 	
 	for n in realization:
@@ -1000,16 +970,9 @@ func get_chord_midi() -> Array:
 
 	# on gere les inversions
 	var _inversion # <= pour effecturer les inversions sans perdre inversopn = -1  -> aléatoire
-	 
-	if inversion == -1:			# INVERSION ALEATOIRE
-		if realization.size() == 3:
-			_inversion = randi() % 2
-			
-		elif realization.size() == 4:
-			_inversion = randi() % 4
-		else:
-			LogBus.error(TAG,"chord_midi -> inversion -> realization.size() not 3 or 4")
-			return []
+	
+	if inversion == -1:
+		_inversion = 0
 	else :
 		_inversion = inversion
 	
