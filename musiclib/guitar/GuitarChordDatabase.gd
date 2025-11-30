@@ -77,7 +77,7 @@ func load_from_json(json_path: String) -> bool:
 func search_by_name(chord_name: String) -> Array:
 
 	if _chords_by_name.has(chord_name):
-		return _chords_by_name[chord_name]
+		return _chords_by_name[chord_name].duplicate()
 	return []
 
 # --- Recherche par pitch classes
