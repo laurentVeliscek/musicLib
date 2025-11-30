@@ -168,8 +168,66 @@ func load_song_from_file(path:String, compressed_hint:bool = true) -> Song:
 	var song:Song = dummy.from_dict(data)
 	set_song(song)
 	
-	LogBus.info(TAG, "load_song_from_file(): Song restored from " + path)
-	return song
+        LogBus.info(TAG, "load_song_from_file(): Song restored from " + path)
+        return song
+
+
+func load_song_from_browser_picker() -> void:
+        # Ouvre une boîte de dialogue du navigateur (HTML5) pour charger une Song JSON
+        if not (OS.has_feature("HTML5") and Engine.has_singleton("JavaScript")):
+                LogBus.error(TAG, "load_song_from_browser_picker(): HTML5 + JavaScript required")
+                return
+
+        var js_win = JavaScript.get_interface("window")
+        if js_win == null:
+                LogBus.error(TAG, "load_song_from_browser_picker(): JavaScript window interface unavailable")
+                return
+
+        # Callback appelé par le JavaScript du navigateur une fois le fichier lu
+        js_win.musiclib_on_song_loaded = JavaScript.create_callback(self, "_on_browser_song_loaded")
+
+        var js_code := ""
+        js_code += "(function(){"
+        js_code += "  var input=document.createElement('input');"
+        js_code += "  input.type='file';"
+        js_code += "  input.accept='.json,application/json';"
+        js_code += "  input.style.display='none';"
+        js_code += "  document.body.appendChild(input);"
+        js_code += "  input.addEventListener('change', function(event){"
+        js_code += "    var file=input.files && input.files[0];"
+        js_code += "    if(!file){ window.musiclib_on_song_loaded(null); document.body.removeChild(input); return; }"
+        js_code += "    var reader=new FileReader();"
+        js_code += "    reader.onload=function(e){ window.musiclib_on_song_loaded(e.target.result); document.body.removeChild(input); };"
+        js_code += "    reader.onerror=function(){ window.musiclib_on_song_loaded(null); document.body.removeChild(input); };"
+        js_code += "    reader.readAsText(file);"
+        js_code += "  });"
+        js_code += "  input.click();"
+        js_code += "})();"
+
+        JavaScript.eval(js_code, true)
+        LogBus.info(TAG, "load_song_from_browser_picker(): waiting for user file selection")
+
+
+func _on_browser_song_loaded(result) -> void:
+        # Callback interne : 'result' est le contenu du fichier JSON ou null
+        if result == null:
+                LogBus.error(TAG, "_on_browser_song_loaded(): no data received from browser")
+                return
+
+        if typeof(result) != TYPE_STRING:
+                LogBus.error(TAG, "_on_browser_song_loaded(): unexpected data type " + str(typeof(result)))
+                return
+
+        var parsed = parse_json(result)
+        if typeof(parsed) != TYPE_DICTIONARY:
+                LogBus.error(TAG, "_on_browser_song_loaded(): parsed JSON is not a Dictionary")
+                return
+
+        var dummy:Song = Song.new()
+        var song:Song = dummy.from_dict(parsed)
+        set_song(song)
+
+        LogBus.info(TAG, "_on_browser_song_loaded(): Song loaded from browser picker -> " + song.title)
 
 
 
