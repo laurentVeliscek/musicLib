@@ -1,6 +1,11 @@
 extends Reference
 class_name GuitarPatternGenerator
 
+
+const FULL_ALPHABET = " .DdUu01234xXBbFfwW"
+const FULL_ALPHABET_NO_GAP = "DdUu01234xXBbFfwW"
+const FULL_ALPHABET_NO_GAP_WITH_POINT = "...DdUu01234xXBbFfwW"
+const SINGLES_ALPHABET = "01234Bb..."
 """
 Générateur de patterns de guitare folk non-déterministes.
 
@@ -48,6 +53,30 @@ func generate(style: String) -> Dictionary:
 			return _generate_bossa()
 		"r'n b", "rnb":
 			return _generate_rnb()
+		"random":
+			return _generate_random()
+		"random_no_gap":
+			return _generate_random_no_gap()
+		"random_melody":
+			return _generate_random_melody()
+		"brassens":
+			return _generate_brassens()
+		"arpeggio1":
+			return _generate_arpeggio1()
+		"arpeggio2":
+			return _generate_arpeggio2()
+		"ska":
+			return _generate_ska()
+		"reggae":
+			return _generate_reggae()
+		"shame_shame":
+			return _generate_shame_shame()
+		"torn":
+			return _generate_torn()
+		"london_calling":
+			return _generate_london_calling()
+		"playa":
+			return _generate_playa()
 		_:
 			push_warning("GuitarPatternGenerator: Unknown style '%s', defaulting to Folk" % style)
 			return _generate_folk()
@@ -56,6 +85,90 @@ func generate(style: String) -> Dictionary:
 # ============================================================================
 # FUNKY - Double croches rythmiques avec mutes
 # ============================================================================
+
+#5
+func _generate_random() -> Dictionary:
+	var pattern = ""
+	var step = 0.25
+	
+	for i in range(0,16):
+		var pos  = rng.randi() % FULL_ALPHABET.length()
+		pattern += FULL_ALPHABET[pos]
+	
+	return {"pattern": pattern, "step_beat_length": step}
+
+#6
+func _generate_random_no_gap() -> Dictionary:
+	var pattern = ""
+	var step = 0.25
+	for i in range(0,16):
+		var pos  = rng.randi() % FULL_ALPHABET_NO_GAP_WITH_POINT.length()
+		pattern += FULL_ALPHABET_NO_GAP_WITH_POINT[pos]
+	
+	return {"pattern": pattern, "step_beat_length": step}
+	
+#7
+func _generate_random_melody() -> Dictionary:
+	var pattern = ""
+	var step = 0.25
+	for i in range(0,16):
+		var pos  = rng.randi() % SINGLES_ALPHABET.length()
+		pattern += SINGLES_ALPHABET[pos]
+	
+	return {"pattern": pattern, "step_beat_length": step}
+
+#8
+func _generate_brassens() -> Dictionary:
+	var pattern = "B.U.b.u.B.U.b.u."
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+	
+#9
+func _generate_arpeggio1() -> Dictionary:
+	var pattern = "B1213212b1213212"
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+
+#10
+func _generate_arpeggio2() -> Dictionary:
+	var pattern = "B232432302324323"
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+#11
+func _generate_ska() -> Dictionary:
+	var pattern = " U U U U U U U U"
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+#12
+func _generate_reggae() -> Dictionary:
+	var pattern = "    D       D x"
+	var step = 0.125
+	return {"pattern": pattern, "step_beat_length": step}
+#13
+func _generate_shame_shame() -> Dictionary:
+	var pattern = "DxXxD D. xUxD.Xx"
+	var step = 0.125
+	return {"pattern": pattern, "step_beat_length": step}
+#14
+func _generate_torn() -> Dictionary:
+	var pattern = "DUDUD.xU.UDUD..."
+	var step = 0.125
+	return {"pattern": pattern, "step_beat_length": step}	
+#15
+func _generate_london_calling() -> Dictionary:
+	var pattern = "D D D D D D D D "
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+#16
+func _generate_playa() -> Dictionary:
+	var pattern = "DUDUxuxuDUDUxuxu"
+	var step = 0.25
+	return {"pattern": pattern, "step_beat_length": step}
+
+
+
+
+
 
 func _generate_funky() -> Dictionary:
 	"""
@@ -138,6 +251,9 @@ func _pick_funky_hit() -> String:
 # ============================================================================
 # FOLK - Croches classiques avec points
 # ============================================================================
+
+
+
 
 func _generate_folk() -> Dictionary:
 	"""

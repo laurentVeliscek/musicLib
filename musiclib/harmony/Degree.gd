@@ -4,7 +4,7 @@ class_name Degree
 # Objet Degree 
 
 const DEFAULT_MIDI_CHANNEL = 0	# canal 0
-const DEFAULT_MIDI_VELOCITY = 100	# vélocité 100
+const DEFAULT_MIDI_VELOCITY = 120	# vélocité 100
 const TAG = "Degree"
 
 
@@ -2025,6 +2025,8 @@ func guitar_chords()-> Array :
 	var gc_array = []
 	var basePitch =  key.degree_midi(degree_number) % 12
 	var root_name = keys[basePitch]
+	var triton_root_name = keys[(basePitch + 6) %12]
+	var backdoor_root_name = keys[(basePitch + 3) %12]
 	var chord_name = get_jazz_chord()
 	var ggb = MusicLabGlobals.GuitarBase
 	
@@ -2040,31 +2042,17 @@ func guitar_chords()-> Array :
 	
 	# search by name
 	gc_array = ggb.search_by_name(chord_name)
-	LogBus.debug(TAG,"gc_array.size() (by_name) -> "+str(gc_array.size()))
-	# on ajoute les 6/9
-	if key.scale_name == "major":
-		if (degree_number == 1 or degree_number == 4 or degree_number == 5):
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
-		elif degree_number == 2:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif key.scale_name == "minor":
-		if (degree_number == 3 or degree_number == 6 or degree_number == 7):
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
-		elif degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif  key.scale_name == "harmonic_minor":
-		if degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif key.scale_name == "melodic_minor":
-		if degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
-				
-				
+	
+	
+					
 	# on ajoute les sus2 et sus4
-	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7:
+	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7 and degree_number !=1  and degree_number !=5:
 		gc_array.append_array(ggb.search_by_name(root_name+"sus2"))
 		gc_array.append_array(ggb.search_by_name(root_name+"sus4"))
 		
+	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7 :
+
+	
 		# et les 9emes et 11emes
 		if key.scale_name == "major":
 			if degree_number == 5:
@@ -2088,6 +2076,44 @@ func guitar_chords()-> Array :
 				gc_array.append_array(ggb.search_by_name(root_name+"9"))	
 
 	
+	# on ajoute les 6/9
+	if key.scale_name == "major":
+		if (degree_number == 1 or degree_number == 4 or degree_number == 5):
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+		elif degree_number == 2:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif key.scale_name == "minor":
+		if (degree_number == 3 or degree_number == 6 or degree_number == 7):
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+		elif degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif  key.scale_name == "harmonic_minor":
+		if degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+	elif key.scale_name == "melodic_minor":
+		if degree_number == 4:
+			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+				
+
+	# Et les Dominantes altérées
+	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7 and degree_number == 5:
+		if key.scale_name == "major":
+			gc_array.append_array(ggb.search_by_name(root_name+"7b9"))
+			gc_array.append_array(ggb.search_by_name(root_name+"7#9"))
+			gc_array.append_array(ggb.search_by_name(root_name+"7sus4"))
+			gc_array.append_array(ggb.search_by_name(root_name+"alt"))
+			# Substitutions tritoniques (♭II7 et cie)
+			#gc_array.append_array(ggb.search_by_name(triton_root_name+"7"))
+			#
+			# ♭VII7 (B♭7) : « backdoor dominant »
+			#gc_array.append_array(ggb.search_by_name(backdoor_root_name+"7"))
+		elif key.scale_name == "harmonic_minor":	
+			gc_array.append_array(ggb.search_by_name(root_name+"7b9"))
+			gc_array.append_array(ggb.search_by_name(root_name+"7#9"))
+			gc_array.append_array(ggb.search_by_name(root_name+"7sus4"))
+			gc_array.append_array(ggb.search_by_name(root_name+"alt"))
+		
+	
 	# search by notes
 	var midi_notes =  PoolIntArray(get_chord_midi())
 	var gc_by_pitch = ggb.search_by_pitches(midi_notes)
@@ -2104,7 +2130,7 @@ func guitar_chords()-> Array :
 		if pool_int_array_in_array(gc.midiNotes , gc_array_midiNotes) == false:
 			gc_array.append(gc)
 				
-	LogBus.debug(TAG,"gc_array.size() -> "+str(gc_array.size()))
+	
 	return gc_array
 	
 func same_pitch_class(p1:int,p2:int)->bool:

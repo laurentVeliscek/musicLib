@@ -2076,7 +2076,19 @@ func multiply(n:int, clone:bool = false):
 	events.sort_custom(self, "compare_events_by_time")
 			
 				
-				
+
+
+# retourne tous les degrés de la Tarck avec leur start
+func get_degrees_with_start()->Array:
+	var arr = []
+	for e in events:
+		if e.has("degree"):
+			var d_dic = {}
+			d_dic["degree"] = e["degree"]
+			d_dic["start"] = e["start"]
+			arr.append(d_dic)
+	return arr
+						
 #func add_note(start_beats: float, note) -> int:
 #	var ev: Dictionary = {}
 #	var t = max(0.0, float(start_beats))

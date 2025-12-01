@@ -311,7 +311,8 @@ func clone():
 	return c
 
 func to_string() -> String:
-	return "GuitarChord{" + chord_name + ", bf=" + str(base_fret) + ", frets=" + str(frets) + ", fingers=" + str(fingers) + "}"
+	var txt_time = "start: " + str(start) + "  Length: "+ str(length_beats) + "\n"
+	return txt_time + "GuitarChord{" + chord_name + ", bf=" + str(base_fret) + ", frets=" + str(frets) + ", fingers=" + str(fingers) + "}"
 
 # --- Helpers nom→pitch class (0..11)
 func _pc_from_note_name_local(s: String) -> int:

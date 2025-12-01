@@ -4,6 +4,9 @@ extends Node
 ########### MIDIPLAYER ############
 var midiPlayer:MidiPlayer = null
 const mySoundFontPath = "res://soundfonts/Aspirin-Stereo.sf2"
+#const mySoundFontPath = "res://soundfonts/FatBoy-v0.786.sf2"
+#const mySoundFontPath = "res://soundfonts/GeneralUser-GS.sf2"
+
 #const mySoundFontPath = "res://soundfonts/SteinwayD.sf2"
 #const mySoundFontPath = "res://soundfonts/FluidR3_GM.sf2"
 #const mySoundFontPath = "res://soundfonts/MuseScore.sf2"
