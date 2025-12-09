@@ -157,6 +157,8 @@ d.set_N6()
 d.set_aug6_It()
 ```
 
+Notice that secondary dominants are not a special kind and are set as diatonic chords in their key
+
 **List of recognized kinds:**
 
 ```
