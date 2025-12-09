@@ -1,203 +1,194 @@
 
-musicLib
-========
-
----
-
-# 🇫🇷 Présentation
-
-**MusicLib** est une librairie Godot 3.6 conçue pour manipuler des progressions d’accords en s’appuyant sur les principes de l’harmonie classique : tonalités, degrés, fonctions harmoniques, sixtes napolitaines, accords de sixte augmentée, dominantes secondaires, etc.
-
-L’objet central de MusicLib est l’objet **`Degree`**.
-
----
-
-# 🇬🇧 Overview
-
-**MusicLib** is a Godot 3.6 library designed to manipulate chord progressions based on classical harmony principles: keys, scale degrees, harmonic functions, Neapolitan sixth, augmented sixth chords, secondary dominants, and more.
+**MusicLib** is a Godot 3.6 library designed to manipulate chord progressions following classical harmony principles: *keys, scale degrees, harmonic functions, Neapolitan sixth, augmented sixth chords, secondary dominants,* and more.
 
 The central object of MusicLib is the **`Degree`** object.
 
 ---
 
-# 🇫🇷 Création d’un Degree
-
-# 🇬🇧 Creating a Degree
+## Creating a Degree
 
 ```gdscript
 var d:Degree = Degree.new()
 ```
 
-Par défaut, le degré est le I en Do majeur, sous forme de triade.
-By default, the degree is I in C major, as a triad.
+By default, a Degree is:
+
+* degree **I**
+* in **C major**
+* a *triad* built on the tonic
 
 ---
 
-# 🇫🇷 Tonalité (HarmonicKey)
-
-# 🇬🇧 Key (HarmonicKey)
-
-Pour associer une tonalité :
-To assign a key:
+## Assigning a Key to a Degree
 
 ```gdscript
 d.key = hk
 ```
 
-Une tonalité est définie par :
-A key is defined by:
+Where **`hk`** is a `HarmonicKey` object (`HarmonicKey.gd`).
 
-* **root_midi : int** — hauteur MIDI de la tonique
-  *MIDI pitch of the root note*
-* **scale_name : string** — le mode de la tonalité
-  *the mode of the key*
+A *HarmonicKey* is defined by:
 
-Modes disponibles :
-Available modes:
+### • `root_midi : int`
+
+The MIDI pitch of the key’s root.
+
+For example, to instantiate A minor, `root_midi` can be **67** or **7**
+(the library uses modulo-12 internally: C = 0, C# = 1 … B = 11).
+
+### • `scale_name : string`
+
+The mode of the key.
+
+In tonal harmony, the base modes are:
+`major`, `minor`, `harmonic_minor`, `melodic_minor`.
+
+Keys may also be modal or exotic; each mode contains 7 notes, and therefore 7 degrees.
+
+**List of available modes:**
 
 ```
-ionian, dorian, phrygian, lydian, mixolydian, aeolian, locrian,
-major, minor, harmonic_minor, melodic_minor, locrian_n6, ionian_#5,
-ukrainian_dorian, phrygian_dominant, lydian_#2, ultralocrian,
-dorian_b2, lydian_#5, overtone, hindu, half_diminished, altered,
-harmonic_major, double_harmonic, double_harmonic_major, byzantine,
-gypsy_major, hungarian_major, hungarian_minor, gypsy_minor,
-neapolitan_major, neapolitan_minor, enigmatic, persian,
-major_locrian, leading_whole_tone, romanian_major
+[ionian, dorian, phrygian, lydian, mixolydian, aeolian, locrian,
+ major, minor, harmonic_minor, locrian_n6, ionian_#5, ukrainian_dorian,
+ phrygian_dominant, lydian_#2, ultralocrian, melodic_minor, dorian_b2,
+ lydian_#5, overtone, hindu, half_diminished, altered, harmonic_major,
+ double_harmonic, double_harmonic_major, byzantine, gypsy_major,
+ hungarian_major, hungarian_minor, gypsy_minor, neapolitan_major,
+ neapolitan_minor, enigmatic, persian, major_locrian, leading_whole_tone,
+ romanian_major]
 ```
 
-Exemple / Example:
+### Instantiating a HarmonicKey
 
 ```gdscript
-var myKey = HarmonicKey.new()
+var myKey:HarmonicKey = HarmonicKey.new()
 myKey.root_midi = 2              # D
 myKey.scale_name = "harmonic_minor"
+```
+
+Assigning it to our Degree:
+
+```gdscript
 d.key = myKey
 ```
 
 ---
 
-# 🇫🇷 Numéro de degré
-
-# 🇬🇧 Degree Number
+## Degree Number
 
 ```gdscript
 d.degree_number = 1..7
 ```
 
-Le degré 1 est la tonique.
-Degree 1 is the tonic.
+In classical harmony, the tonic is **degree 1**, not 0.
 
-Chaque objet possède `to_string()` pour afficher ses caractéristiques.
-Each object has `to_string()` to display its characteristics.
+Each object has a `to_string() -> string` function for easy display.
 
 ---
 
-# 🇫🇷 Journalisation (LogBus)
+## Logging
 
-# 🇬🇧 Logging (LogBus)
+MusicLib uses a **LogBus** object for tracing and debugging.
+
+Each object defines:
 
 ```gdscript
+const TAG = "object_name"
 LogBus.debug(TAG, d.to_string())
 ```
 
-Exemple / Example output:
+Example output:
 
 ```
 Degree: ii° of key: D harmonic_minor(62), Duration: 4 beats, harmonic function: PD
 kind: diatonic, realization: [1, 3, 5], inversion: 0
-Roman Numeral: ii°, jazz chord: Edim, midi: [64, 67, 70]
+Roman Numeral: ii°, jazz chord: Edim, midi: [64, 67, 70] -> [E4, G4, A#4]
 ```
 
 ---
 
-# 🇫🇷 Autres propriétés du Degree
+## Other Degree Properties
 
-# 🇬🇧 Other Degree Properties
-
-### 🇫🇷 Durée (beats)
-
-### 🇬🇧 Duration (beats)
+### • Duration (in beats)
 
 ```gdscript
-d.length_beats = 4
+d.length_beats = 4       # whole note
 ```
 
-### 🇫🇷 Réalisation (notes de l’accord)
+### • Realization
 
-### 🇬🇧 Realization (chord tones)
+The chord tones to include:
 
 ```gdscript
-d.realization = [1, 3, 5, 7]
+d.realization = [1, 3, 5, 7]   # a seventh chord
 ```
 
-### 🇫🇷 Renversement
-
-### 🇬🇧 Inversion
+### • Inversion
 
 ```gdscript
-d.inversion = 1
+d.inversion = 1               # first inversion (third in the bass)
 ```
 
-### 🇫🇷 Fonction harmonique
+### • Harmonic Function
 
-### 🇬🇧 Harmonic Function
+T = Tonic • PD = Predominant • D = Dominant
 
 ```gdscript
-d.set_harmonic_function("PD")   # Predominant
+d.set_harmonic_function("PD")
 ```
 
----
+### • Kind (chord type)
 
-# 🇫🇷 Kind (type d’accord)
+Default: **"diatonic"**
 
-# 🇬🇧 Kind (chord type)
+It can also be:
 
-Par défaut / Default: **"diatonic"**
+* Neapolitan sixth: `N6`
+* augmented sixth chords: `It+6`, `Fr+6`, `Ger+6`
+* cadential 6/4: `cad64`
+* suspended: `sus2`, `sus4`
+* added tones: `add9`, `add11`
+* melodic (single-note degree)
 
-Peut être / Can be:
-
-* N6 (sixte napolitaine) / Neapolitan sixth
-* It+6, Fr+6, Ger+6 (sixte augmentée) / augmented sixth chords
-* cad64 (accord cadentiel) / cadential 6/4
-* sus2 / sus4
-* add9 / add11
-* melodic (une seule note) / single-note degree
-
-Exemples / Examples:
+Setter examples:
 
 ```gdscript
 d.set_N6()
 d.set_aug6_It()
 ```
 
-Kinds disponibles :
-Available kinds:
+**List of recognized kinds:**
 
 ```
-melodic, diatonic, secondary,
-It+6, Fr+6, Ger+6, It+6inv, Fr+6inv, Ger+6inv,
-N6, chrom., cad64, sus2, sus4, add9, add11
+["melodic","diatonic","secondary",
+ "It+6","Fr+6","Ger+6","It+6inv","Fr+6inv","Ger+6inv",
+ "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 ```
+
+*(“chrom.” is not yet implemented.)*
 
 ---
 
-# 🇫🇷 Altération du degré
-
-# 🇬🇧 Altering the Degree
+## Altering the Degree
 
 ```gdscript
-d.set_key_alteration(6, 1)   # raise degree 6
+func set_key_alteration(degree:int, alter:alter)
 ```
 
-Permet, par exemple, de transformer minor → melodic minor.
-For example, minor → melodic minor.
+Example:
+Alter the 6th degree of *harmonic_minor* to obtain *melodic_minor*:
 
----
+```gdscript
+d.set_key_alteration(6, 1)
+```
 
-# 🇫🇷 Commentaire libre
+Alterations are stored in:
 
-# 🇬🇧 Free Comment
+```gdscript
+d._alterations = {6: 1}
+```
+
+A free text comment can be added:
 
 ```gdscript
 d.comment = "secondary dominant"
@@ -205,26 +196,16 @@ d.comment = "secondary dominant"
 
 ---
 
-# 🇫🇷 Track
+## Tracks
 
-# 🇬🇧 Track
-
-Créer une piste :
-Create a track:
+Degrees can be placed into a **Track**:
 
 ```gdscript
-var tr = Track.new()
+var tr:Track = Track.new()
+tr.add_degree(2, d)   # place on beat 3 (time 0 = beat 1)
 ```
 
-Ajouter un degré au 3ᵉ temps (index 2) :
-Add a degree on beat 3 (index 2):
-
-```gdscript
-tr.add_degree(2, d)
-```
-
-Vélocité MIDI :
-MIDI velocity:
+Velocity:
 
 ```gdscript
 d.velocity = 90
@@ -232,55 +213,48 @@ d.velocity = 90
 
 ---
 
-# 🇫🇷 Song
+## Song Object
 
-# 🇬🇧 Song
+A **Song** aggregates tracks:
 
 ```gdscript
-var mySong = Song.new()
+var mySong:Song = Song.new()
 ```
 
-### 🇫🇷 Signature rythmique
-
-### 🇬🇧 Time signature
+### Time signature
 
 ```gdscript
 mySong.time_num = 3
-mySong.time_den = 4
+mySong.time_den = 4       # waltz
 ```
 
-### 🇫🇷 Tempo
-
-### 🇬🇧 Tempo
+### Tempo
 
 ```gdscript
 mySong.tempo_bpm = 140
 ```
 
-### 🇫🇷 Objets MIDI
+### MIDI-oriented objects
 
-### 🇬🇧 MIDI objects
-
-Dans *musicLib/Core* :
-In *musicLib/Core*:
-
-* Note
-* ProgramChange
-* MidiCC
+Located in *musicLib/Core*:
+`Note`, `ProgramChange`, `MidiCC`
 
 ---
 
-# 🇫🇷 Visualisation (songTrackView)
+## Guitar Chords and Visualization
 
-# 🇬🇧 Visualization (songTrackView)
+MusicLib allows:
 
-MusicLib permet d’afficher les pistes sous différentes formes :
-MusicLib can display track content in different formats:
+* associating guitar chord shapes with any Degree
+* displaying them
+* visualizing Tracks using different representations:
 
-* chiffres romains / Roman numerals
-* notes MIDI
-* symboles jazz / jazz chord names
-* clavier / keyboard view
-* accords de guitare / guitar chord shapes
+  * Roman numeral notation
+  * MIDI notes
+  * jazz chord symbols
+  * keyboard layout
+    (using `songTrackView`)
+
+
 
 
