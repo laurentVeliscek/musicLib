@@ -3,6 +3,8 @@ class_name TonalProgressionHelper
 
 const TAG = "TonalProgressionHelper"
 
+var rng: RandomNumberGenerator = null
+
 #-------------------------------------------------------------------------------
 # Graphe MAJEUR : structure proche du JSON donné précédemment
 #-------------------------------------------------------------------------------
@@ -383,6 +385,11 @@ const GRAPH_MINOR = {
 func _init():
 	pass
 
+func _randi(max_val: int) -> int:
+	if rng != null:
+		return rng.randi() % max_val
+	return randi() % max_val
+
 #-------------------------------------------------------------------------------
 # API principale
 #-------------------------------------------------------------------------------
@@ -512,34 +519,56 @@ func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, cur
 
 func _filter_next_for_deceptive(next_list: Array, current_node: Dictionary, current_state: Dictionary) -> Array:
 	var deceptive = current_state.get("deceptive", false)
-	if not deceptive:
-		return next_list
-
 	var current_function = String(current_node.get("function", ""))
+
+	# Seulement applicable quand on est sur une fonction dominante
 	if current_function != "D":
 		return next_list
 
-	var scale_name = String(current_state.get("scale_name", "major"))
-	var deceptive_targets = []
-	if scale_name == "major":
-		deceptive_targets.append("vi")
-	else:
-		deceptive_targets.append("VI")
-	
-	var filtered = []
-	for edge in next_list:
-		var deg = String(edge.get("degree", ""))
-		var j = 0
-		while j < deceptive_targets.size():
-			if deg == deceptive_targets[j]:
+	if deceptive:
+		# deceptive = true: éviter I/i en position fondamentale (inversion 0)
+		# mais permettre I/i en premier renversement (inversion 1)
+		var filtered = []
+		for edge in next_list:
+			var deg = String(edge.get("degree", ""))
+			if deg == "I" or deg == "i":
+				# Créer une copie avec preferred_inversions filtré (exclure "5")
+				var new_preferred = []
+				var orig_preferred = edge.get("preferred_inversions", [])
+				for inv in orig_preferred:
+					if String(inv) != "5":
+						new_preferred.append(inv)
+				if new_preferred.size() > 0:
+					var new_edge = edge.duplicate()
+					new_edge["preferred_inversions"] = new_preferred
+					filtered.append(new_edge)
+				# Si pas d'inversions restantes, on exclut l'edge
+			else:
 				filtered.append(edge)
-				break
-			j += 1
-	
-	if filtered.empty():
+		if filtered.empty():
+			return next_list
+		return filtered
+	else:
+		# deceptive = false: forcer I/i en position fondamentale si possible
+		var tonic_edges = []
+		for edge in next_list:
+			var deg = String(edge.get("degree", ""))
+			if deg == "I" or deg == "i":
+				var orig_preferred = edge.get("preferred_inversions", [])
+				# Vérifier si "5" est dans les preferred_inversions
+				var has_root_pos = false
+				for inv in orig_preferred:
+					if String(inv) == "5":
+						has_root_pos = true
+						break
+				if has_root_pos:
+					# Créer une copie avec seulement "5" comme preferred_inversion
+					var new_edge = edge.duplicate()
+					new_edge["preferred_inversions"] = ["5"]
+					tonic_edges.append(new_edge)
+		if tonic_edges.size() > 0:
+			return tonic_edges
 		return next_list
-	
-	return filtered
 
 #-------------------------------------------------------------------------------
 # Tirage pondéré
@@ -553,7 +582,7 @@ func _pick_weighted_edge(next_list: Array) -> Dictionary:
 	if total_weight <= 0:
 		return next_list[0]
 	
-	var r = randi() % total_weight
+	var r = _randi(total_weight)
 	var acc = 0
 	for edge in next_list:
 		acc += int(edge.get("weight", 1))
@@ -704,12 +733,12 @@ func _degree_key_to_state(degree_key: String, node: Dictionary, edge: Dictionary
 	var inv_code = ""
 	var preferred = edge.get("preferred_inversions", [])
 	if preferred.size() > 0:
-		var idx = int(randi() % preferred.size())
+		var idx = _randi(preferred.size())
 		inv_code = String(preferred[idx])
 	else:
 		var sug = node.get("suggested_inversions", [])
 		if sug.size() > 0:
-			var idx2 = int(randi() % sug.size())
+			var idx2 = _randi(sug.size())
 			inv_code = String(sug[idx2])
 
 	if inv_code == "":
