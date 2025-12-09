@@ -11,7 +11,7 @@ var rng: RandomNumberGenerator = null
 
 const GRAPH_MAJOR = {
 	"I": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -26,7 +26,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"ii": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["5", "6", "65"],
 		"next": [
@@ -41,7 +41,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"iii": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -53,7 +53,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"IV": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -69,7 +69,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"V": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "major",
 		"suggested_inversions": ["5", "7", "65", "43"],
 		"next": [
@@ -82,7 +82,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"vi": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -95,7 +95,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"viio": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "major",
 		"suggested_inversions": ["6", "65", "7"],
 		"next": [
@@ -107,7 +107,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"I64": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["64"],
 		"next": [
@@ -117,7 +117,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"N6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["6"],
 		"next": [
@@ -127,7 +127,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"It+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -138,7 +138,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Fr+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -149,7 +149,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Ger+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -161,7 +161,7 @@ const GRAPH_MAJOR = {
 
 	# Sixtes augmentées "inversées" (#4 à la basse)
 	"It+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -170,7 +170,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Fr+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -179,7 +179,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Ger+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -194,7 +194,7 @@ const GRAPH_MAJOR = {
 
 const GRAPH_MINOR = {
 	"i": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -209,7 +209,7 @@ const GRAPH_MINOR = {
 	},
 
 	"iio": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -224,7 +224,7 @@ const GRAPH_MINOR = {
 	},
 
 	"III": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -236,7 +236,7 @@ const GRAPH_MINOR = {
 	},
 
 	"iv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -252,7 +252,7 @@ const GRAPH_MINOR = {
 	},
 
 	"V": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["5", "7", "65", "43"],
 		"next": [
@@ -265,7 +265,7 @@ const GRAPH_MINOR = {
 	},
 
 	"VI": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -278,7 +278,7 @@ const GRAPH_MINOR = {
 	},
 
 	"VII": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -290,7 +290,7 @@ const GRAPH_MINOR = {
 	},
 
 	"viio": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["6", "65", "7"],
 		"next": [
@@ -302,7 +302,7 @@ const GRAPH_MINOR = {
 	},
 
 	"i64": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["64"],
 		"next": [
@@ -312,7 +312,7 @@ const GRAPH_MINOR = {
 	},
 
 	"N6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["6"],
 		"next": [
@@ -322,7 +322,7 @@ const GRAPH_MINOR = {
 	},
 
 	"It+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -333,7 +333,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Fr+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -344,7 +344,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Ger+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -355,7 +355,7 @@ const GRAPH_MINOR = {
 	},
 
 	"It+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -364,7 +364,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Fr+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -373,7 +373,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Ger+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -425,6 +425,7 @@ func get_next_degree(d:Degree, deceptive = false) -> Degree:
 	next_degree.kind = state_retour["kind"]
 	next_degree.realization = state_retour["realization"]
 	next_degree.length_beats = d.length_beats
+	next_degree.set_harmonic_function(state_retour["harmonic_function"])
 
 	return next_degree
 	
@@ -495,7 +496,7 @@ func _select_graph_for_state(state: Dictionary) -> Dictionary:
 
 func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, current_state: Dictionary) -> Array:
 	var result = []
-	var current_function = String(current_node.get("function", "T"))
+	var current_harmonic_function = String(current_node.get("harmonic_function", "T"))
 	var current_inversion = int(current_state.get("inversion", 0))
 	
 	for edge in next_list:
@@ -505,7 +506,7 @@ func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, cur
 		if is_aug_or_nap:
 			# Règle simple : ces accords sont pris surtout après une fonction PD
 			# et plutôt pas depuis des 2èmes renversements bizarres.
-			if current_function != "PD" and current_function != "T":
+			if current_harmonic_function != "PD" and current_harmonic_function != "T":
 				continue
 			if current_inversion > 1:
 				continue
@@ -519,10 +520,10 @@ func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, cur
 
 func _filter_next_for_deceptive(next_list: Array, current_node: Dictionary, current_state: Dictionary) -> Array:
 	var deceptive = current_state.get("deceptive", false)
-	var current_function = String(current_node.get("function", ""))
+	var current_harmonic_function = String(current_node.get("harmonic_function", ""))
 
 	# Seulement applicable quand on est sur une fonction dominante
-	if current_function != "D":
+	if current_harmonic_function != "D":
 		return next_list
 
 	if deceptive:
@@ -669,13 +670,16 @@ func _degree_key_to_state(degree_key: String, node: Dictionary, edge: Dictionary
 	else:
 		result_scale_name = String(from_state.get("scale_name", "major"))
 
+	var harmonic_function = String(node.get("harmonic_function", "T"))
+
 	var state = {
 		"degree_number": 1,
 		"scale_name": result_scale_name,
 		"inversion": 0,
 		"realization": [1, 3, 5],
 		"kind": "diatonic",
-		"root_midi": from_state.get("root_midi", 0)
+		"root_midi": from_state.get("root_midi", 0),
+		"harmonic_function": harmonic_function
 	}
 
 	# Types spéciaux (N6, +6, cad64)
