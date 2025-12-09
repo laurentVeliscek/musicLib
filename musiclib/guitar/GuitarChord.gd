@@ -308,6 +308,9 @@ func clone():
 			}
 			b.append(d)
 	c.barres = b
+	
+	c.start = start
+	c.length_beats = length_beats
 	return c
 
 func to_string() -> String:
@@ -490,9 +493,9 @@ func get_arp_note_with_string(idx:int)-> Dictionary:
 			1: return notes[(notes_size -4) % notes_size]
 			0: 
 				if notes.size() > 4:
-					return notes[-5]
+					return notes[(notes_size -5) % notes_size]
 				else:
-					return notes[-4]
+					return  notes[(notes_size -4) % notes_size]
 			_:
 				return notes[idx % notes.size()]
 

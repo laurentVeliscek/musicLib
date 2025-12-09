@@ -47,7 +47,7 @@ Examples:
 
 
 # The 16-character pattern string
-var pattern: String = "D...u...D...u..." setget set_pattern
+var pattern: String = "D...U...D...U..." setget set_pattern
 
 # Duration of each step in beats
 var step_beat_length: float = 0.5

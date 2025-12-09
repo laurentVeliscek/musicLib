@@ -119,7 +119,7 @@ func _generate_random_melody() -> Dictionary:
 
 #8
 func _generate_brassens() -> Dictionary:
-	var pattern = "B.U.b.u.B.U.b.u."
+	var pattern = "B.U.b.U.B.U.b.U."
 	var step = 0.25
 	return {"pattern": pattern, "step_beat_length": step}
 	

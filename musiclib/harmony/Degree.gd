@@ -4,8 +4,9 @@ class_name Degree
 # Objet Degree 
 
 const DEFAULT_MIDI_CHANNEL = 0	# canal 0
-const DEFAULT_MIDI_VELOCITY = 120	# vélocité 100
+# = 80	# vélocité 100
 const TAG = "Degree"
+
 
 
 # dictionnaire des realizations possibles avecles extensions
@@ -45,6 +46,7 @@ var key:HarmonicKey = HarmonicKey.new() setget set_key,get_key
 var degree_number:int = 1 setget set_degree_number, get_degree_number
 # _realization du degré -> tableau contenant les degrés exprimés
 #var _realization:Array = [1,3,5]
+
 
 var realization:Array = [1,3,5] setget set_realization, get_realization
 # kind -> définit le type de l'accord (diatonic, secondary, N6, etc...)
@@ -104,11 +106,21 @@ var comment:String = ""
 
 var chord_voicing_index:int = 0
 
+
+var velocity:int = 80 setget set_velocity, get_velocity
+
+
+func set_velocity(v:int):
+	velocity = int(clamp(v,0,127))
+	
+func get_velocity()-> int:
+	return velocity
 ########### CLONE ET TO STRING ##############
 
 func clone()-> Degree:
 
 	var d:Degree = get_script().new()
+	d.velocity = velocity
 	d.key = key
 	d.degree_number = degree_number
 	d.realization = realization
@@ -151,7 +163,7 @@ func to_dict() -> Dictionary:
 			key_dict["scale_name"] = key.scale_name
 			key_dict["root_midi"] = key.root_midi
 	d["key"] = key_dict
-	
+	d["velocity"] = velocity
 	# --- Propriétés de base du Degree ---
 	d["degree_number"] = degree_number
 	d["realization"] = realization.duplicate()
@@ -210,6 +222,11 @@ func from_dict(data:Dictionary) -> Degree:
 	# --- Propriétés de base du Degree ---
 	if data.has("degree_number"):
 		d.set_degree_number(int(data["degree_number"]))
+		
+	if data.has("velocity"):
+		d.set_velocity(int(data["velocity"]))
+		
+		
 	
 	if data.has("realization"):
 		var r = data["realization"]
@@ -221,7 +238,15 @@ func from_dict(data:Dictionary) -> Degree:
 	
 	if data.has("kind"):
 		d.set_kind(str(data["kind"]))
-	
+		var _kind = data["kind"]
+		match _kind:
+			"N6":d.set_N6()
+			"It+6": d.set_aug6_It()
+			"Fr+6": d.set_aug6_Fr()
+			"Ger+6": d.set_aug6_Ger()
+			"It+6inv": d.set_aug6_It_inv()
+			"Fr+6inv": d.set_aug6_Fr_inv()
+			"Ger+6inv": d.set_aug6_Ger_inv()			
 	# Altérations accord
 	if data.has("alterations"):
 		var alt = data["alterations"]
@@ -296,17 +321,15 @@ func from_dict(data:Dictionary) -> Degree:
 	return d
 
 func _set_alterations(d:Dictionary = {}):
-	_alterations = d
+		var normalized:Dictionary = {}
+		for k in d.keys():
+				var key_int = int(k)
+				normalized[key_int] = int(d[k])
+		_alterations = normalized
 
 func _get_alterations():
 	return _alterations
 
-func get_degree_note_names(chord_degre_number) :
-	if key.scale_name == "major":
-		var root_midi_norm = key.root_midi % 12
-		var key_notes_string = MIDI_ROOT_TO_NOTES_OF_MAJOR_SCALE[root_midi_norm]
-		return key_notes_string[(chord_degre_number - 1) % 7]
-		
 
 
 
@@ -339,6 +362,7 @@ func to_string() -> String:
 	var midis = get_chord_midi()
 	txt += ", midi: "+ str(midis)
 	
+
 		
 	# on traduit le midi en notes
 	var notes_txt = []
@@ -354,7 +378,8 @@ func to_string() -> String:
 			satb_arr.append(NoteParser.midipitch2StringStrictInKey(m,key,"en"))
 		txt += ", SATB: " + str(satb_arr)
 		
-		
+#	var gcs_number = guitar_chords().size()
+#	txt += ", Guitar chords number: "+ str(gcs_number)	
 	# comment
 	if comment != "":
 		txt += "\n\n-> "+ comment
@@ -384,19 +409,25 @@ func get_octave():
 
 func set_key(k:HarmonicKey):
 	key = k.clone()
+	
+
 
 func get_key() -> HarmonicKey:
 	return key
 
-func set_degree_number(d=1):
+func set_degree_number(d:int=1):
 	if d < 1 :
 		LogBus.error("Degree","set_degree_number with a value of " + str(d) + " !")
 		d = 1
+	elif d > 24:
+		LogBus.error("Degree","set_degree_number with a value of " + str(d) + " !")
+		d = 1 + (d % 21)
 	# harmonic_function
+	var d_mod = 1 + ((d - 1) %7)
 	if kind == "diatonic" :
-		if d == 1 or d == 6 or d == 3:
+		if d_mod == 1 or d_mod == 6 or d_mod == 3:
 			harmonic_function = "T"
-		elif d == 5 or d == 7 :
+		elif d_mod == 5 or d_mod == 7 :
 			harmonic_function = "D"
 		else:
 			harmonic_function = "PD"
@@ -432,13 +463,13 @@ func set_kind(k:String):
 	if kinds.has(k):
 		kind = k
 		match kind:
-			"it+6": set_aug6_It()
+			"It+6": set_aug6_It()
 			"Fr+6": set_aug6_Fr()
 			"Ger+6": set_aug6_Ger()			
-			"it+6Inv": set_aug6_It_inv()
+			"It+6Inv": set_aug6_It_inv()
 			"Fr+6Inv": set_aug6_Fr_inv()
 			"Ger+6Inv": set_aug6_Ger_inv()
-			
+			"N6": set_N6()
 			
 	else:
 		LogBus.error("Degree","set_kind of unknown kind ! -> "+ k)
@@ -540,9 +571,10 @@ func set_N6():
 	key = old_key
 	kind = "N6"
 	degree_number = 2
-	set_key_alteration(2,-1)
+	#set_key_alteration(2,-1)
+	_alterations = {2:-1}
 	if key.scale_name == "major" or key.scale_name == "melodic_minor":
-		set_key_alteration(6,-1)
+		_alterations = {2:-1, 6:-1}
 	realization = [1,3,5]
 	inversion = 1
 	harmonic_function = "PD"
@@ -744,6 +776,8 @@ func has_seventh() -> bool:
 func get_jazz_chord() -> String :
 	var basePitch =  NoteParser.midipitch2StringStrictInKey(int(get_chord_midi()[0])%12,key,"en",false)
 	var res = get_chord_and_scale(get_chord_midi(), (key.root_midi) % 12  )
+	
+	
 	if ["It+6","Fr+6","Ger+6" ].has(kind):
 		
 		match kind:
@@ -757,11 +791,11 @@ func get_jazz_chord() -> String :
 		var invbassPitch =  NoteParser.midipitch2StringStrictInKey(int(get_chord_midi()[1])%12,key,"en",false)
 		match kind:
 			"It+6inv":
-				return invbassPitch+"7no5/" + basePitch
+				return invbassPitch+"7no5" 
 			"Fr+6inv":
-				return invbassPitch+"7b5/" + basePitch
+				return invbassPitch+"7b5" 
 			_:
-				return invbassPitch+"7/" + basePitch
+				return invbassPitch+"7" 
 	
 	if kind == "add9":
 		if third_distance() == 3 :		
@@ -776,7 +810,11 @@ func get_jazz_chord() -> String :
 	
 	#"It+6inv","Fr+6inv","Ger+6inv"
 	if res != null :
+		
+		
 		return str(res["string"])
+		
+		
 	else:
 		# rattrapage pour le faire à la main...
 		var root_txt
@@ -821,6 +859,12 @@ func get_jazz_chord() -> String :
 			return "?"	
 		
 
+# on récupére le nom de la note pour le degré chord_degree_number du degré courant
+func get_note_name_of_chord_degree_number(chord_degree_number:int):
+	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
+	var midi_from_key = key.degree_midi(chord_degree_number + degree_number -1)
+	var alter = get_chord_alteration(chord_degree_number)
+	return keys[(midi_from_key + alter) % 12]
 
 func get_chord_midi_root_normalised() -> int:
 	return get_chord_midi()[0]%12
@@ -945,26 +989,27 @@ func get_chord_midi() -> Array:
 	#if override_chord_midi != [] :
 	#	return override_chord_midi
 	
-	if kind == "N6":
-		var midi_pitches = [] 
-		for n in realization:
-		# n est le degre dans l'accord 
-			var degre_dans_l_accord = n
-			var degre_dans_la_tonalite = 1 + (degree_number + degre_dans_l_accord -2) 
-			var m = key.degree_midi(degre_dans_la_tonalite)
-			m += get_key_alteration(1 + ((degre_dans_la_tonalite + 6) % 7))
-			m += _octave*12
-			midi_pitches.append(m)
-		# on gere les inversions
-		for i in range(0,inversion) :
-			midi_pitches = _renverse_midi_chord_array(midi_pitches,1)
-			
-		return midi_pitches
+#	if kind == "N6":
+#		var midi_pitches = [] 
+#		for n in realization:
+#		# n est le degre dans l'accord 
+#			var degre_dans_l_accord = n
+#			var degre_dans_la_tonalite = 1 + (degree_number + degre_dans_l_accord -2) 
+#			var m = key.degree_midi(degre_dans_la_tonalite)
+#			m += get_key_alteration(1 + ((degre_dans_la_tonalite + 6) % 7))
+#			m += _octave*12
+#			midi_pitches.append(m)
+#		# on gere les inversions
+#		for i in range(0,inversion) :
+#			midi_pitches = _renverse_midi_chord_array(midi_pitches,1)
+#
+#		return midi_pitches
 	
 
-		if realization.size() == 0 :
-				LogBus.warn("Degree","get_chord_midi: empty realization")
-				return []
+	if realization.size() == 0 :
+			LogBus.warn("Degree","get_chord_midi: empty realization")
+			return []
+			
 	var midi_pitches = []
 	
 	for n in realization:
@@ -1003,7 +1048,7 @@ func to_chord() -> Array:
 			m = 127
 		n.midi = m
 		# par défaut, velocity = 100		
-		n.velocity = DEFAULT_MIDI_VELOCITY
+		n.velocity = velocity
 		n.set_length_beats (max(0.0, get_length_beats()))
 		# par défaut, canal midi = 0
 		n.channel = DEFAULT_MIDI_CHANNEL
@@ -2023,26 +2068,53 @@ func guitar_chords()-> Array :
 	
 	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
 	var gc_array = []
-	var basePitch =  key.degree_midi(degree_number) % 12
+	var basePitch =  key.degree_midi(degree_number) % 12 + get_chord_alteration(1)
 	var root_name = keys[basePitch]
 	var triton_root_name = keys[(basePitch + 6) %12]
 	var backdoor_root_name = keys[(basePitch + 3) %12]
 	var chord_name = get_jazz_chord()
 	var ggb = MusicLabGlobals.GuitarBase
 	
-	if kind == "diatonic" and realization == [1,3,5] and fifth_distance() == 7:
-		if third_distance() == 3:
-			chord_name = root_name+"minor"
-		elif third_distance() == 4:
-			chord_name = root_name+"major"
-	elif kind == "It+6" or kind == "Fr+6" or kind == "Ger+6":
-		chord_name = root_name+"7"
-	elif kind == "It+6Inv" or kind == "Fr+6Inv" or kind == "Ger+6Inv":
-		chord_name = root_name+"7"
+
+	if 	["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv"].has(kind):
+		pass
+	
+	elif (kind == "diatonic" or kind == "cad64" or kind == "N6") and realization == [1,3,5] and fifth_distance() == 7:
+		if inversion == 0:
+				
+			if third_distance() == 3:
+				chord_name = root_name+"minor"
+			elif third_distance() == 4:
+				chord_name = root_name+"major"
+		elif inversion == 1:
+			if third_distance() == 3:
+				var bass_name = get_note_name_of_chord_degree_number(3)
+				chord_name = root_name+"m" + "/"+bass_name
+			elif third_distance() == 4:
+				chord_name = root_name+"major"
+				var bass_name = get_note_name_of_chord_degree_number(3)
+				chord_name = root_name+"" + "/"+bass_name
+		elif inversion == 2:
+			if third_distance() == 3:
+				var bass_name = get_note_name_of_chord_degree_number(5)
+				chord_name = root_name+"m" + "/"+bass_name
+			elif third_distance() == 4:
+				chord_name = root_name+"major"
+				var bass_name = get_note_name_of_chord_degree_number(5)
+				chord_name = root_name+"" + "/"+bass_name
+			
+#	elif kind == "It+6" or kind == "Fr+6" or kind == "Ger+6":
+#		chord_name = root_name+"7"
+#	elif kind == "It+6Inv" or kind == "Fr+6Inv" or kind == "Ger+6Inv":
+#		chord_name = root_name+"7"
 	
 	# search by name
 	gc_array = ggb.search_by_name(chord_name)
 	
+	
+	# on deconne pas avec les accords chromatiques...
+	if ["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6"].has(kind):
+		return gc_array
 	
 					
 	# on ajoute les sus2 et sus4
@@ -2103,10 +2175,10 @@ func guitar_chords()-> Array :
 			gc_array.append_array(ggb.search_by_name(root_name+"7sus4"))
 			gc_array.append_array(ggb.search_by_name(root_name+"alt"))
 			# Substitutions tritoniques (♭II7 et cie)
-			#gc_array.append_array(ggb.search_by_name(triton_root_name+"7"))
+			gc_array.append_array(ggb.search_by_name(triton_root_name+"7"))
 			#
 			# ♭VII7 (B♭7) : « backdoor dominant »
-			#gc_array.append_array(ggb.search_by_name(backdoor_root_name+"7"))
+			gc_array.append_array(ggb.search_by_name(backdoor_root_name+"7"))
 		elif key.scale_name == "harmonic_minor":	
 			gc_array.append_array(ggb.search_by_name(root_name+"7b9"))
 			gc_array.append_array(ggb.search_by_name(root_name+"7#9"))
@@ -2117,7 +2189,7 @@ func guitar_chords()-> Array :
 	# search by notes
 	var midi_notes =  PoolIntArray(get_chord_midi())
 	var gc_by_pitch = ggb.search_by_pitches(midi_notes)
-	#LogBus.debug(TAG,"gc_by_pitch.size()" + str(gc_by_pitch.size()))
+
 	
 	var gc_array_midiNotes = []
 	for gc in gc_array:
@@ -2131,7 +2203,16 @@ func guitar_chords()-> Array :
 			gc_array.append(gc)
 				
 	
-	return gc_array
+	if gc_array.size() > 0 :
+		return gc_array
+	
+	# on vire une note et on croise les doigts...
+	midi_notes.resize(midi_notes.size() -1)
+	var gc_by_pitch2 = ggb.search_by_pitches(midi_notes)
+	return gc_by_pitch2
+
+	
+	
 	
 func same_pitch_class(p1:int,p2:int)->bool:
 	return ((p1 % 12) ==  (p2 % 12))
@@ -2252,3 +2333,18 @@ func pool_int_array_in_array(needle: PoolIntArray, haystack: Array) -> bool:
 		if arr == needle:
 			return true
 	return false
+
+func update_kind():
+	if  ["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6"].has(kind):
+		_alterations = {}
+		match kind:
+			"It+6": set_aug6_It()
+			"Fr+6": set_aug6_Fr()
+			"Ger+6": set_aug6_Ger()			
+			"It+6Inv":set_aug6_It_inv()
+			"Fr+6Inv": set_aug6_Fr_inv()
+			"Ger+6Inv":set_aug6_Ger_inv()
+			"N6":set_N6()
+		
+		LogBus.debug(TAG,"updated_kind")
+		LogBus.debug(TAG,to_string())

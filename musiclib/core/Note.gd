@@ -3,7 +3,7 @@ extends Reference
 class_name Note
 
 var midi: int = 60
-var velocity: int = 100
+var velocity: int = 80
 var length_beats: float = 1.0
 var channel: int = 0
 
