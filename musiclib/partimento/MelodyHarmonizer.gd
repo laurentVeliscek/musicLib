@@ -4,422 +4,385 @@ class_name MelodyHarmonizer
 const TAG = "MelodyHarmonizer"
 
 # ==============================================================================
-# MELODY HARMONIZER
-# Harmonise une mélodie en utilisant les règles du partimento
-# Approche: recherche de chemin dans un graphe d'accords pondéré
+# MELODY HARMONIZER v2
+# Harmonise une partition en utilisant les règles du partimento
+# Basé sur des fenêtres harmoniques avec détection de schémas
 # ==============================================================================
 
 var key: HarmonicKey = null
 var rng: RandomNumberGenerator = null
 
 # Configuration
+var window_size: float = 4.0
 var max_solutions: int = 5
-var beam_width: int = 10
-var prefer_diatonic: bool = true
+var beam_width: int = 15
+var seventh_allowed: bool = true
+var ninth_allowed: bool = false
 var allow_secondary_dominants: bool = true
 
-# Cache interne
-var _scale_helper: ScaleHelper = null
-var _scale_degrees: Array = []
+# Pondération des schémas (configurable)
+var schema_weights: Dictionary = {
+	"romanesca": 1.0,
+	"prinner": 1.0,
+	"monte": 1.0,
+	"fonte": 1.0,
+	"folia": 1.0,
+	"pachelbel": 1.0,
+	"cadence_parfaite": 1.5,
+	"cadence_64": 1.2
+}
 
-func _init():
-	_scale_helper = ScaleHelper.new()
+# Composants internes
+var _analyzer: WindowAnalyzer = null
+var _windows: Array = []
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # API PRINCIPALE
-# ------------------------------------------------------------------------------
+# ==============================================================================
 
-func harmonize(melody: Array, harmonic_key: HarmonicKey, options: Dictionary = {}) -> Array:
+func harmonize(notes: Array, harmonic_key: HarmonicKey, options: Dictionary = {}) -> Dictionary:
 	"""
-	Harmonise une mélodie avec les règles du partimento.
+	Harmonise une partition avec les règles du partimento.
 
 	Arguments:
-		melody: Array de notes (MIDI int ou Dictionary {midi, duration})
+		notes: Array de {midi: int, start: float, duration: float}
 		harmonic_key: La tonalité (HarmonicKey)
 		options: {
+			window_size: float (défaut 4.0 = ronde),
 			max_solutions: int (défaut 5),
-			prefer_common_tones: bool,
-			start_on_tonic: bool,
-			end_on_tonic: bool
+			seventh_allowed: bool (défaut true),
+			ninth_allowed: bool (défaut false),
+			schema_weights: Dictionary,
+			key_regions: Array de {start_beat, key}
 		}
 
-	Retourne:
-		Array de solutions, chaque solution est un Array de Degree
+	Retourne: {
+		solutions: Array de {
+			progression: Array[Degree],
+			melody_track: Array[Degree],
+			score: float,
+			schemas_applied: Array
+		},
+		report: Dictionary
+	}
 	"""
 	key = harmonic_key
 	_apply_options(options)
-	_build_scale_cache()
 
-	if melody.empty():
-		return []
+	if notes.empty():
+		return _empty_result()
 
-	# Convertir la mélodie en degrés de gamme
-	var melody_degrees = _melody_to_scale_degrees(melody)
+	# Phase 1: Analyser la partition en fenêtres
+	_analyzer = WindowAnalyzer.new()
+	_windows = _analyzer.analyze_partition(notes, key, window_size, {
+		"seventh_allowed": seventh_allowed,
+		"ninth_allowed": ninth_allowed,
+		"key_regions": options.get("key_regions", [])
+	})
 
-	if melody_degrees.empty():
-		LogBus.warn(TAG, "Impossible de convertir la mélodie en degrés")
-		return []
+	if _windows.empty():
+		return _empty_result()
 
-	# Construire le graphe et chercher les meilleurs chemins
-	var solutions = _find_best_harmonizations(melody_degrees, options)
+	# Phase 2: Détecter les schémas potentiels
+	var detected_schemas = _detect_schemas()
 
-	return solutions
+	# Phase 3: Trouver les meilleures harmonisations
+	var raw_solutions = _find_best_harmonizations()
 
-func harmonize_with_degrees(melody_degrees: Array, harmonic_key: HarmonicKey, options: Dictionary = {}) -> Array:
-	"""
-	Harmonise une mélodie déjà exprimée en degrés de gamme (1-7).
-	Plus direct si la mélodie est déjà analysée.
-	"""
-	key = harmonic_key
-	_apply_options(options)
-	_build_scale_cache()
+	# Phase 4: Convertir en format de sortie avec melody_track
+	var solutions = _build_output_solutions(raw_solutions, notes)
 
-	return _find_best_harmonizations(melody_degrees, options)
-
-# ------------------------------------------------------------------------------
-# CONVERSION MÉLODIE -> DEGRÉS
-# ------------------------------------------------------------------------------
-
-func _melody_to_scale_degrees(melody: Array) -> Array:
-	var result = []
-
-	for note in melody:
-		var midi_pitch = _extract_midi(note)
-		var degree_info = _midi_to_scale_degree(midi_pitch)
-		result.append(degree_info)
-
-	return result
-
-func _extract_midi(note) -> int:
-	if typeof(note) == TYPE_INT:
-		return note
-	if typeof(note) == TYPE_DICTIONARY:
-		return int(note.get("midi", 60))
-	return 60
-
-func _midi_to_scale_degree(midi: int) -> Dictionary:
-	"""
-	Convertit un pitch MIDI en degré de gamme + info d'altération.
-	Retourne { degree: 1-7, alteration: -1/0/+1, original_midi: int }
-	"""
-	var root = key.root_midi % 12
-	var pitch_class = midi % 12
-	var interval = (pitch_class - root + 12) % 12
-
-	# Chercher le degré le plus proche dans la gamme
-	var scale_array = _scale_helper.get_scale_array(key.scale_name)
-
-	var best_degree = 1
-	var best_alteration = 0
-	var min_distance = 12
-
-	for i in range(scale_array.size() - 1):  # -1 car le dernier est l'octave
-		var scale_interval = scale_array[i]
-		var distance = interval - scale_interval
-
-		if abs(distance) < min_distance:
-			min_distance = abs(distance)
-			best_degree = i + 1  # degrés 1-7
-			best_alteration = distance  # -1, 0, ou +1
+	# Phase 5: Construire le rapport
+	var report = _build_report(detected_schemas)
 
 	return {
-		"degree": best_degree,
-		"alteration": best_alteration,
-		"original_midi": midi
+		"solutions": solutions,
+		"report": report
 	}
 
-# ------------------------------------------------------------------------------
-# ALGORITHME DE RECHERCHE (Beam Search)
-# ------------------------------------------------------------------------------
+func _apply_options(options: Dictionary):
+	window_size = options.get("window_size", 4.0)
+	max_solutions = options.get("max_solutions", 5)
+	beam_width = options.get("beam_width", 15)
+	seventh_allowed = options.get("seventh_allowed", true)
+	ninth_allowed = options.get("ninth_allowed", false)
+	allow_secondary_dominants = options.get("allow_secondary_dominants", true)
 
-func _find_best_harmonizations(melody_degrees: Array, options: Dictionary) -> Array:
-	"""
-	Utilise beam search pour trouver les k meilleures harmonisations.
-	"""
-	var start_on_tonic = options.get("start_on_tonic", true)
-	var end_on_tonic = options.get("end_on_tonic", true)
+	if options.has("schema_weights"):
+		for k in options.schema_weights.keys():
+			schema_weights[k] = options.schema_weights[k]
 
-	# État initial: liste de (chemin, score)
+func _empty_result() -> Dictionary:
+	return {
+		"solutions": [],
+		"report": {"error": "No notes provided", "windows_analyzed": 0}
+	}
+
+# ==============================================================================
+# DÉTECTION DE SCHÉMAS
+# ==============================================================================
+
+func _detect_schemas() -> Array:
+	"""
+	Détecte les schémas partimento potentiels basés sur le contour mélodique.
+	"""
+	var detected = []
+	var contour = _analyzer.get_downbeat_contour()
+
+	# Nettoyer le contour (enlever les nulls)
+	var clean_contour = []
+	var contour_positions = []
+	for i in range(contour.size()):
+		if contour[i] != null:
+			clean_contour.append(contour[i])
+			contour_positions.append(i)
+
+	if clean_contour.size() < 3:
+		return detected
+
+	# Chercher chaque schéma
+	for schema_name in PartimentoRules.list_schemas():
+		var schema = PartimentoRules.get_schema(schema_name)
+		if schema.empty():
+			continue
+
+		var matches = _find_schema_matches(clean_contour, contour_positions, schema)
+		detected.append_array(matches)
+
+	return detected
+
+func _find_schema_matches(contour: Array, positions: Array, schema: Dictionary) -> Array:
+	"""
+	Cherche les occurrences d'un schéma dans le contour mélodique.
+	"""
+	var matches = []
+	var schema_soprano = schema.get("typical_soprano", [])
+	var schema_name = schema.get("name", "Unknown")
+
+	if schema_soprano.empty():
+		return matches
+
+	var pattern_length = schema_soprano.size()
+
+	# Glisser le pattern sur le contour
+	for start_idx in range(contour.size() - pattern_length + 1):
+		var match_score = _compute_pattern_match(contour, start_idx, schema_soprano)
+
+		if match_score > 0.6:  # Seuil de correspondance
+			matches.append({
+				"schema": schema_name,
+				"start_window": positions[start_idx],
+				"end_window": positions[start_idx + pattern_length - 1],
+				"match_score": match_score,
+				"weight": schema_weights.get(schema_name.to_lower(), 1.0)
+			})
+
+	return matches
+
+func _compute_pattern_match(contour: Array, start: int, pattern: Array) -> float:
+	"""
+	Calcule le score de correspondance entre un segment de contour et un pattern.
+	Retourne un score entre 0 et 1.
+	"""
+	var matches = 0
+	var total = pattern.size()
+
+	for i in range(total):
+		if start + i >= contour.size():
+			break
+
+		var contour_degree = contour[start + i]
+		var pattern_degree = pattern[i]
+
+		# Correspondance exacte
+		if contour_degree == pattern_degree:
+			matches += 1
+		# Correspondance à l'octave (même classe de degré)
+		elif (contour_degree - 1) % 7 == (pattern_degree - 1) % 7:
+			matches += 0.8
+
+	return float(matches) / float(total)
+
+# ==============================================================================
+# RECHERCHE D'HARMONISATION (Beam Search)
+# ==============================================================================
+
+func _find_best_harmonizations() -> Array:
+	"""
+	Utilise beam search pour trouver les meilleures progressions.
+	"""
+	# Générer tous les candidats pour chaque fenêtre
+	var candidates_per_window = []
+	for w in _windows:
+		var candidates = _get_candidates_for_window(w)
+		candidates_per_window.append(candidates)
+
+	# Beam search
 	var beams = []
 
-	# Premier accord
-	var first_note = melody_degrees[0]
-	var first_candidates = _get_chord_candidates(first_note, null, 0, melody_degrees.size())
+	# Initialiser avec les candidats de la première fenêtre
+	if candidates_per_window.empty() or candidates_per_window[0].empty():
+		return []
 
-	# Filtrer pour commencer sur tonique si demandé
-	if start_on_tonic:
-		var tonic_candidates = []
-		for c in first_candidates:
-			if c.degree_number == 1:
-				tonic_candidates.append(c)
-		if not tonic_candidates.empty():
-			first_candidates = tonic_candidates
-
-	# Initialiser les beams
-	for candidate in first_candidates:
+	for cand in candidates_per_window[0]:
 		beams.append({
-			"path": [candidate],
-			"score": candidate.get_meta("_search_score", 0)
+			"path": [cand.chord],
+			"scores": [cand.score],
+			"total_score": cand.score,
+			"schemas": []
 		})
 
-	# Parcourir le reste de la mélodie
-	for i in range(1, melody_degrees.size()):
-		var note_info = melody_degrees[i]
-		var is_last = (i == melody_degrees.size() - 1)
+	# Parcourir les fenêtres suivantes
+	for i in range(1, candidates_per_window.size()):
+		var window_candidates = candidates_per_window[i]
 		var new_beams = []
 
 		for beam in beams:
 			var prev_chord = beam.path[beam.path.size() - 1]
-			var candidates = _get_chord_candidates(note_info, prev_chord, i, melody_degrees.size())
 
-			# Filtrer pour finir sur tonique si demandé
-			if is_last and end_on_tonic:
-				var tonic_candidates = []
-				for c in candidates:
-					if c.degree_number == 1 and c.inversion == 0:
-						tonic_candidates.append(c)
-				if not tonic_candidates.empty():
-					candidates = tonic_candidates
+			for cand in window_candidates:
+				# Score de transition
+				var trans_score = _score_transition(prev_chord, cand.chord)
+				var new_score = beam.total_score + cand.score + trans_score
 
-			for candidate in candidates:
-				var transition_score = _score_transition(prev_chord, candidate)
 				var new_path = beam.path.duplicate()
-				new_path.append(candidate)
-				var new_score = beam.score + candidate.get_meta("_search_score", 0) + transition_score
+				new_path.append(cand.chord)
+
+				var new_scores = beam.scores.duplicate()
+				new_scores.append(cand.score + trans_score)
 
 				new_beams.append({
 					"path": new_path,
-					"score": new_score
+					"scores": new_scores,
+					"total_score": new_score,
+					"schemas": beam.schemas.duplicate()
 				})
 
-		# Garder les meilleurs beams
+		# Garder les meilleurs
 		new_beams.sort_custom(self, "_compare_beams")
 		beams = new_beams.slice(0, min(beam_width, new_beams.size()) - 1)
 
-	# Extraire les solutions finales
+	# Trier les résultats finaux
 	beams.sort_custom(self, "_compare_beams")
-	var solutions = []
-
-	for i in range(min(max_solutions, beams.size())):
-		var path = beams[i].path
-		# Nettoyer les métadonnées de recherche
-		var clean_path = []
-		for degree in path:
-			var clean_degree = degree.clone() if degree.has_method("clone") else degree
-			clean_path.append(clean_degree)
-		solutions.append(clean_path)
-
-	return solutions
+	return beams.slice(0, min(max_solutions, beams.size()) - 1)
 
 func _compare_beams(a: Dictionary, b: Dictionary) -> bool:
-	return a.score > b.score  # Plus haut score = meilleur
+	return a.total_score > b.total_score
 
-# ------------------------------------------------------------------------------
-# GÉNÉRATION DES CANDIDATS
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# GÉNÉRATION DES CANDIDATS PAR FENÊTRE
+# ==============================================================================
 
-func _get_chord_candidates(note_info: Dictionary, prev_chord, position: int, total_length: int) -> Array:
+func _get_candidates_for_window(window: HarmonicWindow) -> Array:
 	"""
-	Pour une note mélodique, retourne les accords candidats possibles.
+	Génère les accords candidats pour une fenêtre.
 	"""
-	var degree = note_info.degree
-	var alteration = note_info.alteration
 	var candidates = []
-
-	# Obtenir les accords de base depuis les règles partimento
 	var is_minor = _is_minor_mode()
-	var base_chords = PartimentoRules.get_chords_for_melody_note(degree, is_minor)
 
-	for chord_info in base_chords:
-		var candidate = _create_degree_from_chord_info(chord_info, note_info)
+	# Tester chaque degré diatonique
+	for degree in range(1, 8):
+		for realization in [[1, 3, 5], [1, 3, 5, 7]]:
+			for inversion in range(realization.size()):
+				var score_result = window.score_chord_candidate(degree, realization, inversion)
 
-		# Calculer le score de ce candidat
-		var score = chord_info.get("weight", 1) * 10
+				if score_result.valid or not window.has_notes:
+					var chord = _create_degree(degree, realization, inversion, window.key)
 
-		# Bonus/malus contextuels
-		score += _contextual_score(candidate, prev_chord, position, total_length)
+					# Bonus pour schémas détectés à cette position
+					var schema_bonus = _get_schema_bonus(window.window_index, degree)
+					score_result.score += schema_bonus
 
-		# Gérer les altérations chromatiques
-		if alteration != 0:
-			score += _chromatic_score(candidate, alteration, degree)
+					candidates.append({
+						"chord": chord,
+						"score": score_result.score,
+						"details": score_result.details
+					})
 
-		candidate.set_meta("_search_score", score)
-		candidates.append(candidate)
+	# Trier par score décroissant
+	candidates.sort_custom(self, "_compare_candidates")
 
-	# Ajouter des dominantes secondaires si autorisé et note altérée
-	if allow_secondary_dominants and alteration != 0:
-		var secondary = _get_secondary_dominant_candidates(note_info)
-		candidates.append_array(secondary)
+	# Garder les meilleurs (éviter explosion combinatoire)
+	return candidates.slice(0, min(8, candidates.size()) - 1)
 
-	return candidates
+func _compare_candidates(a: Dictionary, b: Dictionary) -> bool:
+	return a.score > b.score
 
-func _create_degree_from_chord_info(chord_info: Dictionary, note_info: Dictionary) -> Degree:
+func _create_degree(degree_num: int, realization: Array, inversion: int, window_key: HarmonicKey) -> Degree:
 	"""
-	Crée un objet Degree à partir des infos d'accord partimento.
+	Crée un objet Degree pour un accord.
 	"""
 	var d = Degree.new()
-	d.key = key.clone() if key.has_method("clone") else key
-	d.degree_number = chord_info.degree
-	d.inversion = chord_info.get("inversion", 0)
-	d.realization = chord_info.get("realization", [1, 3, 5]).duplicate()
-	d.kind = chord_info.get("kind", "diatonic")
-	d.harmonic_function = chord_info.get("function", "T")
-	d.length_beats = 1.0  # Par défaut, sera ajusté selon la mélodie
-
-	# Stocker la position de la note mélodique dans l'accord (metadata)
-	d._comment = chord_info.get("position", "")
-
+	d.key = window_key.clone() if window_key != null and window_key.has_method("clone") else window_key
+	d.degree_number = degree_num
+	d.realization = realization.duplicate()
+	d.inversion = inversion
+	d.kind = "diatonic"
+	d.harmonic_function = _get_harmonic_function(degree_num)
 	return d
 
-func _get_secondary_dominant_candidates(note_info: Dictionary) -> Array:
+func _get_harmonic_function(degree: int) -> String:
+	var is_minor = _is_minor_mode()
+	if is_minor:
+		match degree:
+			1: return "T"
+			2: return "PD"
+			3: return "T"
+			4: return "PD"
+			5: return "D"
+			6: return "T"
+			7: return "D"
+	else:
+		match degree:
+			1: return "T"
+			2: return "PD"
+			3: return "T"
+			4: return "PD"
+			5: return "D"
+			6: return "T"
+			7: return "D"
+	return "?"
+
+func _get_schema_bonus(window_index: int, degree: int) -> float:
 	"""
-	Génère des candidats de dominantes secondaires pour les notes altérées.
+	Retourne un bonus si un schéma détecté suggère ce degré à cette position.
 	"""
-	var candidates = []
-	var degree = note_info.degree
-	var alteration = note_info.alteration
+	# TODO: Implémenter la correspondance schéma -> degré attendu
+	return 0.0
 
-	# Note haussée d'un demi-ton -> possible sensible d'une dominante secondaire
-	if alteration == 1:
-		# La note altérée pourrait être la tierce d'un V/x
-		var target_degree = (degree + 1 - 1) % 7 + 1  # Degré suivant
+# ==============================================================================
+# SCORING DE TRANSITION
+# ==============================================================================
 
-		var secondary_v = Degree.new()
-		secondary_v.key = key.clone() if key.has_method("clone") else key
-		secondary_v.degree_number = 5
-		secondary_v.kind = "secondary"
-		secondary_v._is_secondary = true
-		secondary_v._secondary_roman_spelling = "V/" + _degree_to_roman(target_degree)
-		secondary_v.harmonic_function = "D"
-		secondary_v.realization = [1, 3, 5]
-		secondary_v.set_meta("_search_score", 30)  # Score élevé pour les secondaires appropriées
-
-		candidates.append(secondary_v)
-
-	return candidates
-
-# ------------------------------------------------------------------------------
-# SCORING
-# ------------------------------------------------------------------------------
-
-func _score_transition(from_chord: Degree, to_chord: Degree) -> int:
+func _score_transition(from_chord: Degree, to_chord: Degree) -> float:
 	"""
-	Score la transition entre deux accords.
+	Score la qualité de l'enchaînement entre deux accords.
 	"""
-	if from_chord == null:
-		return 0
+	var score = 0.0
 
-	var score = 0
-
-	# Score basé sur les fonctions harmoniques
-	var func_score = PartimentoRules.get_transition_score(
+	# Score des fonctions harmoniques
+	score += PartimentoRules.get_transition_score(
 		from_chord.harmonic_function,
 		to_chord.harmonic_function
-	)
-	score += func_score * 5
+	) * 5.0
 
-	# Bonus/malus pour progressions spécifiques
-	var prog_bonus = PartimentoRules.get_progression_bonus(
+	# Bonus pour progressions idiomatiques
+	var from_label = _degree_to_label(from_chord.degree_number)
+	var to_label = _degree_to_label(to_chord.degree_number)
+	score += PartimentoRules.get_progression_bonus(
 		from_chord.degree_number,
 		to_chord.degree_number,
-		_degree_to_roman(from_chord.degree_number),
-		_degree_to_roman(to_chord.degree_number)
-	)
-	score += prog_bonus * 3
+		from_label,
+		to_label
+	) * 3.0
 
-	# Pénalité pour répétition exacte (sauf si voulu)
-	if from_chord.degree_number == to_chord.degree_number and from_chord.inversion == to_chord.inversion:
-		score -= 5
-
-	# Bonus pour mouvement de basse par quinte descendante
-	var bass_interval = _get_bass_interval(from_chord, to_chord)
-	if bass_interval == 5 or bass_interval == -7:  # Quinte descendante
-		score += 8
-	elif bass_interval == 4 or bass_interval == -8:  # Quarte ascendante
-		score += 6
+	# Pénalité légère pour répétition
+	if from_chord.degree_number == to_chord.degree_number:
+		score -= 3.0
 
 	return score
 
-func _contextual_score(candidate: Degree, prev_chord, position: int, total_length: int) -> int:
-	"""
-	Score contextuel basé sur la position dans la phrase.
-	"""
-	var score = 0
-
-	# Bonus pour tonique au début
-	if position == 0 and candidate.degree_number == 1:
-		score += 15
-
-	# Bonus pour cadence à la fin
-	if position == total_length - 1:
-		if candidate.degree_number == 1 and candidate.inversion == 0:
-			score += 20
-
-	# Avant-dernière position: préférer dominante
-	if position == total_length - 2:
-		if candidate.harmonic_function == "D":
-			score += 15
-
-	# Antépénultième: préférer pré-dominante
-	if position == total_length - 3:
-		if candidate.harmonic_function == "PD":
-			score += 10
-
-	return score
-
-func _chromatic_score(candidate: Degree, alteration: int, original_degree: int) -> int:
-	"""
-	Score pour les notes chromatiques.
-	"""
-	# Si la note est altérée mais l'accord ne le reflète pas, pénalité
-	# Si l'accord est une dominante secondaire appropriée, bonus
-
-	if candidate.kind == "secondary":
-		return 20  # Les secondaires sont bonnes pour les chromatismes
-
-	return -5  # Pénalité par défaut pour chromatisme non résolu
-
-func _get_bass_interval(from_chord: Degree, to_chord: Degree) -> int:
-	"""
-	Calcule l'intervalle de basse entre deux accords (en degrés).
-	"""
-	var from_bass = _get_bass_degree(from_chord)
-	var to_bass = _get_bass_degree(to_chord)
-	return to_bass - from_bass
-
-func _get_bass_degree(chord: Degree) -> int:
-	"""
-	Retourne le degré de la note de basse d'un accord.
-	"""
-	if chord.realization.empty():
-		return chord.degree_number
-
-	var bass_index = chord.inversion % chord.realization.size()
-	var bass_interval = chord.realization[bass_index]
-
-	return ((chord.degree_number - 1) + (bass_interval - 1)) % 7 + 1
-
-# ------------------------------------------------------------------------------
-# UTILITAIRES
-# ------------------------------------------------------------------------------
-
-func _apply_options(options: Dictionary):
-	max_solutions = options.get("max_solutions", 5)
-	beam_width = options.get("beam_width", 10)
-	prefer_diatonic = options.get("prefer_diatonic", true)
-	allow_secondary_dominants = options.get("allow_secondary_dominants", true)
-
-func _build_scale_cache():
-	if key != null:
-		_scale_degrees = _scale_helper.get_scale_array(key.scale_name)
-
-func _is_minor_mode() -> bool:
-	if key == null:
-		return false
-	var scale_name = key.scale_name.to_lower()
-	return scale_name.find("minor") >= 0 or scale_name == "aeolian" or scale_name == "dorian" or scale_name == "phrygian"
-
-func _degree_to_roman(degree: int) -> String:
+func _degree_to_label(degree: int) -> String:
 	var is_minor = _is_minor_mode()
 	if is_minor:
 		match degree:
@@ -429,7 +392,7 @@ func _degree_to_roman(degree: int) -> String:
 			4: return "iv"
 			5: return "V"
 			6: return "VI"
-			7: return "VII"
+			7: return "viio"
 	else:
 		match degree:
 			1: return "I"
@@ -441,26 +404,112 @@ func _degree_to_roman(degree: int) -> String:
 			7: return "viio"
 	return str(degree)
 
-# ------------------------------------------------------------------------------
-# MÉTHODES DE COMMODITÉ
-# ------------------------------------------------------------------------------
+# ==============================================================================
+# CONSTRUCTION DE LA SORTIE
+# ==============================================================================
 
-func set_key(new_key: HarmonicKey):
-	key = new_key
-	_build_scale_cache()
+func _build_output_solutions(raw_solutions: Array, original_notes: Array) -> Array:
+	"""
+	Convertit les solutions brutes en format de sortie avec melody_track.
+	"""
+	var solutions = []
+
+	for sol in raw_solutions:
+		var progression = sol.path
+		var melody_track = _create_melody_track(progression, original_notes)
+
+		# Annoter les degrés avec les schémas
+		_annotate_with_schemas(progression, sol.schemas)
+
+		solutions.append({
+			"progression": progression,
+			"melody_track": melody_track,
+			"score": sol.total_score,
+			"schemas_applied": sol.schemas
+		})
+
+	return solutions
+
+func _create_melody_track(progression: Array, notes: Array) -> Array:
+	"""
+	Crée la track mélodique: chaque note exprimée en Degree "melodic"
+	par rapport à son accord.
+	"""
+	var melody_track = []
+
+	for note in notes:
+		# Trouver la fenêtre de cette note
+		var window_idx = _get_window_index_for_beat(note.start)
+		if window_idx < 0 or window_idx >= progression.size():
+			continue
+
+		var chord = progression[window_idx]
+		var window = _windows[window_idx]
+
+		# Créer le Degree melodic
+		var melodic_degree = window.create_melodic_degree(
+			note.midi,
+			chord.degree_number,
+			chord.realization
+		)
+
+		# Copier les infos temporelles
+		melodic_degree.length_beats = note.get("duration", 1.0)
+
+		melody_track.append({
+			"degree": melodic_degree,
+			"start": note.start,
+			"original_midi": note.midi,
+			"chord_degree": chord.degree_number
+		})
+
+	return melody_track
+
+func _get_window_index_for_beat(beat: float) -> int:
+	for i in range(_windows.size()):
+		var w = _windows[i]
+		if beat >= w.start_beat and beat < w.end_beat:
+			return i
+	return -1
+
+func _annotate_with_schemas(progression: Array, schemas: Array):
+	"""
+	Annote chaque Degree avec le schéma appliqué (dans comment).
+	"""
+	for schema_info in schemas:
+		var start = schema_info.get("start_window", 0)
+		var end = schema_info.get("end_window", 0)
+		var name = schema_info.get("schema", "")
+
+		for i in range(start, min(end + 1, progression.size())):
+			var pos_in_schema = i - start + 1
+			var total_in_schema = end - start + 1
+			progression[i].comment = "%s[%d/%d]" % [name, pos_in_schema, total_in_schema]
+
+# ==============================================================================
+# RAPPORT
+# ==============================================================================
+
+func _build_report(detected_schemas: Array) -> Dictionary:
+	return {
+		"windows_analyzed": _windows.size(),
+		"window_size": window_size,
+		"global_contour": _analyzer.get_global_contour() if _analyzer else [],
+		"downbeat_contour": _analyzer.get_downbeat_contour() if _analyzer else [],
+		"schemas_detected": detected_schemas,
+		"seventh_allowed": seventh_allowed,
+		"ninth_allowed": ninth_allowed
+	}
+
+# ==============================================================================
+# UTILITAIRES
+# ==============================================================================
+
+func _is_minor_mode() -> bool:
+	if key == null:
+		return false
+	var scale_name = key.scale_name.to_lower()
+	return scale_name.find("minor") >= 0 or scale_name == "aeolian" or scale_name == "dorian" or scale_name == "phrygian"
 
 func set_rng(new_rng: RandomNumberGenerator):
 	rng = new_rng
-
-func get_possible_chords_for_note(midi_note: int, harmonic_key: HarmonicKey) -> Array:
-	"""
-	Méthode utilitaire: retourne les accords possibles pour une note MIDI donnée.
-	Utile pour l'UI ou le débogage.
-	"""
-	key = harmonic_key
-	_build_scale_cache()
-
-	var note_info = _midi_to_scale_degree(midi_note)
-	var candidates = _get_chord_candidates(note_info, null, 0, 1)
-
-	return candidates
