@@ -524,7 +524,7 @@ func _build_items() -> void:
 
 		# Sélectionnable uniquement si Degree
 		wrapper.set_meta("selectable", is_degree)
-		wrapper.set_meta("start_time", e["start"])
+		wrapper.set_meta("start", e["start"])
 		wrapper.set_meta("selected", false)
 		wrapper.set_meta("index", idx_wrapper)
 		wrapper.set_meta("degree",elem)

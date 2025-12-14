@@ -22,6 +22,7 @@ const PERSIAN_STEPS = [1, 3, 1, 1, 2, 3, 1]               # Persian
 const MAJOR_LOCRIAN_STEPS = [2, 2, 1, 1, 2, 2, 2]         # Major Locrian
 const LEADING_WHOLE_TONE_STEPS = [2, 2, 2, 2, 2, 1, 1]    # Leading whole tone (mode II de Neapolitan major)
 const ROMANIAN_MAJOR_STEPS = [1, 3, 2, 1, 2, 1, 2]        # Romanian major
+const AUGMENTED_HEPTATONIC_SCALE = [0, 2, 4, 5, 8, 9, 10, 12]
 
 var scale_steps: Dictionary = {}
 
@@ -94,13 +95,13 @@ func _build_tables():
 	
 	scale_steps[_norm("harmonic_major")] = HARMONIC_MAJOR_STEPS
 
-	scale_steps[_norm("double_harmonic")] = DOUBLE_HARMONIC_STEPS
-	scale_steps[_norm("double_harmonic_major")] = DOUBLE_HARMONIC_STEPS
-	scale_steps[_norm("byzantine")] = DOUBLE_HARMONIC_STEPS
+#	scale_steps[_norm("double_harmonic")] = DOUBLE_HARMONIC_STEPS
+#	scale_steps[_norm("double_harmonic_major")] = DOUBLE_HARMONIC_STEPS
+#	scale_steps[_norm("byzantine")] = DOUBLE_HARMONIC_STEPS
 	scale_steps[_norm("gypsy_major")] = DOUBLE_HARMONIC_STEPS
 
 	scale_steps[_norm("hungarian_major")] = HUNGARIAN_MAJOR_STEPS
-	scale_steps[_norm("hungarian_minor")] = HUNGARIAN_MINOR_STEPS
+#	scale_steps[_norm("hungarian_minor")] = HUNGARIAN_MINOR_STEPS
 	scale_steps[_norm("gypsy_minor")] = HUNGARIAN_MINOR_STEPS
 
 	scale_steps[_norm("neapolitan_major")] = NEAPOLITAN_MAJOR_STEPS
@@ -114,6 +115,7 @@ func _build_tables():
 
 	scale_steps[_norm("romanian_major")] = ROMANIAN_MAJOR_STEPS
 
+	scale_steps[_norm("augmented_heptatonic")] = AUGMENTED_HEPTATONIC_SCALE
 
 
 	

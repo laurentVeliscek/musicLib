@@ -48,7 +48,7 @@ func load_modulation_database():
 	
 	print("modulation_db.size(): "+ str(modulation_db.size()))
 	
-	LogBus.info(TAG,"\nModulationManager loaded :")	
+	LogBus.info(TAG,"ModulationManager loaded :")	
 	LogBus.info(TAG,str(modulation_db.size()) + " paths available\n")
 	
 	#LogBus.info(TAG,"Version: " +  str(modulation_db["version"]))

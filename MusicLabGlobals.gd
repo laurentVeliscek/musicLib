@@ -72,12 +72,6 @@ func set_sound_Font(path):
 	midi_player.set_soundfont(path)
 
 func set_song(song):
-	if song == null:
-		pass
-		#LogBus.info(TAG,"[MusicLabGlobals] set_song(null) !")
-	else:
-		pass
-		#LogBus.info(TAG,"[MusicLabGlobals] set_song() -> " + str(song))
 	current_song = song
 
 
@@ -186,41 +180,6 @@ func load_song_from_file(path:String, compressed_hint:bool = true) -> Song:
 	return song
 
 
-func load_song_from_browser_picker() -> void:
-		# Ouvre une boîte de dialogue du navigateur (HTML5) pour charger une Song JSON
-		if not (OS.has_feature("HTML5") and Engine.has_singleton("JavaScript")):
-				LogBus.error(TAG, "load_song_from_browser_picker(): HTML5 + JavaScript required")
-				return
-
-		var js_win = JavaScript.get_interface("window")
-		if js_win == null:
-				LogBus.error(TAG, "load_song_from_browser_picker(): JavaScript window interface unavailable")
-				return
-
-		# Callback appelé par le JavaScript du navigateur une fois le fichier lu
-		js_win.musiclib_on_song_loaded = JavaScript.create_callback(self, "_on_browser_song_loaded")
-
-		var js_code := ""
-		js_code += "(function(){"
-		js_code += "  var input=document.createElement('input');"
-		js_code += "  input.type='file';"
-		js_code += "  input.accept='.json,application/json';"
-		js_code += "  input.style.display='none';"
-		js_code += "  document.body.appendChild(input);"
-		js_code += "  input.addEventListener('change', function(event){"
-		js_code += "    var file=input.files && input.files[0];"
-		js_code += "    if(!file){ window.musiclib_on_song_loaded(null); document.body.removeChild(input); return; }"
-		js_code += "    var reader=new FileReader();"
-		js_code += "    reader.onload=function(e){ window.musiclib_on_song_loaded(e.target.result); document.body.removeChild(input); };"
-		js_code += "    reader.onerror=function(){ window.musiclib_on_song_loaded(null); document.body.removeChild(input); };"
-		js_code += "    reader.readAsText(file);"
-		js_code += "  });"
-		js_code += "  input.click();"
-		js_code += "})();"
-
-		JavaScript.eval(js_code, true)
-		LogBus.info(TAG, "load_song_from_browser_picker(): waiting for user file selection")
-
 
 func _on_browser_song_loaded(result) -> void:
 		# Callback interne : 'result' est le contenu du fichier JSON ou null
@@ -244,62 +203,45 @@ func _on_browser_song_loaded(result) -> void:
 		LogBus.info(TAG, "_on_browser_song_loaded(): Song loaded from browser picker -> " + song.title)
 
 
-
-func download_current_song_as_json(filename:String = "song.json") -> void:
-	if current_song == null or not (current_song is Song):
-		LogBus.error(TAG, "download_current_song_as_json(): no current_song")
-		return
-	
-	var data:Dictionary = current_song.to_dict()
-	var json:String = JSON.print(data, "\t")
-	
-	# HTML5 + JavaScript disponible ?
-	if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-		var b64:String = Marshalls.utf8_to_base64(json)
-		var url:String = "data:application/json;base64," + b64
-		
-		var js_code:String = ""
-		js_code += "var a=document.createElement('a');"
-		js_code += "a.href='" + url + "';"
-		js_code += "a.download='" + filename + "';"
-		js_code += "document.body.appendChild(a);"
-		js_code += "a.click();"
-		js_code += "document.body.removeChild(a);"
-		
-		JavaScript.eval(js_code, true)
-		LogBus.info(TAG, "download_current_song_as_json(): HTML5 download triggered (" + filename + ")")
-	
-	else:
-		# Pas en HTML5 → on se rabat sur un simple save dans user://
-		var path:String = "user://" + filename
-		var ok:bool = save_current_song_to_file(path, false)
-		if ok:
-			LogBus.info(TAG, "download_current_song_as_json(): not HTML5, saved to " + path + " instead")
-		else:
-			LogBus.error(TAG, "download_current_song_as_json(): fallback save failed")
-
-
+#
+#func download_current_song_as_json(filename:String = "song.json") -> void:
+#	if current_song == null or not (current_song is Song):
+#		LogBus.error(TAG, "download_current_song_as_json(): no current_song")
+#		return
+#
+#	var data:Dictionary = current_song.to_dict()
+#	#var json:String = JSON.print(data, "\t")
+#
+#
+#	var path:String = "user://" + filename
+#	var ok:bool = save_current_song_to_file(path, false)
+#	if ok:
+#		LogBus.info(TAG, "download_current_song_as_json(): not HTML5, saved to " + path + " instead")
+#	else:
+#		LogBus.error(TAG, "download_current_song_as_json(): fallback save failed")
+#
+#
 func import_song_from_json_file(path:String) -> Song:
 	# Lit un fichier JSON exporté (song.json) et reconstruit la Song
 	var f := File.new()
-	
+
 	if not f.file_exists(path):
 		LogBus.error(TAG, "import_song_from_json_file(): file does not exist: " + path)
 		return null
-	
+
 	var err = f.open(path, File.READ)
 	if err != OK:
 		LogBus.error(TAG, "import_song_from_json_file(): can't open " + path + " (err " + str(err) + ")")
 		return null
-	
+
 	var text:String = f.get_as_text()
 	f.close()
-	
+
 	var parsed = parse_json(text)
 	if typeof(parsed) != TYPE_DICTIONARY:
 		LogBus.error(TAG, "import_song_from_json_file(): parsed JSON is not a Dictionary")
 		return null
-	
+
 	var dummy:Song = Song.new()
 	var song:Song = dummy.from_dict(parsed)
 	set_song(song)
@@ -352,60 +294,38 @@ func clear_user_settings():
 # -------------------------------------------------------------------
 
 func _save_globals():
-		if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-				var js = Engine.get_singleton("JavaScript")
-				var json_data = to_json(user_settings)
-				js.eval("localStorage.setItem('musiclab_globals', JSON.stringify(%s))" % json_data)
-				#print_verbose("[MusicLabGlobals] Globals sauvegardés dans localStorage")
-				#LogBus.info(TAG,"MusicLab Globals saved in localStorage")
-		else:
-				var f := File.new()
-				var err = f.open(GLOBALS_SAVE_PATH, File.WRITE)
-				if err != OK:
-						LogBus.error(TAG, "_save_globals(): can't open " + GLOBALS_SAVE_PATH + " (err " + str(err) + ")")
-						return
 
-				f.store_string(JSON.print(user_settings, "\t"))
-				f.close()
-				#LogBus.info(TAG, "MusicLab Globals saved to " + GLOBALS_SAVE_PATH)
+	var f := File.new()
+	var err = f.open(GLOBALS_SAVE_PATH, File.WRITE)
+	if err != OK:
+			LogBus.error(TAG, "_save_globals(): can't open " + GLOBALS_SAVE_PATH + " (err " + str(err) + ")")
+			return
+
+	f.store_string(JSON.print(user_settings, "\t"))
+	f.close()
+	#LogBus.info(TAG, "MusicLab Globals saved to " + GLOBALS_SAVE_PATH)
 
 
 func _load_globals():
-		if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-				var js = Engine.get_singleton("JavaScript")
-				var data = js.eval("localStorage.getItem('musiclab_globals')")
-				if data and typeof(data) == TYPE_STRING and data != "":
-						var parsed = parse_json(data)
-						if typeof(parsed) == TYPE_DICTIONARY:
-								user_settings = parsed
-								#print_verbose("[MusicLabGlobals] Globals rechargés depuis localStorage")
-								LogBus.info(TAG,"MusicLab Globals loaded from localStorage")
 
-						else:
-								#print_verbose("[MusicLabGlobals] Erreur parse_json (data non-dict)")
-								LogBus.error(TAG,"MusicLab Globals Error parse_json (data non-dict)")
-				else:
-						#print_verbose("[MusicLabGlobals] Aucune donnée locale à charger")
-						LogBus.info(TAG,"MusicLab Globals no data to load")
-		else:
-				var f := File.new()
-				if not f.file_exists(GLOBALS_SAVE_PATH):
-						return
+	var f := File.new()
+	if not f.file_exists(GLOBALS_SAVE_PATH):
+			return
 
-				var err = f.open(GLOBALS_SAVE_PATH, File.READ)
-				if err != OK:
-						LogBus.error(TAG, "_load_globals(): can't open " + GLOBALS_SAVE_PATH + " (err " + str(err) + ")")
-						return
+	var err = f.open(GLOBALS_SAVE_PATH, File.READ)
+	if err != OK:
+			LogBus.error(TAG, "_load_globals(): can't open " + GLOBALS_SAVE_PATH + " (err " + str(err) + ")")
+			return
 
-				var text := f.get_as_text()
-				f.close()
+	var text := f.get_as_text()
+	f.close()
 
-				var parsed = parse_json(text)
-				if typeof(parsed) == TYPE_DICTIONARY:
-						user_settings = parsed
-						LogBus.info(TAG, "MusicLab Globals loaded from " + GLOBALS_SAVE_PATH)
-				else:
-						LogBus.error(TAG, "_load_globals(): invalid data format in " + GLOBALS_SAVE_PATH)
+	var parsed = parse_json(text)
+	if typeof(parsed) == TYPE_DICTIONARY:
+			user_settings = parsed
+			LogBus.info(TAG, "MusicLab Globals loaded from " + GLOBALS_SAVE_PATH)
+	else:
+			LogBus.error(TAG, "_load_globals(): invalid data format in " + GLOBALS_SAVE_PATH)
 
 func _ensure_directory(path: String) -> bool:
 		var dir := Directory.new()
@@ -503,55 +423,12 @@ func save_midi_bytes_to_midi_file(bytes: PoolByteArray,filename:String)->String:
 				return "No Midi Bytes to export (bytes.size == 0)."
 
 		var export_path := _build_output_path(LAST_MIDI_DIR_KEY, filename, MIDI_EXTENSION)
-		var mime_type = "audio/midi"
-
-
-		if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-				var result = _html5_download_bytes(bytes, export_path.get_file(), mime_type)
-				_remember_dir(LAST_MIDI_DIR_KEY, export_path)
-				return result
-		else:
-				var result = _save_locally(bytes, export_path)
-				_remember_dir(LAST_MIDI_DIR_KEY, export_path)
-				return result
+		#var mime_type = "audio/midi"
+		var result = _save_locally(bytes, export_path)
+		_remember_dir(LAST_MIDI_DIR_KEY, export_path)
+		return result
 	
 	
-
-func _html5_download_bytes(bytes: PoolByteArray, fname: String, mime: String) -> String:
-	# Encode en base64 côté Godot (rapide et fiable)
-	var b64: String = Marshalls.raw_to_base64(bytes)
-	
-	# Installe une fonction JS si absente, puis appelle le download
-	var js_win = JavaScript.get_interface("window")
-	if js_win == null:
-		#LogBus.error(TAG,"[MidiExport] JavaScript window interface non available.")
-		return "[MidiExport] JavaScript window interface non disponible."
-	
-	if not js_win.has("musiclib_download_b64"):
-		var code = ""
-		code += "window.musiclib_download_b64 = function(b64, filename, mime) {"
-		code += "  try {"
-		code += "    var bin = atob(b64);"
-		code += "    var len = bin.length;"
-		code += "    var arr = new Uint8Array(len);"
-		code += "    for (var i = 0; i < len; i++) arr[i] = bin.charCodeAt(i);"
-		code += "    var blob = new Blob([arr], {type: mime || 'application/octet-stream'});"
-		code += "    var a = document.createElement('a');"
-		code += "    a.href = URL.createObjectURL(blob);"
-		code += "    a.download = filename || 'export.bin';"
-		code += "    document.body.appendChild(a);"
-		code += "    a.click();"
-		code += "    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 0);"
-		code += "  } catch(e) { console.error('musiclib_download_b64 error', e); }"
-		code += "};"
-		JavaScript.eval(code, true)	#﻿
-	
-	if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-		# Appel direct
-		js_win.musiclib_download_b64(b64, fname, mime)
-		return fname + "saved !"
-	else:
-		return "[MidiExport] JavaScript environment required for export."
 
 
 func _save_locally(bytes: PoolByteArray, path: String) -> String:
@@ -599,39 +476,3 @@ func save_text_to_file(path:String, text:String) -> bool:
 	return true
 	
 	
-func save_text_html5(text:String, filename:String = "export.txt") -> void:
-	# Garde-fou : nom par défaut
-	var fname:String = filename
-	if fname == "":
-			fname = "export" + TEXT_EXTENSION
-
-	if not fname.ends_with(TEXT_EXTENSION):
-			fname += TEXT_EXTENSION
-
-# Si on est en HTML5 + JavaScript dispo : vrai download navigateur
-	if OS.has_feature("HTML5") and Engine.has_singleton("JavaScript"):
-		var b64:String = Marshalls.utf8_to_base64(text)
-		var url:String = "data:text/plain;base64," + b64
-	
-		# Attention : ici on suppose un filename sans quotes ni caractères bizarres
-		var js:String = ""
-		js += "var a=document.createElement('a');"
-		js += "a.href='" + url + "';"
-		js += "a.download='" + fname + "';"
-		js += "document.body.appendChild(a);"
-		js += "a.click();"
-		js += "document.body.removeChild(a);"
-		
-		JavaScript.eval(js, true)
-		LogBus.info(TAG, "download_text_html5(): HTML5 download triggered (" + fname + ")")
-
-	else:
-		# Fallback hors HTML5 : on enregistre dans le dossier utilisateur
-		var path:String = get_text_export_path(fname)
-		var ok:bool = save_text_to_file(path, text)
-		if ok:
-				_remember_dir(LAST_TEXT_DIR_KEY, path)
-				LogBus.info(TAG, "download_text_html5(): not HTML5, saved to " + path + " instead")
-		else:
-				LogBus.error(TAG, "download_text_html5(): fallback save failed")
-

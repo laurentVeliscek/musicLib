@@ -714,3 +714,191 @@ func _meta_tempo_to_bpm(data: PoolByteArray) -> float:
 	if mpqn <= 0:
 		return -1.0
 	return 60000000.0 / float(mpqn)
+
+
+func humanize_chords(midi_bytes: PoolByteArray, track_number: int = 0, min_delta: float = 0.01, max_delta: float = 0.05, velocity_random_percentage: float = 0.2) -> PoolByteArray:
+	# Humanise une piste: micro-arpège très rapide (grave -> aigu) et légère variation de vélocité
+	# min_delta/max_delta sont exprimés en "temps" (noires). Ex.: 0.05 = 5% d'une noire.
+	# Retourne le MIDI modifié (toutes les pistes conservées, seule la piste cible est altérée).
+	# # Garde-fous
+	if min_delta < 0.0:
+		min_delta = 0.0
+	if max_delta < min_delta:
+		max_delta = min_delta
+	
+	# Lire header + pistes
+	var rd = _Reader.new(midi_bytes)
+	var header = _read_header(rd)
+	if header == null:
+		push_error("MIDI invalide: en-tête MThd manquant ou corrompu")
+		return midi_bytes
+	var tracks: Array = []
+	for i in range(header.ntrks):
+		var ch = _read_chunk(rd)
+		if ch == null or ch.id != MTRK_MAGIC:
+			return midi_bytes
+		tracks.append(ch)
+	if track_number < 0 or track_number >= tracks.size():
+		return midi_bytes
+	
+	# Parse piste cible
+	var events: Array = _parse_track_events(tracks[track_number].data)
+	if events.size() == 0:
+		return midi_bytes
+	
+	# Aparier notes (par pitch & canal)
+	_pair_notes(events)
+	
+	# Calcul ticks par noire (supporte TPQN; SMPTE via premier tempo si présent, sinon BPM=120)
+	var ticks_per_beat = _calc_ticks_per_beat(header, tracks)
+	if ticks_per_beat <= 0:
+		# Aucun calcul fiable -> pas de décalage temporel; on appliquera seulement la vélocité
+		ticks_per_beat = 0
+	
+	# RNG local
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	
+	# Regrouper les notes par start absolu (chords) — tous canaux confondus
+	var starts_to_on_idxs = {}
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind == "ch" and ev.is_note_on and ev.pair_index >= 0:
+			var key_time = ev.abs_time
+			if not starts_to_on_idxs.has(key_time):
+				starts_to_on_idxs[key_time] = []
+			starts_to_on_idxs[key_time].append(i)
+	
+	# Parcourir chaque accord (taille >= 2)
+	for t in starts_to_on_idxs.keys():
+		var idxs: Array = starts_to_on_idxs[t]
+		if idxs.size() < 2:
+			continue
+		# Trier grave -> aigu
+		_cmp_events_ref = events
+		idxs.sort_custom(self, "_cmp_idx_by_pitch_asc")
+		
+		# Détermination du delta total (en ticks)
+		var delta_ticks = 0
+		if ticks_per_beat > 0:
+			var delta_beats = rng.randf_range(min_delta, max_delta)
+			delta_ticks = int(round(float(ticks_per_beat) * delta_beats))
+		
+		# Appliquer offsets progressifs + vélocités
+		var n = idxs.size()
+		for k in range(n):
+			var idx_on = int(idxs[k])
+			var ev_on = events[idx_on]
+			var offset = 0
+			if delta_ticks > 0 and n > 1:
+				# offset = delta_total * k / n (première immobile)
+				offset = int(round(float(delta_ticks) * float(k) / float(n)))
+			if offset != 0:
+				ev_on.abs_time += offset
+				# Décaler la fin pour conserver la durée de la note
+				if ev_on.pair_index >= 0:
+					var ev_off = events[ev_on.pair_index]
+					ev_off.abs_time += offset
+			# Variation de vélocité autour de 100%
+			if ev_on.data.size() >= 2:
+				var vel = int(ev_on.data[1])
+				var jitter = rng.randf_range(-velocity_random_percentage, velocity_random_percentage)
+				var scaled = int(round(float(vel) * (1.0 + jitter)))
+				if scaled < 1:
+					scaled = 1
+				if scaled > 127:
+					scaled = 127
+				ev_on.data[1] = scaled
+	# Éviter tout chevauchement entre occurrences successives d'un même pitch & canal
+	_shorten_to_next_same_pitch(events)
+	# Reconstruire la piste (tri temporel inclus dans _rebuild_track)
+	var new_track_bytes: PoolByteArray = _rebuild_track(events)
+	
+	# Recomposer le fichier
+	var out: PoolByteArray = PoolByteArray()
+	out.append_array(_write_mthd(header))
+	for i in range(tracks.size()):
+		if i == track_number:
+			out.append_array(_write_chunk(MTRK_MAGIC, new_track_bytes))
+		else:
+			out.append_array(_write_chunk(MTRK_MAGIC, tracks[i].data))
+	return out
+
+
+# --- Helpers pour humanize_chords ---
+
+func _calc_ticks_per_beat(header: _Header, tracks: Array) -> int:
+	# TPQN directement si non-SMPTE
+	if (header.division & 0x8000) == 0:
+		return int(header.division)
+	# SMPTE: déduction via premier méta tempo (MPQN). Fallback BPM=120 si absent.
+	var fps_byte = (header.division >> 8) & 0xFF
+	var ticks_per_frame = header.division & 0xFF
+	var fps = -int(fps_byte)	# # signé dans la spec
+	var ticks_per_second = fps * ticks_per_frame
+	if ticks_per_second <= 0:
+		return -1
+	# Chercher premier tempo (MPQN) dans toutes les pistes
+	var bpm = -1.0
+	for i in range(tracks.size()):
+		var evs = _parse_track_events(tracks[i].data)
+		if evs.size() == 0:
+			continue
+		for j in range(evs.size()):
+			var ev = evs[j]
+			if ev.kind == "meta" and ev.meta_type == 0x51 and ev.data.size() >= 3:
+				bpm = _meta_tempo_to_bpm(ev.data)
+				if bpm > 0.0:
+					break
+		if bpm > 0.0:
+			break
+	if bpm <= 0.0:
+		bpm = 120.0
+	# ticks_per_beat = ticks_per_second * 60 / bpm
+	var tpb = int(round(float(ticks_per_second) * 60.0 / bpm))
+	if tpb <= 0:
+		return -1
+	return tpb
+
+func _cmp_idx_by_pitch_asc(a_idx, b_idx) -> bool:
+	var events = _cmp_events_ref
+	var ea = events[int(a_idx)]
+	var eb = events[int(b_idx)]
+	if ea.pitch == eb.pitch:
+		return int(a_idx) < int(b_idx)
+	return ea.pitch < eb.pitch
+
+
+func _shorten_to_next_same_pitch(events: Array) -> void:
+	# Raccourcit chaque note pour ne pas chevaucher la prochaine note du même pitch & canal.
+	# Hypothèse: _pair_notes a été appelé et les abs_time ont déjà été ajustés.
+	var by_key = {}	# "pitch_chan" -> Array d'indices note-on
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind == "ch" and ev.is_note_on and ev.pair_index >= 0:
+			var chan = ev.status & 0x0F
+			var key = str(ev.pitch) + "_" + str(chan)
+			if not by_key.has(key):
+				by_key[key] = []
+			by_key[key].append(i)
+	
+	# Pour chaque (pitch, canal), trier par temps puis capper la durée
+	for key in by_key.keys():
+		var idxs: Array = by_key[key]
+		_cmp_events_ref = events
+		idxs.sort_custom(self, "_cmp_idx_by_time_then_index")
+		
+		for k in range(idxs.size() - 1):
+			var idx_on_a = int(idxs[k])
+			var idx_on_b = int(idxs[k + 1])
+			var ev_on_a = events[idx_on_a]
+			var ev_on_b = events[idx_on_b]
+			var ev_off_a = events[ev_on_a.pair_index]
+			
+			var next_start = ev_on_b.abs_time
+			var min_off = ev_on_a.abs_time + 1	# au moins 1 tick
+			var max_off = next_start - 1		# ne pas empiéter sur B
+			if max_off < min_off:
+				max_off = min_off
+			if ev_off_a.abs_time > max_off:
+				ev_off_a.abs_time = max_off

@@ -63,7 +63,7 @@ var config_override = {
 	"accent_downbeat_factor": 1.3,  # Multiplication vélocité temps forts
 	"mute_duration": 0.02,  # Durée des notes mutées (en beats)
 	"humanize_timing": true,  # Micro-décalages temporels
-	"timing_variance": 0.005,  # Variance temporelle (en beats)
+	"timing_variance": 0.0,  # Variance temporelle (en beats)
 	"velocity_down_base": 100,  # Vélocité de base pour Down fort
 	"velocity_down_light": 50,  # Vélocité de base pour down léger
 	"velocity_up_base": 90,  # Vélocité de base pour Up fort

@@ -833,7 +833,7 @@ func to_string() -> String:
 	for e in events:
 		if e == null:
 			continue
-
+		
 		if typeof(e) == TYPE_DICTIONARY:
 			# 1) Degree event
 			if e.has("degree"):
@@ -2088,15 +2088,34 @@ func get_degrees_with_start()->Array:
 			d_dic["start"] = e["start"]
 			arr.append(d_dic)
 	return arr
-						
-#func add_note(start_beats: float, note) -> int:
-#	var ev: Dictionary = {}
-#	var t = max(0.0, float(start_beats))
-#	ev["start"] = t
-#
-#	if adopt_channel and typeof(note) == TYPE_OBJECT and note != null and note.has_method("set"):
-#		note.channel = clamp(channel, 0, 15)
-#
-#	ev["note"] = note
-#	events.append(ev)
-#	return events.size() - 1
+		
+## return a track with an inserted track at position				
+func track_with_insert(position:float,inserted_track:Track)->Track:
+	var out_track = clone()
+	if inserted_track.length_beats == 0:
+		return out_track
+		
+	var end_track = clone()
+	end_track = end_track.extract(position,end_track.length_beats,true)
+	out_track = out_track.extract(0,position)
+	var insert = inserted_track.clone()
+	insert.shift_time(out_track.length_beats)
+	out_track.merge_track(insert)
+	end_track.shift_time(out_track.length_beats)
+	out_track.merge_track(end_track)
+	return out_track
+	
+func track_with_cut(position_from:float,position_to:float)->Track:
+	var out_track = clone()	
+	if position_from >= position_to :
+		LogBus.error(TAG,"track_with_cut() : position_from >= position_to")
+		LogBus.error(TAG,"position_from: " + str(position_from))
+		LogBus.error(TAG,"position_to: " + str(position_to))
+		return out_track
+	var end_track = clone()
+	end_track = end_track.extract(position_to,end_track.length_beats)
+	end_track.shift_time(position_from - position_to)
+	out_track = out_track.extract(0,position_from)	
+	out_track.merge_track(end_track)
+	return out_track
+	

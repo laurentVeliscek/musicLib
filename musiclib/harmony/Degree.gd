@@ -70,6 +70,11 @@ var harmonic_function:String ="T" setget set_harmonic_function, get_harmonic_fun
 # plan_data pour stocker les infos du générateur
 #var plan_data:Dictionary  = {} setget set_plan_data, get_plan_data
 
+# variable _comment non affichée
+# Pour que le code de progression editor puisse tagger des degrés
+# ni vu ni connu...
+var _comment = ""
+
 # adaptateur progressionGenerators
 #jazz_chord
 var override_jazz_chord:String = "" setget set_override_jazz_chord, get_override_jazz_chord
@@ -146,7 +151,7 @@ func clone()-> Degree:
 	# String comment
 	d.comment = comment
 	d.chord_voicing_index = chord_voicing_index
-	
+	d._comment = _comment
 	return d
 	
 	
@@ -199,6 +204,7 @@ func to_dict() -> Dictionary:
 	
 	# Commentaire texte
 	d["comment"] = comment
+	d["_comment"] = _comment
 	d["chord_voicing_index"] = chord_voicing_index
 	
 	return d
@@ -313,6 +319,10 @@ func from_dict(data:Dictionary) -> Degree:
 	# Commentaire texte
 	if data.has("comment"):
 		d.comment = str(data["comment"])
+		# Commentaire texte
+
+	if data.has("_comment"):
+		d.comment = str(data["_comment"])
 		
 	# Commentaire texte
 	if data.has("chord_voicing_index"):
@@ -335,7 +345,7 @@ func _get_alterations():
 
 func to_string() -> String:
 	var degree_roman = key.roman_triad(degree_number)
-	var txt = "Degree: " + degree_roman + " of key: " + key.to_string() + "(" + str(key.root_midi) + ")"
+	var txt = "Degree: " + degree_roman + " of key: " + key.to_string()
 	txt += ", Duration: "+str(length_beats)+ " beats"
 	txt += ", harmonic function: "+harmonic_function + "\n"
 	
@@ -456,6 +466,7 @@ func set_realization(arr:Array):
 
 func get_realization():
 	return realization
+
 
 func set_kind(k:String):
 	# bérifie que le kind existe bien
@@ -773,90 +784,122 @@ func has_seventh() -> bool:
 	
 ####################### Conversions ##############
 
+
+
 func get_jazz_chord() -> String :
-	var basePitch =  NoteParser.midipitch2StringStrictInKey(int(get_chord_midi()[0])%12,key,"en",false)
-	var res = get_chord_and_scale(get_chord_midi(), (key.root_midi) % 12  )
+	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
+	var gc_array = []
+	var basePitch =  key.degree_midi(degree_number) % 12 + get_chord_alteration(1)
+	var root_name = keys[basePitch]
+	var triton_root_name = keys[(basePitch + 6) %12]
+	var backdoor_root_name = keys[(basePitch + 3) %12]
+	var chord_name = ""
 	
-	
-	if ["It+6","Fr+6","Ger+6" ].has(kind):
-		
+	if ["It+6","Fr+6","Ger+6" ].has(kind):	
+		basePitch =  key.degree_midi(6) % 12 + get_chord_alteration(6)
+		root_name = keys[basePitch]
 		match kind:
 			"It+6":
-				return basePitch+"7"
+				return root_name+"7"
 			"Fr+6":
-				return basePitch+"7b5"
+				return root_name+"7b5"
 			_:
-				return basePitch+"7"
-	if ["It+6inv","Fr+6inv","Ger+6inv" ].has(kind):
-		var invbassPitch =  NoteParser.midipitch2StringStrictInKey(int(get_chord_midi()[1])%12,key,"en",false)
+				return root_name+"7"
+	elif ["It+6inv","Fr+6inv","Ger+6inv" ].has(kind):
+		basePitch =  key.degree_midi(6) % 12 + get_chord_alteration(6)
+		root_name = keys[basePitch % 12]
+		
 		match kind:
 			"It+6inv":
-				return invbassPitch+"7no5" 
+				return root_name+"7" 
 			"Fr+6inv":
-				return invbassPitch+"7b5" 
+				return root_name+"7b5" 
 			_:
-				return invbassPitch+"7" 
+				return root_name+"7" 
 	
-	if kind == "add9":
-		if third_distance() == 3 :		
-			return basePitch+"m9"
-		else:
-			return basePitch+"9"
-	if kind == "add11":
-		if third_distance() == 3 :		
-			return basePitch+"m11"
-		else:
-			return basePitch+"11"
-	
-	#"It+6inv","Fr+6inv","Ger+6inv"
-	if res != null :
-		
-		
-		return str(res["string"])
-		
-		
-	else:
-		# rattrapage pour le faire à la main...
-		var root_txt
 
-		#static func midipitch2StringStrictInKey(midi: int, hk, locale: String = "en", include_octave: bool = true, use_unicode_accidentals: bool = false) -> String:
-		root_txt = NoteParser.midipitch2StringStrictInKey(int(get_chord_midi()[0])%12,key,"en",false)
+	elif kind == "N6"	:		
+		basePitch =  key.degree_midi(2) % 12 + get_chord_alteration(2)
+		root_name = keys[basePitch % 12]
+		if inversion == 1:
+			var thirdPitch = key.degree_midi(4) % 12 + get_chord_alteration(4)
+			var third_name = keys[thirdPitch % 12]
+			return root_name+ "/"+third_name
+		return keys[basePitch]
 		
+	elif kind == "add9":
+		if third_distance() == 3 :		
+			return root_name+"m9"
+		else:
+			return root_name+"9"
+	elif kind == "add11":
+		if third_distance() == 3 :		
+			return root_name+"m11"
+		else:
+			return root_name+"11"
+	elif kind == "sus2":
+		return root_name+"sus2"
+	elif kind == "sus4":
+		return root_name+"sus4"
+	
+	elif (kind == "diatonic") and realization == [1,3,5] and third_distance() == 2 and fifth_distance() == 6:
+		# special chord -> on renverse pour avoir un accord 7
+		basePitch += 2
+		root_name = keys[basePitch % 12]
+		return  root_name+"7"
+	elif (kind == "diatonic") and realization == [1,3,5] and third_distance() == 3 and fifth_distance() == 5:
+		# special chord2 -> on renverse pour avoir un accord 7
+		basePitch += 5
+		root_name = keys[basePitch % 12]
+		return  root_name+"7sus4"	
+		
+	elif (kind == "diatonic" or kind == "cad64" or kind == "N6") and realization == [1,3,5] and fifth_distance() == 7:
+		if inversion == 0:		
+			if third_distance() == 3:
+				chord_name = root_name+"m"
+			elif third_distance() == 4:
+				chord_name = root_name+""
+		elif inversion == 1:
+			if third_distance() == 3:
+				var bass_name = get_note_name_of_chord_degree_number(3)
+				chord_name = root_name+"m" + "/"+bass_name
+			elif third_distance() == 4:
+				chord_name = root_name+""
+				var bass_name = get_note_name_of_chord_degree_number(3)
+				chord_name = root_name+"" + "/"+bass_name
+		elif inversion == 2:
+			if third_distance() == 3:
+				var bass_name = get_note_name_of_chord_degree_number(5)
+				chord_name = root_name+"m" + "/"+bass_name
+			elif third_distance() == 4:
+				chord_name = root_name+""
+				var bass_name = get_note_name_of_chord_degree_number(5)
+				chord_name = root_name+"" + "/"+bass_name
+		if chord_name != "":
+			return chord_name
 		# triades funky...
-		if realization.size()  == 3 :
-			if third_distance() == 4 and fifth_distance() == 6:
-				return root_txt+" b5"
-				
+	if realization  == [1,3,5] and third_distance() == 4 and fifth_distance() == 6:
+		return root_name+"b5"
+	elif realization  == [1,3,5] and third_distance() == 3 and fifth_distance() == 6:
+		return root_name+"dim"
+	elif realization  == [1,3,5] and third_distance() == 4 and fifth_distance() == 8:
+			return root_name+"aug"
+	elif realization == [1,3,5,7]:
+		var jc:String = jazz_chord_tetrades()
+		if jc != "":
+			return jc
+		else:
+			# On cherche par pitch
+			var ggb = MusicLabGlobals.GuitarBase
+			var midi_notes =  PoolIntArray(get_chord_midi())
+			var gc_by_pitch = ggb.search_by_pitches(midi_notes)
+			if gc_by_pitch.size() > 0:
+				var gc:GuitarChord = gc_by_pitch[0]
+				return gc.chord_name
+			else :
+				return "?"
 		
-		
-		
-		
-		var q = triad_quality()
-		var quality_txt = ""
-		
-		if kind == "sus2":
-			quality_txt = "sus2"
-		elif kind == "sus4":
-			quality_txt = "sus4"
-		match q:
-			"dim":
-				quality_txt = "dim"
-			"min":
-				quality_txt = "m"
-			"maj":
-				quality_txt = ""
-			"aug":
-				quality_txt = "aug"
-		
-		
-		if realization == [1,3,7,9] : 			
-			# Neuvieme
-			return root_txt + quality_txt + "9"	
-		elif realization == [1,5,7,11] : 		
-			# onzieme	
-			return root_txt + quality_txt + "11"
-		else :
-			return "?"	
+	return "?"
 		
 
 # on récupére le nom de la note pour le degré chord_degree_number du degré courant
@@ -1780,9 +1823,6 @@ func quality_with_alter() -> String:
 	var midi_fifth = key.degree_midi(degree_number + 4) + get_chord_alteration(5)
 	var midi_seventh = key.degree_midi(degree_number + 6) + get_chord_alteration(7) 
 	
-
-	
-	
 	if midi_third - midi_root == 3 and midi_fifth - midi_root == 6:
 		q = "dim"
 	elif midi_third - midi_root == 3 and midi_fifth - midi_root == 7:
@@ -1797,6 +1837,79 @@ func quality_with_alter() -> String:
 		#LogBus.error(TAG,"quality_with_alter() -> Unknown quality" )
 		return "?"
 	return q
+
+func jazz_chord_tetrades() -> String:
+	
+	
+	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
+	
+	var midi_root = key.degree_midi(degree_number) + get_chord_alteration(1)
+	var midi_third = key.degree_midi(degree_number + 2) + get_chord_alteration(3)
+	var midi_fifth = key.degree_midi(degree_number + 4) + get_chord_alteration(5)
+	var midi_seventh = key.degree_midi(degree_number + 6) + get_chord_alteration(7) 
+	var base_letter = keys[midi_root %12]
+	
+	if midi_third - midi_root == 4 :
+		# tierce majeure
+		if midi_fifth - midi_root == 7:
+			# quinte juste
+			if midi_seventh - midi_root == 11:
+				#septieme majeure
+				return base_letter + "maj7"
+			elif midi_seventh - midi_root == 10:
+				#septieme mineure
+				return base_letter + "7"
+		elif  midi_fifth - midi_root == 6:
+			# quinte diminuée
+			if midi_seventh - midi_root == 11:
+				#septieme majeure
+				return base_letter + "maj7b5"
+			elif midi_seventh - midi_root == 10:
+				#septieme mineure
+				return base_letter + "7b5"
+		elif  midi_fifth - midi_root == 8:
+			# quinte augmentée
+			if midi_seventh - midi_root == 11:
+				#septieme majeure
+				return base_letter + "maj7#5"
+			elif midi_seventh - midi_root == 10:
+				#septieme mineure
+				return base_letter + "7#5"
+	elif midi_third - midi_root ==  3:
+		# tierce mineure
+		if midi_fifth - midi_root == 7:
+			# quinte juste
+			if midi_seventh - midi_root == 10:
+				#septieme mineure
+				return base_letter + "m7"
+			elif midi_seventh - midi_root == 11:
+				#septieme mineure
+				return base_letter + "mmaj7"
+		elif midi_fifth - midi_root == 6:
+			# quinte diminuée
+			if midi_seventh - midi_root == 10:
+				#septieme mineure
+				return base_letter + "m7b5"
+			elif midi_seventh - midi_root == 11:
+				#septieme majeure
+				return base_letter + "mmaj7b5"
+			elif midi_seventh - midi_root == 9:
+				return base_letter + "dim7"
+		elif midi_fifth - midi_root == 8:
+			# quinte augmentée
+			if midi_seventh - midi_root == 11:
+				#septieme mineure
+				return base_letter + "aug7"	
+				
+	# on cherche par pitch
+	var ggb = MusicLabGlobals.GuitarBase
+	var midi_notes =  PoolIntArray(get_chord_midi())
+	var gc_by_pitch = ggb.search_by_pitches(midi_notes)
+	if gc_by_pitch.size() > 0:
+		var gc:GuitarChord = gc_by_pitch[0]
+		return gc.chord_name
+	#on a pas trouvé
+	return ""
 
 func triad_string_with_alter() -> String:
 	var roman_string = ""
@@ -1892,6 +2005,7 @@ func enharmonize():
 		comment = "Enharmonized from Ger+6 of key "+from_key.to_string() 
 		LogBus.info(TAG,comment)
 		enharmonic_string = "Enharmony: from Ger+6 to V dominant"
+		harmonic_function = "D"
 		return
 	
 	if enharmonic_string == "Enharmony: from Ger+6 to V dominant" :
@@ -1939,18 +2053,23 @@ func enharmonize():
 			key.root_midi = 60 + ((9 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 2
+			harmonic_function = "PD"
 		elif (key.scale_name == "harmonic_minor" or key.scale_name == "minor")  and degree_number == 2:
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 7
+			harmonic_function = "D"
 		elif key.scale_name == "harmonic_minor" and degree_number == 7:
 			key.scale_name = "major"
 			degree_number = 7
+			harmonic_function = "D"
 		else :
 			var midi_root = (key.degree_midi(degree_number) + get_chord_alteration(1)) %12
 			key.root_midi = (midi_root + 1) %12
 			degree_number = 7
 			key.scale_name = "harmonic_minor"
+			harmonic_function = "D"
+		
 
 	# test accord augmenté 
 	if midi_notes.size() == 3  and (midi_notes[1] - midi_notes[0] == 4) and  (midi_notes[2] - midi_notes[0] == 8): 
@@ -1966,37 +2085,44 @@ func enharmonize():
 			key.root_midi = 60 + ((9 + old_key_root) % 12)
 			key.scale_name = "minor"
 			degree_number = 3
+			harmonic_function = "T"
 		elif key.scale_name == "minor" and degree_number == 3:
 			# 3 de La mineur
 			key.root_midi = 60 + ((10 + old_key_root) % 12)
 			key.scale_name = "major"
 			degree_number = 4
+			harmonic_function = "PD"
 		elif key.scale_name == "major" and degree_number == 4:
 			#4 de sol majeur 
 			key.root_midi = 60 + ((7 + old_key_root) % 12)
 			key.scale_name = "minor"
 			degree_number =  7
+			harmonic_function = "D"
 		elif  key.scale_name == "minor" and degree_number == 7:
 			# 7 de ré mineur
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "major"
 			degree_number = 5
+			harmonic_function = "D"
 		elif  key.scale_name == "major" and degree_number == 5:
 			# 5 de fa majeur
 			key.root_midi = 60 + ((2 + old_key_root) % 12)
 			key.scale_name = "melodic_minor"
 			degree_number = 4
+			harmonic_function = "PD"
 		elif  key.scale_name == "melodic_minor" and degree_number == 4:
 			# 5 de fa majeur
 			key.root_midi = 60 + ((5 + old_key_root) % 12)
 			key.scale_name = "major"
 			degree_number = 1
+			harmonic_function = "T"
 		else:
 			# accord quelconque majeur
 			var m = key.degree_midi(degree_number)
 			key.scale_name = "major"
 			key.root_midi = 60 + (m % 12)
 			degree_number = 1 
+			harmonic_function = "T"
 			
 		var log_str = "Enharmonization major triad:\nFrom: "+ from_rn + " in key " + from_key.to_string()
 		log_str += "\nTo: " + get_roman_numeral() + " in key " + key.to_string()
@@ -2009,60 +2135,47 @@ func enharmonize():
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "major"
 			degree_number = 6
+			harmonic_function = "T"
 		elif key.scale_name == "major" and degree_number == 6:
 			#from C
 			key.root_midi = 60 + ((4 + old_key_root) % 12)
 			key.scale_name = "minor"
 			degree_number = 4
+			harmonic_function = "PD"
 		elif key.scale_name == "minor" and degree_number == 4:
 			#from E minor
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "major"
 			degree_number = 2
+			harmonic_function = "PD"
 		elif key.scale_name == "major" and degree_number == 2:
 			#from G major
 			key.root_midi = 60 + ((7 + old_key_root) % 12)
 			key.scale_name = "minor"
 			degree_number = 5
+			harmonic_function = "D"
 		elif key.scale_name == "minor" and degree_number == 5:
 			#from D minor
 			key.root_midi = 60 + ((3 + old_key_root) % 12)
 			key.scale_name = "major"
-			degree_number = 3		
+			degree_number = 3	
+			harmonic_function = "T"	
 		elif key.scale_name == "major" and degree_number == 3:
 			#from F major  -> G melodic minor
 			key.root_midi = 60 + ((2 + old_key_root) % 12)
 			key.scale_name = "melodic_minor"
 			degree_number = 2
+			harmonic_function = "PD"
 		elif key.scale_name == "melodic_minor" and degree_number == 2:
 			#G melodic minor
 			key.root_midi = 60 + ((2 + old_key_root) % 12)
 			key.scale_name = "harmonic_minor"
 			degree_number = 1
+			harmonic_function = "T"
 		var log_str = "Enharmonization minor triad:\nFrom: "+ from_rn + " in key " + from_key.to_string()
 		log_str += "\nTo: " + get_roman_numeral() + " in key " + key.to_string()
 		LogBus.info(TAG,log_str)
-#	# GAMME MAJEURE
-#
-#	# -> FROM ii
-#	if enharmonic_string == "ii_N6":
-#		# from key C to F#
-#		reset()
-#		var delta_key = 6
-#		degree_number = 5
-#		_set_alterations({})
-#		var comment = "Degree ii becomes bII = V dominant chord in a new major key (resolves to I)\nTypical modulation from bII to V"
-#		var new_scale = "major"
-#		enharmonic_string = "ii_N6_V"
-#		#
-#		key.scale_name = new_scale
-#		key.root_midi = 60 + ((old_key_root + delta_key) %12)
-#		var txt_info = "Enharmonic exchange !\n\n"+ comment +"\n\n"
-#		txt_info += "From: "+ from_jazzchord  + " (" + from_rn + " in key "+ from_key.to_string() +")"
-#		txt_info += "\nTo: " + get_jazz_chord() + " (" + get_roman_numeral() +  " in key "+key.to_string()+") \n"
-#		LogBus.info(TAG,txt_info)
-#		return
-#
+
 
 func guitar_chords()-> Array :
 	
@@ -2077,7 +2190,8 @@ func guitar_chords()-> Array :
 	
 
 	if 	["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv"].has(kind):
-		pass
+		gc_array = ggb.search_by_name(chord_name)
+		return gc_array
 	
 	elif (kind == "diatonic" or kind == "cad64" or kind == "N6") and realization == [1,3,5] and fifth_distance() == 7:
 		if inversion == 0:
@@ -2091,7 +2205,7 @@ func guitar_chords()-> Array :
 				var bass_name = get_note_name_of_chord_degree_number(3)
 				chord_name = root_name+"m" + "/"+bass_name
 			elif third_distance() == 4:
-				chord_name = root_name+"major"
+				chord_name = root_name+""
 				var bass_name = get_note_name_of_chord_degree_number(3)
 				chord_name = root_name+"" + "/"+bass_name
 		elif inversion == 2:
@@ -2099,7 +2213,7 @@ func guitar_chords()-> Array :
 				var bass_name = get_note_name_of_chord_degree_number(5)
 				chord_name = root_name+"m" + "/"+bass_name
 			elif third_distance() == 4:
-				chord_name = root_name+"major"
+				chord_name = root_name+""
 				var bass_name = get_note_name_of_chord_degree_number(5)
 				chord_name = root_name+"" + "/"+bass_name
 			
@@ -2113,8 +2227,8 @@ func guitar_chords()-> Array :
 	
 	
 	# on deconne pas avec les accords chromatiques...
-	if ["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6"].has(kind):
-		return gc_array
+#	if ["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6"].has(kind):
+#		return gc_array
 	
 					
 	# on ajoute les sus2 et sus4
@@ -2148,23 +2262,23 @@ func guitar_chords()-> Array :
 				gc_array.append_array(ggb.search_by_name(root_name+"9"))	
 
 	
-	# on ajoute les 6/9
-	if key.scale_name == "major":
-		if (degree_number == 1 or degree_number == 4 or degree_number == 5):
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
-		elif degree_number == 2:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif key.scale_name == "minor":
-		if (degree_number == 3 or degree_number == 6 or degree_number == 7):
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
-		elif degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif  key.scale_name == "harmonic_minor":
-		if degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"m69"))
-	elif key.scale_name == "melodic_minor":
-		if degree_number == 4:
-			gc_array.append_array(ggb.search_by_name(root_name+"69"))
+		# on ajoute les 6/9
+		if key.scale_name == "major":
+			if (degree_number == 1 or degree_number == 4 or degree_number == 5):
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+			elif degree_number == 2:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif key.scale_name == "minor":
+			if (degree_number == 3 or degree_number == 6 or degree_number == 7):
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
+			elif degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif  key.scale_name == "harmonic_minor":
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"m69"))
+		elif key.scale_name == "melodic_minor":
+			if degree_number == 4:
+				gc_array.append_array(ggb.search_by_name(root_name+"69"))
 				
 
 	# Et les Dominantes altérées
@@ -2219,17 +2333,31 @@ func same_pitch_class(p1:int,p2:int)->bool:
 
 
 func tonalize():
-	if degree_number == 1 and ["major","minor"].has(key.scale_name):
+	
+	if ["It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv"].has(kind):
+		var new_key_root = (key.root_midi + 8) % 12
+		reset()
+		key.root_midi = new_key_root
+		key.scale_name = "major"
+		return
+	elif kind == "N6":
+		var new_key_root = (key.root_midi + 1) % 12
+		reset()
+		key.root_midi = new_key_root
+		key.scale_name = "major"
 		return
 		
+	
+	
+		
 	if quality_with_alter() != "min" and  quality_with_alter() != "maj" :
-		LogBus.info(TAG,"Cannot tonalize !\nYou must select 2 diatonic major or minor chords\nIt is better to use 2 Degree 1 of 2 different tonalities\n")
+		LogBus.info(TAG,"Cannot tonalize !\nYou must select a diatonic major or minor chord")
 		return
 		
 	var k:HarmonicKey = HarmonicKey.new()
 	k.root_midi = 60 +  (key.degree_midi(degree_number) % 12)
 	if quality_with_alter() == "min" :
-		k.scale_name = "minor"
+		k.scale_name = "harmonic_minor"
 	elif quality_with_alter() == "maj":
 		k.scale_name = "major"
 	kind = "diatonic"
@@ -2346,5 +2474,3 @@ func update_kind():
 			"Ger+6Inv":set_aug6_Ger_inv()
 			"N6":set_N6()
 		
-		LogBus.debug(TAG,"updated_kind")
-		LogBus.debug(TAG,to_string())
