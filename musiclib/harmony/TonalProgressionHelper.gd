@@ -3,13 +3,15 @@ class_name TonalProgressionHelper
 
 const TAG = "TonalProgressionHelper"
 
+var rng: RandomNumberGenerator = null
+
 #-------------------------------------------------------------------------------
 # Graphe MAJEUR : structure proche du JSON donné précédemment
 #-------------------------------------------------------------------------------
 
 const GRAPH_MAJOR = {
 	"I": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -24,7 +26,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"ii": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["5", "6", "65"],
 		"next": [
@@ -39,7 +41,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"iii": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -51,7 +53,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"IV": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -67,7 +69,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"V": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "major",
 		"suggested_inversions": ["5", "7", "65", "43"],
 		"next": [
@@ -80,7 +82,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"vi": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -93,7 +95,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"viio": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "major",
 		"suggested_inversions": ["6", "65", "7"],
 		"next": [
@@ -105,7 +107,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"I64": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "major",
 		"suggested_inversions": ["64"],
 		"next": [
@@ -115,7 +117,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"N6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": ["6"],
 		"next": [
@@ -125,7 +127,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"It+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -136,7 +138,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Fr+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -147,7 +149,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Ger+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -159,7 +161,7 @@ const GRAPH_MAJOR = {
 
 	# Sixtes augmentées "inversées" (#4 à la basse)
 	"It+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -168,7 +170,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Fr+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -177,7 +179,7 @@ const GRAPH_MAJOR = {
 	},
 
 	"Ger+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "major",
 		"suggested_inversions": [],
 		"next": [
@@ -192,7 +194,7 @@ const GRAPH_MAJOR = {
 
 const GRAPH_MINOR = {
 	"i": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -207,7 +209,7 @@ const GRAPH_MINOR = {
 	},
 
 	"iio": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -222,7 +224,7 @@ const GRAPH_MINOR = {
 	},
 
 	"III": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -234,7 +236,7 @@ const GRAPH_MINOR = {
 	},
 
 	"iv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -250,7 +252,7 @@ const GRAPH_MINOR = {
 	},
 
 	"V": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["5", "7", "65", "43"],
 		"next": [
@@ -263,7 +265,7 @@ const GRAPH_MINOR = {
 	},
 
 	"VI": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5", "6"],
 		"next": [
@@ -276,7 +278,7 @@ const GRAPH_MINOR = {
 	},
 
 	"VII": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["5"],
 		"next": [
@@ -288,7 +290,7 @@ const GRAPH_MINOR = {
 	},
 
 	"viio": {
-		"function": "D",
+		"harmonic_function": "D",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["6", "65", "7"],
 		"next": [
@@ -300,7 +302,7 @@ const GRAPH_MINOR = {
 	},
 
 	"i64": {
-		"function": "T",
+		"harmonic_function": "T",
 		"scale": "minor",
 		"suggested_inversions": ["64"],
 		"next": [
@@ -310,7 +312,7 @@ const GRAPH_MINOR = {
 	},
 
 	"N6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": ["6"],
 		"next": [
@@ -320,7 +322,7 @@ const GRAPH_MINOR = {
 	},
 
 	"It+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -331,7 +333,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Fr+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -342,7 +344,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Ger+6": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -353,7 +355,7 @@ const GRAPH_MINOR = {
 	},
 
 	"It+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -362,7 +364,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Fr+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -371,7 +373,7 @@ const GRAPH_MINOR = {
 	},
 
 	"Ger+6inv": {
-		"function": "PD",
+		"harmonic_function": "PD",
 		"scale": "harmonic_minor",
 		"suggested_inversions": [],
 		"next": [
@@ -383,6 +385,11 @@ const GRAPH_MINOR = {
 func _init():
 	pass
 
+func _randi(max_val: int) -> int:
+	if rng != null:
+		return rng.randi() % max_val
+	return randi() % max_val
+
 #-------------------------------------------------------------------------------
 # API principale
 #-------------------------------------------------------------------------------
@@ -390,53 +397,51 @@ func _init():
 
 func get_next_degree(d:Degree, deceptive = false) -> Degree:
 
-	var seventh = false
+	var realization = [1, 3, 5]
 	if d.realization.size() > 3:
-		seventh = true
-		 
+		realization = [1, 3, 5, 7]
+
 	var state = {
-	"degree": d.degree_number,
-	"mode": d.key.scale_name,
-	"inversion": d.inversion,
-	"seventh": seventh,
-	"type": d.kind,
-	"deceptive": deceptive
-	}	
-	
+		"degree_number": d.degree_number,
+		"scale_name": d.key.scale_name,
+		"inversion": d.inversion,
+		"realization": realization,
+		"kind": d.kind,
+		"deceptive": deceptive,
+		"root_midi": d.key.root_midi
+	}
+
 	var state_retour = get_next_chord(state)
-	
-	
+
+
 	#LogBus.debug(TAG,JSON.print(state_retour))
-	
+
 	var next_degree:Degree = Degree.new()
 	var new_key:HarmonicKey = d.key.clone()
-	new_key.scale_name = state_retour["mode"]
+	new_key.scale_name = state_retour["scale_name"]
 	next_degree.key = new_key
-	next_degree.degree_number = state_retour["degree"]
+	next_degree.degree_number = state_retour["degree_number"]
 	next_degree.inversion = state_retour["inversion"]
-	next_degree.kind = state_retour["type"]
-	if state_retour.seventh :
-		next_degree.realization = [1 ,3, 5, 7]
-	else :
-		
-		next_degree.realization = [1 ,3, 5]
+	next_degree.kind = state_retour["kind"]
+	next_degree.realization = state_retour["realization"]
 	next_degree.length_beats = d.length_beats
-	
+	next_degree.set_harmonic_function(state_retour["harmonic_function"])
+
 	return next_degree
 	
 
 func get_next_chord(current_state: Dictionary) -> Dictionary:
 	var degree_key = _state_to_degree_key(current_state)
 	var graph = _select_graph_for_state(current_state)
-	
+
 	if not graph.has(degree_key):
 		# fallback : repartir de la tonique si label inconnu
-		var mode = String(current_state.get("mode", "major"))
-		if mode == "major":
+		var scale_name = String(current_state.get("scale_name", "major"))
+		if scale_name == "major":
 			degree_key = "I"
 		else:
 			degree_key = "i"
-	
+
 	var node = graph.get(degree_key, {})
 	var next_list = node.get("next", [])
 	
@@ -478,10 +483,10 @@ func generate_progression(start_state: Dictionary, length: int) -> Array:
 #-------------------------------------------------------------------------------
 
 func _select_graph_for_state(state: Dictionary) -> Dictionary:
-	var mode = String(state.get("mode", "major"))
-	if mode == "major":
+	var scale_name = String(state.get("scale_name", "major"))
+	if scale_name == "major":
 		return GRAPH_MAJOR
-	if mode == "minor" or mode == "harmonic_minor" or mode == "melodic_minor":
+	if scale_name == "minor" or scale_name == "harmonic_minor" or scale_name == "melodic_minor":
 		return GRAPH_MINOR
 	return GRAPH_MAJOR
 
@@ -491,7 +496,7 @@ func _select_graph_for_state(state: Dictionary) -> Dictionary:
 
 func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, current_state: Dictionary) -> Array:
 	var result = []
-	var current_function = String(current_node.get("function", "T"))
+	var current_harmonic_function = String(current_node.get("harmonic_function", "T"))
 	var current_inversion = int(current_state.get("inversion", 0))
 	
 	for edge in next_list:
@@ -501,7 +506,7 @@ func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, cur
 		if is_aug_or_nap:
 			# Règle simple : ces accords sont pris surtout après une fonction PD
 			# et plutôt pas depuis des 2èmes renversements bizarres.
-			if current_function != "PD" and current_function != "T":
+			if current_harmonic_function != "PD" and current_harmonic_function != "T":
 				continue
 			if current_inversion > 1:
 				continue
@@ -515,34 +520,56 @@ func _filter_next_for_aug_sixths(next_list: Array, current_node: Dictionary, cur
 
 func _filter_next_for_deceptive(next_list: Array, current_node: Dictionary, current_state: Dictionary) -> Array:
 	var deceptive = current_state.get("deceptive", false)
-	if not deceptive:
+	var current_harmonic_function = String(current_node.get("harmonic_function", ""))
+
+	# Seulement applicable quand on est sur une fonction dominante
+	if current_harmonic_function != "D":
 		return next_list
-	
-	var current_function = String(current_node.get("function", ""))
-	if current_function != "D":
-		return next_list
-	
-	var mode = String(current_state.get("mode", "major"))
-	var deceptive_targets = []
-	if mode == "major":
-		deceptive_targets.append("vi")
-	else:
-		deceptive_targets.append("VI")
-	
-	var filtered = []
-	for edge in next_list:
-		var deg = String(edge.get("degree", ""))
-		var j = 0
-		while j < deceptive_targets.size():
-			if deg == deceptive_targets[j]:
+
+	if deceptive:
+		# deceptive = true: éviter I/i en position fondamentale (inversion 0)
+		# mais permettre I/i en premier renversement (inversion 1)
+		var filtered = []
+		for edge in next_list:
+			var deg = String(edge.get("degree", ""))
+			if deg == "I" or deg == "i":
+				# Créer une copie avec preferred_inversions filtré (exclure "5")
+				var new_preferred = []
+				var orig_preferred = edge.get("preferred_inversions", [])
+				for inv in orig_preferred:
+					if String(inv) != "5":
+						new_preferred.append(inv)
+				if new_preferred.size() > 0:
+					var new_edge = edge.duplicate()
+					new_edge["preferred_inversions"] = new_preferred
+					filtered.append(new_edge)
+				# Si pas d'inversions restantes, on exclut l'edge
+			else:
 				filtered.append(edge)
-				break
-			j += 1
-	
-	if filtered.empty():
+		if filtered.empty():
+			return next_list
+		return filtered
+	else:
+		# deceptive = false: forcer I/i en position fondamentale si possible
+		var tonic_edges = []
+		for edge in next_list:
+			var deg = String(edge.get("degree", ""))
+			if deg == "I" or deg == "i":
+				var orig_preferred = edge.get("preferred_inversions", [])
+				# Vérifier si "5" est dans les preferred_inversions
+				var has_root_pos = false
+				for inv in orig_preferred:
+					if String(inv) == "5":
+						has_root_pos = true
+						break
+				if has_root_pos:
+					# Créer une copie avec seulement "5" comme preferred_inversion
+					var new_edge = edge.duplicate()
+					new_edge["preferred_inversions"] = ["5"]
+					tonic_edges.append(new_edge)
+		if tonic_edges.size() > 0:
+			return tonic_edges
 		return next_list
-	
-	return filtered
 
 #-------------------------------------------------------------------------------
 # Tirage pondéré
@@ -556,7 +583,7 @@ func _pick_weighted_edge(next_list: Array) -> Dictionary:
 	if total_weight <= 0:
 		return next_list[0]
 	
-	var r = randi() % total_weight
+	var r = _randi(total_weight)
 	var acc = 0
 	for edge in next_list:
 		acc += int(edge.get("weight", 1))
@@ -570,210 +597,214 @@ func _pick_weighted_edge(next_list: Array) -> Dictionary:
 #-------------------------------------------------------------------------------
 
 func _state_to_degree_key(state: Dictionary) -> String:
-	var t = String(state.get("type", "diatonic"))
-	var degree = int(state.get("degree", 1))
+	var kind = String(state.get("kind", "diatonic"))
+	var degree_number = int(state.get("degree_number", 1))
 	var inv = int(state.get("inversion", 0))
-	var seventh = state.get("seventh", false)
-	var mode = String(state.get("mode", "major"))
-	
+	var realization = state.get("realization", [1, 3, 5])
+	var scale_name = String(state.get("scale_name", "major"))
+
 	# Types spéciaux d'abord
-	if t == "cad64":
-		if mode == "major":
+	if kind == "cad64":
+		if scale_name == "major":
 			return "I64"
 		else:
 			return "i64"
-	
-	if t == "N6":
+
+	if kind == "N6":
 		return "N6"
-	if t == "It+6":
+	if kind == "It+6":
 		return "It+6"
-	if t == "Fr+6":
+	if kind == "Fr+6":
 		return "Fr+6"
-	if t == "Ger+6":
+	if kind == "Ger+6":
 		return "Ger+6"
-	if t == "It+6inv":
+	if kind == "It+6inv":
 		return "It+6inv"
-	if t == "Fr+6inv":
+	if kind == "Fr+6inv":
 		return "Fr+6inv"
-	if t == "Ger+6inv":
+	if kind == "Ger+6inv":
 		return "Ger+6inv"
-	
+
 	var deg_label = ""
-	
-	if mode == "major":
-		if degree == 1:
+
+	if scale_name == "major":
+		if degree_number == 1:
 			deg_label = "I"
-		elif degree == 2:
+		elif degree_number == 2:
 			deg_label = "ii"
-		elif degree == 3:
+		elif degree_number == 3:
 			deg_label = "iii"
-		elif degree == 4:
+		elif degree_number == 4:
 			deg_label = "IV"
-		elif degree == 5:
+		elif degree_number == 5:
 			deg_label = "V"
-		elif degree == 6:
+		elif degree_number == 6:
 			deg_label = "vi"
-		elif degree == 7:
+		elif degree_number == 7:
 			deg_label = "viio"
 	else:
-		if degree == 1:
+		if degree_number == 1:
 			deg_label = "i"
-		elif degree == 2:
+		elif degree_number == 2:
 			deg_label = "iio"
-		elif degree == 3:
+		elif degree_number == 3:
 			deg_label = "III"
-		elif degree == 4:
+		elif degree_number == 4:
 			deg_label = "iv"
-		elif degree == 5:
+		elif degree_number == 5:
 			deg_label = "V"
-		elif degree == 6:
+		elif degree_number == 6:
 			deg_label = "VI"
-		elif degree == 7:
+		elif degree_number == 7:
 			deg_label = "VII"
-	
+
 	# La 7e est gérée par le code d'inversion, pas dans la clé de graphe
 	# On encode seulement les renversements les plus "typiques" si besoin.
 	# Ici, on garde le label de base ("V", "I", etc.).
 	return deg_label
 
 func _degree_key_to_state(degree_key: String, node: Dictionary, edge: Dictionary, from_state: Dictionary) -> Dictionary:
-	var result_mode = ""
+	var result_scale_name = ""
 	if node.has("scale"):
-		result_mode = String(node.get("scale"))
+		result_scale_name = String(node.get("scale"))
 	else:
-		result_mode = String(from_state.get("mode", "major"))
-	
+		result_scale_name = String(from_state.get("scale_name", "major"))
+
+	var harmonic_function = String(node.get("harmonic_function", "T"))
+
 	var state = {
-		"degree": 1,
-		"mode": result_mode,
+		"degree_number": 1,
+		"scale_name": result_scale_name,
 		"inversion": 0,
-		"seventh": false,
-		"type": "diatonic"
+		"realization": [1, 3, 5],
+		"kind": "diatonic",
+		"root_midi": from_state.get("root_midi", 0),
+		"harmonic_function": harmonic_function
 	}
-	
+
 	# Types spéciaux (N6, +6, cad64)
 	if degree_key == "I64" or degree_key == "i64":
-		state["type"] = "cad64"
-		state["degree"] = 1
+		state["kind"] = "cad64"
+		state["degree_number"] = 1
 		state["inversion"] = 2
-		state["seventh"] = false
+		state["realization"] = [1, 3, 5]
 		return state
-	
+
 	if degree_key == "N6":
-		state["type"] = "N6"
-		state["degree"] = 2
+		state["kind"] = "N6"
+		state["degree_number"] = 2
 		state["inversion"] = 1
-		state["seventh"] = false
+		state["realization"] = [1, 3, 5]
 		return state
-	
+
 	if degree_key.begins_with("It+6"):
-		state["degree"] = 4
-		state["seventh"] = false
+		state["degree_number"] = 4
+		state["realization"] = [1, 3, 5]
 		if degree_key == "It+6inv":
-			state["type"] = "It+6inv"
+			state["kind"] = "It+6inv"
 			state["inversion"] = 1
 		else:
-			state["type"] = "It+6"
+			state["kind"] = "It+6"
 			state["inversion"] = 0
 		return state
-	
+
 	if degree_key.begins_with("Fr+6"):
-		state["degree"] = 4
-		state["seventh"] = false
+		state["degree_number"] = 4
+		state["realization"] = [1, 3, 5]
 		if degree_key == "Fr+6inv":
-			state["type"] = "Fr+6inv"
+			state["kind"] = "Fr+6inv"
 			state["inversion"] = 1
 		else:
-			state["type"] = "Fr+6"
+			state["kind"] = "Fr+6"
 			state["inversion"] = 0
 		return state
-	
+
 	if degree_key.begins_with("Ger+6"):
-		state["degree"] = 4
-		state["seventh"] = false
+		state["degree_number"] = 4
+		state["realization"] = [1, 3, 5]
 		if degree_key == "Ger+6inv":
-			state["type"] = "Ger+6inv"
+			state["kind"] = "Ger+6inv"
 			state["inversion"] = 1
 		else:
-			state["type"] = "Ger+6"
+			state["kind"] = "Ger+6"
 			state["inversion"] = 0
 		return state
-	
+
 	# Accord diatonique
-	state["type"] = "diatonic"
-	
+	state["kind"] = "diatonic"
+
 	# Choix de l'inversion / 7e à partir des preferred_inversions ou des suggested_inversions
 	var inv_code = ""
 	var preferred = edge.get("preferred_inversions", [])
 	if preferred.size() > 0:
-		var idx = int(randi() % preferred.size())
+		var idx = _randi(preferred.size())
 		inv_code = String(preferred[idx])
 	else:
 		var sug = node.get("suggested_inversions", [])
 		if sug.size() > 0:
-			var idx2 = int(randi() % sug.size())
+			var idx2 = _randi(sug.size())
 			inv_code = String(sug[idx2])
-	
+
 	if inv_code == "":
 		inv_code = "5"
-	
+
 	var inversion = 0
-	var seventh = false
-	
+	var realization = [1, 3, 5]
+
 	if inv_code == "5":
 		inversion = 0
-		seventh = false
+		realization = [1, 3, 5]
 	elif inv_code == "6":
 		inversion = 1
-		seventh = false
+		realization = [1, 3, 5]
 	elif inv_code == "64":
 		inversion = 2
-		seventh = false
+		realization = [1, 3, 5]
 	elif inv_code == "7":
 		inversion = 0
-		seventh = true
+		realization = [1, 3, 5, 7]
 	elif inv_code == "65":
 		inversion = 1
-		seventh = true
+		realization = [1, 3, 5, 7]
 	elif inv_code == "43":
 		inversion = 2
-		seventh = true
+		realization = [1, 3, 5, 7]
 	elif inv_code == "42":
 		inversion = 3
-		seventh = true
-	
+		realization = [1, 3, 5, 7]
+
 	state["inversion"] = inversion
-	state["seventh"] = seventh
-	
+	state["realization"] = realization
+
 	# Mapping clé -> degré
 	var base = degree_key
-	
+
 	if base == "I":
-		state["degree"] = 1
+		state["degree_number"] = 1
 	elif base == "ii":
-		state["degree"] = 2
+		state["degree_number"] = 2
 	elif base == "iii":
-		state["degree"] = 3
+		state["degree_number"] = 3
 	elif base == "IV":
-		state["degree"] = 4
+		state["degree_number"] = 4
 	elif base == "V":
-		state["degree"] = 5
+		state["degree_number"] = 5
 	elif base == "vi":
-		state["degree"] = 6
+		state["degree_number"] = 6
 	elif base == "viio":
-		state["degree"] = 7
+		state["degree_number"] = 7
 	elif base == "i":
-		state["degree"] = 1
+		state["degree_number"] = 1
 	elif base == "iio":
-		state["degree"] = 2
+		state["degree_number"] = 2
 	elif base == "III":
-		state["degree"] = 3
+		state["degree_number"] = 3
 	elif base == "iv":
-		state["degree"] = 4
+		state["degree_number"] = 4
 	elif base == "VI":
-		state["degree"] = 6
+		state["degree_number"] = 6
 	elif base == "VII":
-		state["degree"] = 7
-	
+		state["degree_number"] = 7
+
 	# Le mode reste celui du nœud (permet la modal mixture et l'utilisation explicite de harmonic_minor)
 	return state
