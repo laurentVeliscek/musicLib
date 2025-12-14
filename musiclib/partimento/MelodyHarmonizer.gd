@@ -159,7 +159,7 @@ func _find_best_harmonizations(melody_degrees: Array, options: Dictionary) -> Ar
 	for candidate in first_candidates:
 		beams.append({
 			"path": [candidate],
-			"score": candidate.get("_search_score", 0)
+			"score": candidate.get_meta("_search_score", 0)
 		})
 
 	# Parcourir le reste de la mélodie
@@ -185,7 +185,7 @@ func _find_best_harmonizations(melody_degrees: Array, options: Dictionary) -> Ar
 				var transition_score = _score_transition(prev_chord, candidate)
 				var new_path = beam.path.duplicate()
 				new_path.append(candidate)
-				var new_score = beam.score + candidate.get("_search_score", 0) + transition_score
+				var new_score = beam.score + candidate.get_meta("_search_score", 0) + transition_score
 
 				new_beams.append({
 					"path": new_path,
@@ -243,7 +243,7 @@ func _get_chord_candidates(note_info: Dictionary, prev_chord, position: int, tot
 		if alteration != 0:
 			score += _chromatic_score(candidate, alteration, degree)
 
-		candidate.set("_search_score", score)
+		candidate.set_meta("_search_score", score)
 		candidates.append(candidate)
 
 	# Ajouter des dominantes secondaires si autorisé et note altérée
@@ -292,7 +292,7 @@ func _get_secondary_dominant_candidates(note_info: Dictionary) -> Array:
 		secondary_v._secondary_roman_spelling = "V/" + _degree_to_roman(target_degree)
 		secondary_v.harmonic_function = "D"
 		secondary_v.realization = [1, 3, 5]
-		secondary_v.set("_search_score", 30)  # Score élevé pour les secondaires appropriées
+		secondary_v.set_meta("_search_score", 30)  # Score élevé pour les secondaires appropriées
 
 		candidates.append(secondary_v)
 
