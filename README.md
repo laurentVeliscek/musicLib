@@ -48,14 +48,7 @@ Keys may also be modal or exotic; each mode contains 7 notes, and therefore 7 de
 **List of available modes:**
 
 ```
-[ionian, dorian, phrygian, lydian, mixolydian, aeolian, locrian,
- major, minor, harmonic_minor, locrian_n6, ionian_#5, ukrainian_dorian,
- phrygian_dominant, lydian_#2, ultralocrian, melodic_minor, dorian_b2,
- lydian_#5, overtone, hindu, half_diminished, altered, harmonic_major,
- double_harmonic, double_harmonic_major, byzantine, gypsy_major,
- hungarian_major, hungarian_minor, gypsy_minor, neapolitan_major,
- neapolitan_minor, enigmatic, persian, major_locrian, leading_whole_tone,
- romanian_major]
+[ionian, dorian, phrygian, lydian, mixolydian, aeolian, locrian, major, minor, harmonic_minor, locrian_n6, ionian_#5, ukrainian_dorian, phrygian_dominant, lydian_#2, ultralocrian, melodic_minor, dorian_b2, lydian_#5, overtone, hindu, half_diminished, altered, harmonic_major, gypsy_major, hungarian_major, gypsy_minor, neapolitan_major, neapolitan_minor, enigmatic, persian, major_locrian, leading_whole_tone, romanian_major, augmented_heptatonic]
 ```
 
 ### Instantiating a HarmonicKey
