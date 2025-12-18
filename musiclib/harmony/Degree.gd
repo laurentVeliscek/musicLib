@@ -128,9 +128,9 @@ func clone()-> Degree:
 	d.velocity = velocity
 	d.key = key
 	d.degree_number = degree_number
-	d.realization = realization
+	d.realization = realization.duplicate()
 	d.kind = kind
-	d._alterations = _alterations
+	d._alterations = _alterations.duplicate(true)
 	d.inversion = inversion
 	d.length_beats = length_beats
 	d.harmonic_function = harmonic_function
@@ -345,7 +345,7 @@ func _get_alterations():
 
 func to_string() -> String:
 	var degree_roman = key.roman_triad(degree_number)
-	var txt = "Degree: " + degree_roman + " of key: " + key.to_string()
+	var txt = "Degree: " + degree_roman + " of key: " + key.to_string() + " (" + str(degree_number) + ")" 
 	txt += ", Duration: "+str(length_beats)+ " beats"
 	txt += ", harmonic function: "+harmonic_function + "\n"
 	
@@ -434,7 +434,7 @@ func set_degree_number(d:int=1):
 		d = 1 + (d % 21)
 	# harmonic_function
 	var d_mod = 1 + ((d - 1) %7)
-	if kind == "diatonic" :
+	if kind == "diatonic" or  kind == "melodic":
 		if d_mod == 1 or d_mod == 6 or d_mod == 3:
 			harmonic_function = "T"
 		elif d_mod == 5 or d_mod == 7 :
@@ -453,12 +453,9 @@ func get_degree_number():
 func set_realization(arr:Array):
 	if arr.empty() or arr == null:
 		LogBus.error("Degree","set_realization with an empty or null array !")
-	elif (1 in arr) == false :
-		LogBus.error("Degree","set_realization is missing 1 !")
-		print(str(arr))
 		
 	else :
-		if arr.size() == 3 or arr.size() == 4:
+		if arr.size() == 3 or arr.size() == 4 or arr.size() == 1:
 			realization = arr
 			return
 		else: LogBus.error(TAG,"set_realization -> bad length, arr = " + str(arr))	
@@ -481,7 +478,8 @@ func set_kind(k:String):
 			"Fr+6Inv": set_aug6_Fr_inv()
 			"Ger+6Inv": set_aug6_Ger_inv()
 			"N6": set_N6()
-			
+		if k == "melodic":
+			set_melodic()
 	else:
 		LogBus.error("Degree","set_kind of unknown kind ! -> "+ k)
 	
@@ -605,9 +603,8 @@ func set_add11():
 	degree_number = n
 
 func set_melodic():
-	realization = [1]
 	kind = "melodic"
-
+	
 # C'est le premier degré de la tonalité majeure un 1/2 ton au dessus	
 func set_cad64():
 	reset()
@@ -790,7 +787,7 @@ func get_jazz_chord() -> String :
 	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
 	var gc_array = []
 	var basePitch =  key.degree_midi(degree_number) % 12 + get_chord_alteration(1)
-	var root_name = keys[basePitch]
+	var root_name = keys[basePitch%12]
 	var triton_root_name = keys[(basePitch + 6) %12]
 	var backdoor_root_name = keys[(basePitch + 3) %12]
 	var chord_name = ""
@@ -971,12 +968,12 @@ func get_roman_numeral() -> String:
 	if _is_secondary:
 		suffixe_secondary = "/"
 	
-
+	
 				
 	if kind == "N6" or kind == "It+6" or kind == "Fr+6" or kind == "Ger+6" or kind == "It+6inv" or kind == "Fr+6inv" or kind == "Ger+6inv" or kind == "cad64":
 		return kind  + suffixe_secondary
 
-	elif  kind == "diatonic" or kind == "sus2" or kind == "sus4" :
+	elif  kind == "diatonic" or kind == "melodic" or kind == "sus2" or kind == "sus4" :
 		
 		var sus = ""
 		if kind =="sus2":
@@ -986,8 +983,7 @@ func get_roman_numeral() -> String:
 		
 
 		
-		if realization.size() == 3 :
-
+		if realization.size() == 3 or realization == [1]:
 			return triad_string_with_alter() + chiffrage + sus + suffixe_secondary
 		elif realization.size() == 4 :
 			
@@ -1029,30 +1025,23 @@ func degre_dans_la_tonalite(degre_dans_l_accord):
 # -> application de l'inversion
 func get_chord_midi() -> Array:
 	
-	#if override_chord_midi != [] :
-	#	return override_chord_midi
-	
-#	if kind == "N6":
-#		var midi_pitches = [] 
-#		for n in realization:
-#		# n est le degre dans l'accord 
-#			var degre_dans_l_accord = n
-#			var degre_dans_la_tonalite = 1 + (degree_number + degre_dans_l_accord -2) 
-#			var m = key.degree_midi(degre_dans_la_tonalite)
-#			m += get_key_alteration(1 + ((degre_dans_la_tonalite + 6) % 7))
-#			m += _octave*12
-#			midi_pitches.append(m)
-#		# on gere les inversions
-#		for i in range(0,inversion) :
-#			midi_pitches = _renverse_midi_chord_array(midi_pitches,1)
-#
-#		return midi_pitches
+
 	
 
 	if realization.size() == 0 :
 			LogBus.warn("Degree","get_chord_midi: empty realization")
 			return []
 			
+	if kind == "melodic":
+		if realization.size() != 1:
+			LogBus.error(TAG,"get_chord_midi -> REALIZATION: "  + str(realization))
+		var degre_dans_l_accord = realization[0]
+		var degre_dans_la_tonalite = degree_number + degre_dans_l_accord -1
+		var m = key.degree_midi(degre_dans_la_tonalite)
+		m += get_key_alteration(degre_dans_la_tonalite % 7)
+		m += _octave*12
+		return[m]
+		
 	var midi_pitches = []
 	
 	for n in realization:
