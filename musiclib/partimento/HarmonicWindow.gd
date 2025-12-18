@@ -381,7 +381,7 @@ func create_melodic_degree(midi: int, chord_degree: int, chord_realization: Arra
 	chord_realization: [1,3,5] ou [1,3,5,7]
 
 	Retourne: un Degree avec kind="melodic", degree_number=chord_degree,
-	          realization=[position_dans_accord], et altérations si nécessaire
+			  realization=[position_dans_accord], et altérations si nécessaire
 	"""
 	var d = Degree.new()
 	d.key = key.clone() if key != null and key.has_method("clone") else key
@@ -522,7 +522,13 @@ func to_dict() -> Dictionary:
 	}
 
 func clone() -> HarmonicWindow:
-	var w = HarmonicWindow.new(start_beat, window_size, key)
+	# !!! Do not use new() -> cyclic reference
+	#var w = HarmonicWindow.new(start_beat, window_size, key) # cyclic reference
+	var w = get_script().new()	#fix to avoid cyclic reference
+#	
+	w.start_beat = start_beat
+	w.window_size = window_size
+	w.key = key.clone()
 	w.window_index = window_index
 	w.notes = notes.duplicate(true)
 	w.downbeat_notes = downbeat_notes.duplicate(true)
