@@ -108,12 +108,6 @@ Roman Numeral: ii°, jazz chord: Edim, midi: [64, 67, 70] -> [E4, G4, A#4]
 d.length_beats = 4       # whole note
 ```
 
-### • Velocity (velocity of the midi notes)
-
-```gdscript
-d.velocity = 90
-```
-
 ### • Realization
 
 The chord tones to include:
@@ -174,7 +168,7 @@ There's a special kind of Degree : "melodic"
 This Degree is to be used for "monophonic" melodic Degrees.
 You can set the melody note referenced to the current chord, has a degree of this chord
 
-Example: the melody note is the third of the IV Degree in key F major
+Example: the melody note is the third of the VI Degree in key F major
 
 ```
 	var hk:HarmonicKey = HarmonicKey.new()
@@ -183,6 +177,7 @@ Example: the melody note is the third of the IV Degree in key F major
 	var d:Degree = Degree.new()
 	d.key = hk
 	d.degree_number= 4		# = Bb
+	print(d.to_string())
 	d.set_melodic()
 	d.realization = [3]		# -> D
 		
@@ -239,21 +234,12 @@ var tr:Track = Track.new()
 tr.add_degree(2, d)   # place on beat 3 (time 0 = beat 1)
 ```
 
-The time position isn't embedded in the Degree object (it is set when the degree is added to a Track)
-But that you can easily get an array of the degrees from a track with their position using 
-**track.get_degrees_with_start()**
+Velocity:
 
+```gdscript
+d.velocity = 90
 ```
-func get_degrees_with_start()->Array:
-	var arr = []
-	for e in events:
-		if e.has("degree"):
-			var d_dic = {}
-			d_dic["degree"] = e["degree"]
-			d_dic["start"] = e["start"]
-			arr.append(d_dic)
-	return arr
-```
+
 ---
 
 ## Song Object
