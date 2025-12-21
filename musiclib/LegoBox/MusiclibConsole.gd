@@ -13,6 +13,8 @@ func _ready():
 	
 func clear():
 	text = ""
+	visible_characters = -1 
+	yield(get_tree(), "idle_frame")
 
 func export_to_file():
 	MusicLabGlobals.save_text_to_disk(text,"console.txt")

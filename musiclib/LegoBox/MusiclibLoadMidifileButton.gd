@@ -1,7 +1,7 @@
 extends Button
 class_name MusiclibLoadMidifileButton
 
-signal midi_loaded(bytes)
+signal midi_loaded(bytes,file_name)
 signal midi_load_failed(error_text)
 
 export(int) var max_midi_size_bytes = 10485760 # 10 MB
@@ -115,7 +115,9 @@ func _on_file_selected(path):
 	var bytes = _load_and_validate_midi(path)
 	if bytes == null:
 		return
-	emit_signal("midi_loaded", bytes)
+	var file_name = path.get_file()
+	
+	emit_signal("midi_loaded", bytes,file_name)
 
 func _on_popup_hide():
 	if dialog_selected:

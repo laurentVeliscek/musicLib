@@ -541,6 +541,16 @@ func _write_chunk(id: String, data: PoolByteArray) -> PoolByteArray:
 
 
 
+func get_tracks_number(midi_bytes: PoolByteArray) -> int :
+	var rd = _Reader.new(midi_bytes)
+	var header = _read_header(rd)
+	if header == null:
+		return 0
+	if header.ntrks != null:
+		return header.ntrks
+	else:
+		return 0
+
 func analyse_midi_file(midi_bytes: PoolByteArray) -> String:
 	var rd = _Reader.new(midi_bytes)
 	var header = _read_header(rd)

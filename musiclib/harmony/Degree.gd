@@ -67,13 +67,11 @@ var inversion:int = 0 setget set_inversion, get_inversion
 var length_beats:float = 4 setget set_length_beats, get_length_beats
 # func -> fonction harmonique "T" "PD" "D" "?"
 var harmonic_function:String ="T" setget set_harmonic_function, get_harmonic_function
-# plan_data pour stocker les infos du générateur
-#var plan_data:Dictionary  = {} setget set_plan_data, get_plan_data
 
 # variable _comment non affichée
 # Pour que le code de progression editor puisse tagger des degrés
 # ni vu ni connu...
-var _comment = ""
+var _comment:Dictionary = {}
 
 # adaptateur progressionGenerators
 #jazz_chord
@@ -90,7 +88,6 @@ var _is_secondary:bool = false
 # si kind "sus2" ou kind "sus4" -> sus = "sus2" ou "sus4"
 #var sus:String = ""
 
-var _secondary_roman_spelling = ""
 
 # right click current satb 
 var satb:Array= [] 
@@ -134,8 +131,6 @@ func clone()-> Degree:
 	d.inversion = inversion
 	d.length_beats = length_beats
 	d.harmonic_function = harmonic_function
-	#d.plan_data = plan_data
-	d._secondary_roman_spelling = _secondary_roman_spelling
 	d.override_jazz_chord = override_jazz_chord
 	d.override_chord_midi = override_chord_midi
 	d._octave = _octave
@@ -151,7 +146,7 @@ func clone()-> Degree:
 	# String comment
 	d.comment = comment
 	d.chord_voicing_index = chord_voicing_index
-	d._comment = _comment
+	d._comment = _comment.duplicate(true)
 	return d
 	
 	
@@ -182,10 +177,7 @@ func to_dict() -> Dictionary:
 	d["length_beats"] = length_beats
 	d["harmonic_function"] = harmonic_function
 	
-	# Données du générateur / plan
-	# Si tu es sûr que plan_data ne contient que des types simples,
-	# tu peux décommenter la ligne suivante.
-	# d["plan_data"] = plan_data.duplicate()
+
 	
 	# Overrides éventuels
 	d["override_jazz_chord"] = override_jazz_chord
@@ -194,7 +186,6 @@ func to_dict() -> Dictionary:
 	# Contexte de hauteur / secondaire
 	d["octave"] = _octave
 	d["is_secondary"] = _is_secondary
-	d["secondary_roman_spelling"] = _secondary_roman_spelling
 	
 	# SATB + structures associées
 	d["satb"] = satb.duplicate(true)
@@ -204,7 +195,7 @@ func to_dict() -> Dictionary:
 	
 	# Commentaire texte
 	d["comment"] = comment
-	d["_comment"] = _comment
+	d["_comment"] = _comment.duplicate(true)
 	d["chord_voicing_index"] = chord_voicing_index
 	
 	return d
@@ -272,11 +263,6 @@ func from_dict(data:Dictionary) -> Degree:
 	if data.has("enharmonic_string"):
 		d.enharmonic_string = str(data["enharmonic_string"])
 	
-	# Données du générateur / plan (optionnel)
-	if data.has("plan_data"):
-		var pd = data["plan_data"]
-		if typeof(pd) == TYPE_DICTIONARY:
-			d.set_plan_data(pd.duplicate())
 	
 	# Overrides éventuels
 	if data.has("override_jazz_chord"):
@@ -293,10 +279,7 @@ func from_dict(data:Dictionary) -> Degree:
 	
 	if data.has("is_secondary"):
 		d._is_secondary = bool(data["is_secondary"])
-	
-	if data.has("secondary_roman_spelling"):
-		d._secondary_roman_spelling = str(data["secondary_roman_spelling"])
-	
+		
 	# SATB + structures associées
 	if data.has("satb"):
 		var s = data["satb"]
@@ -322,7 +305,10 @@ func from_dict(data:Dictionary) -> Degree:
 		# Commentaire texte
 
 	if data.has("_comment"):
-		d.comment = str(data["_comment"])
+		var c = data["_comment"]
+		if typeof(c) == TYPE_DICTIONARY:
+			d._comment = c.duplicate(true)
+		
 		
 	# Commentaire texte
 	if data.has("chord_voicing_index"):
@@ -392,7 +378,10 @@ func to_string() -> String:
 #	txt += ", Guitar chords number: "+ str(gcs_number)	
 	# comment
 	if comment != "":
-		txt += "\n\n-> "+ comment
+		txt += "\n\n comment -> "+ comment
+	
+	if _comment.size() > 0 :
+		txt += "\n\n _comment -> "+ str(JSON.print(_comment,"\t"))
 	
 	return txt
 
@@ -467,7 +456,7 @@ func get_realization():
 
 func set_kind(k:String):
 	# bérifie que le kind existe bien
-	var kinds = ["melodic","diatonic","secondary","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
+	var kinds = ["melodic","diatonic","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 	if kinds.has(k):
 		kind = k
 		match kind:
@@ -541,17 +530,7 @@ func set_harmonic_function(f:String = "?"):
 func get_harmonic_function() -> String:
 	return harmonic_function
 	
-#func set_plan_data(pd:Dictionary) :
-#	plan_data = pd
-#
-#func get_plan_data():
-#	return plan_data
-#
-## Convertit plan_data en texte
-#func get_plan_data_JSON() -> String:
-#	var PDText = JSON.print(plan_data, "\t")
-#	return PDText
-	
+
 ####################### Methodes #################
 
 

@@ -47,7 +47,37 @@ const ALL_MODES = {
 }
 
 
-func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10) -> Array:
+func _get_note_midi(n: Dictionary, verbose: bool = false) -> int:
+	if n.has("midi"):
+		return int(n["midi"])
+	if n.has("pitch"):
+		if verbose:
+			print_debug("Key_Guess: fallback 'pitch' -> 'midi'")
+		return int(n["pitch"])
+	return -1
+
+
+func _get_note_start(n: Dictionary, verbose: bool = false) -> float:
+	if n.has("start"):
+		return float(n["start"])
+	if n.has("time"):
+		if verbose:
+			print_debug("Key_Guess: fallback 'time' -> 'start'")
+		return float(n["time"])
+	return 0.0
+
+
+func _get_note_length_beats(n: Dictionary, verbose: bool = false) -> float:
+	if n.has("length_beats"):
+		return float(n["length_beats"])
+	if n.has("duration"):
+		if verbose:
+			print_debug("Key_Guess: fallback 'duration' -> 'length_beats'")
+		return float(n["duration"])
+	return 0.0
+
+
+func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10, verbose: bool = false) -> Array:
 	var results = []
 	
 	if notes.empty():
@@ -57,7 +87,7 @@ func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10) ->
 	if not tonal_only:
 		modes = ALL_MODES
 	
-	var note_weights = _compute_note_weights(notes)
+	var note_weights = _compute_note_weights(notes, verbose)
 	var total_weight = 0.0
 	
 	for w in note_weights.values():
@@ -66,7 +96,10 @@ func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10) ->
 	if total_weight == 0.0:
 		return results
 	
-	var first_pc = int(notes[0]["pitch"]) % 12
+	var first_midi = _get_note_midi(notes[0], verbose)
+	var first_pc = -1
+	if first_midi >= 0:
+		first_pc = first_midi % 12
 	
 	for mode_name in modes.keys():
 		var intervals = modes[mode_name]
@@ -78,8 +111,8 @@ func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10) ->
 				score += 0.05
 			
 			results.append({
-				"mode": mode_name,
-				"root": root,
+				"scale_name": mode_name,
+				"root_midi": root,
 				"score": score
 			})
 	
@@ -91,25 +124,23 @@ func guess_keys(notes: Array, tonal_only: bool = true, max_results: int = 10) ->
 	return results
 
 
-func _compute_note_weights(notes: Array) -> Dictionary:
+func _compute_note_weights(notes: Array, verbose: bool = false) -> Dictionary:
 	var weights = {}
 	
 	for n in notes:
-		if not n.has("pitch"):
+		var midi = _get_note_midi(n, verbose)
+		var length_beats = _get_note_length_beats(n, verbose)
+		if midi < 0:
 			continue
-		if not n.has("duration"):
+		if length_beats <= 0.0:
 			continue
 		
-		var pc = int(n["pitch"]) % 12
-		var duration = float(n["duration"])
-		
-		if duration <= 0.0:
-			continue
+		var pc = midi % 12
 		
 		if not weights.has(pc):
 			weights[pc] = 0.0
 		
-		weights[pc] += duration
+		weights[pc] += length_beats
 	
 	return weights
 
@@ -149,18 +180,18 @@ func guess_keys_windowed(notes: Array, window_size: float, step: float = 0.0, to
 			print_debug("Key_Guess.guess_keys_windowed: step <= 0, fallback step=", step)
 	
 	var sorted_notes = notes.duplicate()
-	sorted_notes.sort_custom(self, "_sort_notes_by_time")
+	sorted_notes.sort_custom(self, "_sort_notes_by_start")
 	
-	var t_min = _get_notes_time_min(sorted_notes)
-	var t_max = _get_notes_time_max(sorted_notes)
+	var t_min = _get_notes_start_min(sorted_notes, verbose)
+	var t_max = _get_notes_start_max(sorted_notes, verbose)
 	
 	var t = t_min
 	while t < t_max:
 		var t0 = t
 		var t1 = t + window_size
 		
-		var first_pc = _first_pitch_class_in_window(sorted_notes, t0, t1)
-		var note_weights = _compute_note_weights_in_window(sorted_notes, t0, t1)
+		var first_pc = _first_pitch_class_in_window(sorted_notes, t0, t1, verbose)
+		var note_weights = _compute_note_weights_in_window(sorted_notes, t0, t1, verbose)
 		var total_weight = 0.0
 		for w in note_weights.values():
 			total_weight += w
@@ -308,23 +339,20 @@ func _score_all_keys(note_weights: Dictionary, total_weight: float, tonal_only: 
 	return results
 
 
-func _compute_note_weights_in_window(notes: Array, t0: float, t1: float) -> Dictionary:
+func _compute_note_weights_in_window(notes: Array, t0: float, t1: float, verbose: bool = false) -> Dictionary:
 	var weights = {}
 	
 	for n in notes:
-		if not n.has("pitch"):
+		var midi = _get_note_midi(n, verbose)
+		var start = _get_note_start(n, verbose)
+		var length_beats = _get_note_length_beats(n, verbose)
+		
+		if midi < 0:
 			continue
-		if not n.has("duration"):
-			continue
-		if not n.has("time"):
+		if length_beats <= 0.0:
 			continue
 		
-		var start = float(n["time"])
-		var dur = float(n["duration"])
-		if dur <= 0.0:
-			continue
-		
-		var endt = start + dur
+		var endt = start + length_beats
 		
 		var overlap_start = start
 		if overlap_start < t0:
@@ -338,7 +366,7 @@ func _compute_note_weights_in_window(notes: Array, t0: float, t1: float) -> Dict
 		if overlap <= 0.0:
 			continue
 		
-		var pc = int(n["pitch"]) % 12
+		var pc = midi % 12
 		if not weights.has(pc):
 			weights[pc] = 0.0
 		weights[pc] += overlap
@@ -346,39 +374,50 @@ func _compute_note_weights_in_window(notes: Array, t0: float, t1: float) -> Dict
 	return weights
 
 
-func _first_pitch_class_in_window(notes: Array, t0: float, t1: float) -> int:
+func _first_pitch_class_in_window(notes: Array, t0: float, t1: float, verbose: bool = false) -> int:
 	for n in notes:
-		if not n.has("pitch"):
+		var midi = _get_note_midi(n, verbose)
+		var start = _get_note_start(n, verbose)
+		var length_beats = _get_note_length_beats(n, verbose)
+		
+		if midi < 0:
 			continue
-		if not n.has("time"):
-			continue
-		if not n.has("duration"):
+		if length_beats <= 0.0:
 			continue
 		
-		var start = float(n["time"])
-		var dur = float(n["duration"])
-		if dur <= 0.0:
-			continue
-		
-		var endt = start + dur
+		var endt = start + length_beats
 		if endt <= t0:
 			continue
 		if start >= t1:
 			continue
 		
-		return int(n["pitch"]) % 12
+		return midi % 12
 	
 	return -1
 
 
-func _get_notes_time_min(notes: Array) -> float:
+func _get_notes_start_min(notes: Array, verbose: bool = false) -> float:
 	var tmin = 0.0
 	var first = true
 	
 	for n in notes:
-		if not n.has("time"):
+		var has_start = false
+		if n.has("start"):
+			has_start = true
+		elif n.has("time"):
+			has_start = true
+			if verbose:
+				print_debug("Key_Guess: fallback 'time' -> 'start'")
+		
+		if not has_start:
 			continue
-		var t = float(n["time"])
+		
+		var t = 0.0
+		if n.has("start"):
+			t = float(n["start"])
+		else:
+			t = float(n["time"])
+		
 		if first:
 			tmin = t
 			first = false
@@ -389,16 +428,47 @@ func _get_notes_time_min(notes: Array) -> float:
 	return tmin
 
 
-func _get_notes_time_max(notes: Array) -> float:
+func _get_notes_start_max(notes: Array, verbose: bool = false) -> float:
 	var tmax = 0.0
 	var first = true
 	
 	for n in notes:
-		if not n.has("time"):
+		var has_start = false
+		var has_len = false
+		
+		if n.has("start"):
+			has_start = true
+		elif n.has("time"):
+			has_start = true
+			if verbose:
+				print_debug("Key_Guess: fallback 'time' -> 'start'")
+		
+		if n.has("length_beats"):
+			has_len = true
+		elif n.has("duration"):
+			has_len = true
+			if verbose:
+				print_debug("Key_Guess: fallback 'duration' -> 'length_beats'")
+		
+		if not has_start:
 			continue
-		if not n.has("duration"):
+		if not has_len:
 			continue
-		var t = float(n["time"]) + float(n["duration"])
+		
+		var start = 0.0
+		if n.has("start"):
+			start = float(n["start"])
+		else:
+			start = float(n["time"])
+		
+		var length_beats = 0.0
+		if n.has("length_beats"):
+			length_beats = float(n["length_beats"])
+		else:
+			length_beats = float(n["duration"])
+		
+		var t = start + length_beats
+		
 		if first:
 			tmax = t
 			first = false
@@ -409,9 +479,25 @@ func _get_notes_time_max(notes: Array) -> float:
 	return tmax
 
 
-func _sort_notes_by_time(a: Dictionary, b: Dictionary) -> bool:
-	if not a.has("time"):
+func _sort_notes_by_start(a: Dictionary, b: Dictionary) -> bool:
+	var a_has = a.has("start") or a.has("time")
+	var b_has = b.has("start") or b.has("time")
+	
+	if not a_has:
 		return true
-	if not b.has("time"):
+	if not b_has:
 		return false
-	return float(a["time"]) < float(b["time"])
+	
+	var at = 0.0
+	if a.has("start"):
+		at = float(a["start"])
+	else:
+		at = float(a["time"])
+	
+	var bt = 0.0
+	if b.has("start"):
+		bt = float(b["start"])
+	else:
+		bt = float(b["time"])
+	
+	return at < bt
