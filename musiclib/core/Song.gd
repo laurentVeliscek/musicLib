@@ -25,15 +25,6 @@ var _entries: Array = []
 var guitar_player_scene_params:Dictionary = {}
 
 
-const PROGRESSION_TRACK_NAME:String= "Chord Progression"
-const SATB_TRACK_NAME:String= "SATB"
-const SATB_SOPRANO:String= "SATB Soprano"
-const SATB_ALTO:String= "SATB Alto"
-const SATB_TENOR:String= "SATB Tenor"
-const SATB_BASS:String= "SATB Bass"
-const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
-const MELODY_TRACK:String= "Melody"
-
 
 func clone() -> Song:
 	# ⚠️ factory locale pour éviter la self-référence en 3.x
