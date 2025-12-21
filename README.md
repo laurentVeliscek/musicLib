@@ -168,7 +168,7 @@ There's a special kind of Degree : "melodic"
 This Degree is to be used for "monophonic" melodic Degrees.
 You can set the melody note referenced to the current chord, has a degree of this chord
 
-Example: the melody note is the third of the VI Degree in key F major
+Example: the melody note is the third of the IV Degree in key F major
 
 ```
 	var hk:HarmonicKey = HarmonicKey.new()
