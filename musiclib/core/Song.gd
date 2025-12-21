@@ -32,7 +32,6 @@ const SATB_ALTO:String= "SATB Alto"
 const SATB_TENOR:String= "SATB Tenor"
 const SATB_BASS:String= "SATB Bass"
 const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
-const FRACTAL_TRACK:String= "fractal SATB"
 const MELODY_TRACK:String= "Melody"
 
 

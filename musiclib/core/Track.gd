@@ -2,7 +2,14 @@
 extends Reference
 class_name Track
 
-
+const PROGRESSION_TRACK_NAME:String= "Chord Progression"
+const SATB_TRACK_NAME:String= "SATB"
+const SATB_SOPRANO:String= "SATB Soprano"
+const SATB_ALTO:String= "SATB Alto"
+const SATB_TENOR:String= "SATB Tenor"
+const SATB_BASS:String= "SATB Bass"
+const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
+const MELODY_TRACK:String= "Melody"
 
 const TAG = "Track"
 # Nom facultatif de la piste
@@ -2078,13 +2085,25 @@ func multiply(n:int, clone:bool = false):
 				
 
 
-# retourne tous les degrés de la Tarck avec leur start
+# retourne tous les degrés de la Track avec leur start
 func get_degrees_with_start()->Array:
 	var arr = []
 	for e in events:
 		if e.has("degree"):
 			var d_dic = {}
 			d_dic["degree"] = e["degree"]
+			d_dic["start"] = e["start"]
+			arr.append(d_dic)
+	return arr
+		
+
+# retourne toutes les notes de la Track avec leur start
+func get_notes_with_start()->Array:
+	var arr = []
+	for e in events:
+		if e.has("note"):
+			var d_dic = {}
+			d_dic["note"] = e["note"]
 			d_dic["start"] = e["start"]
 			arr.append(d_dic)
 	return arr
