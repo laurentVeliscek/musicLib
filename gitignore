@@ -1,0 +1,3 @@
+# Ignorer tous les fichiers avec une extension
+*.zip
+*.bak
