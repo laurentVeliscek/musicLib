@@ -55,7 +55,7 @@ Keys may also be modal or exotic; each mode contains 7 notes, and therefore 7 de
 
 ```gdscript
 var myKey:HarmonicKey = HarmonicKey.new()
-myKey.root_midi = 2              # D
+myKey.root = 2              # D
 myKey.scale_name = "harmonic_minor"
 ```
 
@@ -155,12 +155,39 @@ Notice that secondary dominants are not a special kind and are set as diatonic c
 **List of recognized kinds:**
 
 ```
-["melodic","diatonic","secondary",
+["melodic","diatonic",
  "It+6","Fr+6","Ger+6","It+6inv","Fr+6inv","Ger+6inv",
  "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 ```
 
 *(“chrom.” is not yet implemented.)*
+
+
+There's a special kind of Degree : "melodic"
+
+This Degree is to be used for "monophonic" melodic Degrees.
+You can set the melody note referenced to the current chord, has a degree of this chord
+
+Example: the melody note is the third of the VI Degree in key F major
+
+```
+	var hk:HarmonicKey = HarmonicKey.new()
+	hk.scale_name = "major" # major key
+	hk.root = 5				# root if F
+	var d:Degree = Degree.new()
+	d.key = hk
+	d.degree_number= 4		# = Bb
+	print(d.to_string())
+	d.set_melodic()
+	d.realization = [3]		# -> D
+		
+	print(d.to_string())
+	#Degree: IV of key: F major (4), Duration: 4 beats, harmonic function: PD
+	#kind: melodic, realization: [3], inversion: 0
+	#Roman Numeral: ?, jazz chord: ?, midi: [74] -> [D5]
+
+```
+
 
 ---
 
@@ -187,6 +214,13 @@ A free text comment can be added:
 
 ```gdscript
 d.comment = "secondary dominant"
+```
+
+A free Dictionary _comment (with an underscore !) can be set:
+
+```gdscript
+	d._comment["is_secondary"]= true
+	d._comment["secondary_target_degree"]= 5
 ```
 
 ---
