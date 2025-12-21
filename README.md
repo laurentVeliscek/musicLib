@@ -108,6 +108,12 @@ Roman Numeral: ii°, jazz chord: Edim, midi: [64, 67, 70] -> [E4, G4, A#4]
 d.length_beats = 4       # whole note
 ```
 
+### • Velocity (velocity of the midi notes)
+
+```gdscript
+d.velocity = 90
+```
+
 ### • Realization
 
 The chord tones to include:
@@ -233,12 +239,21 @@ var tr:Track = Track.new()
 tr.add_degree(2, d)   # place on beat 3 (time 0 = beat 1)
 ```
 
-Velocity:
+The time position isn't embedded in the Degree object (it is set when the degree is added to a Track)
+But that you can easily get an array of the degrees from a track with their position using 
+**track.get_degrees_with_start()**
 
-```gdscript
-d.velocity = 90
 ```
-
+func get_degrees_with_start()->Array:
+	var arr = []
+	for e in events:
+		if e.has("degree"):
+			var d_dic = {}
+			d_dic["degree"] = e["degree"]
+			d_dic["start"] = e["start"]
+			arr.append(d_dic)
+	return arr
+```
 ---
 
 ## Song Object
