@@ -177,7 +177,6 @@ Example: the melody note is the third of the IV Degree in key F major
 	var d:Degree = Degree.new()
 	d.key = hk
 	d.degree_number= 4		# = Bb
-	print(d.to_string())
 	d.set_melodic()
 	d.realization = [3]		# -> D
 		
