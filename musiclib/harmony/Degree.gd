@@ -106,6 +106,8 @@ var satb_dictionary:Dictionary = {}
 
 var comment:String = ""
 
+var partimento_json:String = "" setget set_partimento_json, get_partimento_json
+
 var chord_voicing_index:int = 0
 
 
@@ -117,6 +119,12 @@ func set_velocity(v:int):
 	
 func get_velocity()-> int:
 	return velocity
+
+func set_partimento_json(txt:String):
+	partimento_json = str(txt)
+
+func get_partimento_json() -> String:
+	return partimento_json
 ########### CLONE ET TO STRING ##############
 
 func clone()-> Degree:
@@ -144,6 +152,7 @@ func clone()-> Degree:
 	d.satb_index = satb_index
 	
 	# String comment
+	d.partimento_json = partimento_json
 	d.comment = comment
 	d.chord_voicing_index = chord_voicing_index
 	d._comment = _comment.duplicate(true)
@@ -197,6 +206,7 @@ func to_dict() -> Dictionary:
 	d["comment"] = comment
 	d["_comment"] = _comment.duplicate(true)
 	d["chord_voicing_index"] = chord_voicing_index
+	d["partimento_json"] = partimento_json
 	
 	return d
 
@@ -313,6 +323,9 @@ func from_dict(data:Dictionary) -> Degree:
 	# Commentaire texte
 	if data.has("chord_voicing_index"):
 		d.chord_voicing_index = int(data["chord_voicing_index"])
+
+	if data.has("partimento_json"):
+		d.set_partimento_json(str(data["partimento_json"]))
 	
 	return d
 
