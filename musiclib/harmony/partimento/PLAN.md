@@ -44,6 +44,20 @@ Ce plan s'appuie sur la feuille de route fonctionnelle décrite dans `partimento
   - Réutiliser `ParallelChecker.gd` pour contrôler les mouvements parallèles.
   - Exposer des méthodes de génération de progressions compatibles avec `TonalProgressionHelper.gd` et `RockProgressionGenerator.gd` (ex. `PartimentoGenerator.generate_progression(pattern_name, key, options)` renvoyant `Track`).
 
+### 5. API publique (basse niveau → Track)
+- `PartimentoBassEvent` (objets immuables/serré) expose : `degree:int`, `alter:int`, `length_beats:float`, `beat:float`, `figures:Array`, `tags:Array`, `comment:String`, `meta:Dictionary`.
+- `PartimentoBassLine` :
+  - propriétés : `key:HarmonicKey`, `events:Array`, `time_signature:Dictionary` (`{"num":4,"den":4}`), `tempo_bpm:int` optionnel.
+  - helpers : `from_pattern(pattern_name, key, options={})`, `from_partimento_json(dic:Dictionary)`, `to_partimento_json()`, `get_window(idx, size)` pour la règle de l’octave.
+- `RuleOfTheOctaveBank` / `CadenceBank` / `PatternBank` : méthodes `lookup(degree, context)` et `get_pattern(name)` retournant des structures prêtes à convertir en `PartimentoBassLine`.
+- `RealizationEngine` :
+  - `realize(bass_line:PartimentoBassLine, options={}) -> PartimentoRealization` (avec options `style`, `allow_sevenths`, `voiceleading_mode`...).
+  - `realize_to_track(bass_line, options) -> Track` (raccourci qui appelle `to_track` sur la réalisation).
+- `PartimentoRealization` :
+  - propriétés : `degrees:Array` (instances de `Degree` annotées), `choices:Array` (chemin choisi dans le graphe), `debug:Array` (traces de règles appliquées).
+  - méthodes : `to_track(track_name="Partimento") -> Track`, `get_annotations() -> Dictionary`.
+- `PartimentoJsonCodec` : fonctions statiques `encode(bass_line|realization)` et `decode(dic)` qui valident le format `partimento_json`.
+
 ## Étapes d'implémentation (itératif)
 1. **Infrastructure & modèles** : créer les classes de base `PartimentoBassEvent`, `PartimentoBassLine`, `RealizationChoice`, `RealizationGraph`.
 2. **Rule of the Octave** : implémenter `RuleOfTheOctaveBank` avec tables minimales (majeur/mineur, asc./desc.). Fournir API de lookup par degré + contexte.
@@ -72,6 +86,34 @@ var options = {
 }
 var result:Track = engine.realize(bass, options)
 # result.degrees contient les Degree générés, annotés avec leur schéma/cadence
+```
+
+## Format `partimento_json` (v1)
+- racine : `{"format":"partimento_json","version":"1.0","key":{},"bass":[]}`.
+- `key` : dictionnaire conforme à `HarmonicKey.to_dict()` (`root_midi`, `scale_name`, altérations optionnelles).
+- `time_signature` (optionnel) : `{ "num":4, "den":4 }`, `tempo_bpm` (optionnel int).
+- `options` (optionnel) : `{ "style":"classical|galant|chromatic", "voiceleading_mode":"strict|lenient", "allow_sevenths":true }`.
+- `annotations` (optionnel) : `{ "schema":"romanesca", "cadence":"authentic" }`.
+- `bass` : tableau ordonné d’objets `{ "beat":0.0, "degree":1..7, "alter":-1|0|1, "length":1.0, "figures":["5","3"], "tags":["rule_of_octave:desc"], "comment":"pivot" }`.
+- `RealizationEngine` doit pouvoir :
+  - consommer directement ce format via `PartimentoJsonCodec.decode(...)` → `PartimentoBassLine`.
+  - exposer `PartimentoJsonCodec.encode(realization)` pour sérialiser une solution (`degrees`, `annotations`, `debug`).
+
+### Exemple `partimento_json`
+```json
+{
+  "format": "partimento_json",
+  "version": "1.0",
+  "key": {"root_midi": 0, "scale_name": "minor"},
+  "time_signature": {"num": 4, "den": 4},
+  "options": {"style": "classical", "voiceleading_mode": "strict", "allow_sevenths": true},
+  "annotations": {"schema": "romanesca", "cadence": "authentic"},
+  "bass": [
+    {"beat": 0.0, "degree": 1, "alter": 0, "length": 1.0, "figures": ["5", "3"], "tags": ["rot:desc"], "comment": "tonic"},
+    {"beat": 1.0, "degree": 7, "alter": -1, "length": 1.0, "figures": ["6", "5"], "tags": ["cadence:approach"], "comment": "leading tone"},
+    {"beat": 2.0, "degree": 1, "alter": 0, "length": 2.0, "figures": ["5", "3"], "tags": ["cadence:authentic"], "comment": "resolution"}
+  ]
+}
 ```
 
 ## Points de vigilance
