@@ -27,6 +27,10 @@ var adopt_program_channel: bool = true setget set_adopt_program_channel, get_ado
 # "note": Note  OU "degree": degree}
 var events: Array = []
 
+# Structure JSON optionnelle utilisée par le pipeline Partimento pour conserver
+# les informations d'analyse/réalisation.
+var partimento_json = null setget set_partimento_json, get_partimento_json
+
 var length_beats:float setget set_length_beats,get_length_beats
 
 
@@ -44,6 +48,12 @@ func clone() -> Track:
 		t.program_change = program_change.clone()
 	else:
 		t.program_change = program_change
+
+	# Données de partimento éventuelles
+	if typeof(partimento_json) in [TYPE_ARRAY, TYPE_DICTIONARY]:
+		t.partimento_json = partimento_json.duplicate(true)
+	else:
+		t.partimento_json = partimento_json
 	
 	# Events (deep-ish copy)
 	t.events = []
@@ -88,6 +98,13 @@ func to_dict() -> Dictionary:
 	
 	if program_change != null and typeof(program_change) == TYPE_OBJECT and program_change.has_method("to_dict"):
 		dic["program_change"] = program_change.to_dict()
+
+	# Données de partimento (optionnelles)
+	if partimento_json != null:
+		if typeof(partimento_json) in [TYPE_ARRAY, TYPE_DICTIONARY]:
+			dic["partimento_json"] = partimento_json.duplicate(true)
+		else:
+			dic["partimento_json"] = partimento_json
 	
 	# --- Events ---
 	var ev_array:Array = []
@@ -150,6 +167,14 @@ func from_dict(dic) -> Track:
 		t.program_change = dummy_pc.from_dict(pc_data)
 	else:
 		t.program_change = null
+
+	# Données de partimento éventuelles
+	if dic.has("partimento_json"):
+		var pj = dic.get("partimento_json", null)
+		if typeof(pj) in [TYPE_ARRAY, TYPE_DICTIONARY]:
+			t.partimento_json = pj.duplicate(true)
+		else:
+			t.partimento_json = pj
 	
 	# --- Events ---
 	t.events.clear()
@@ -270,6 +295,17 @@ func add_midiCC(start_beats: float, midiCC:MidiCC) -> int:
 	ev["MidiCC"] = midiCC
 	events.append(ev)
 	return events.size() - 1
+
+
+
+func set_partimento_json(data):
+	if typeof(data) in [TYPE_ARRAY, TYPE_DICTIONARY]:
+		partimento_json = data.duplicate(true)
+	else:
+		partimento_json = data
+
+func get_partimento_json():
+	return partimento_json
 
 
 
