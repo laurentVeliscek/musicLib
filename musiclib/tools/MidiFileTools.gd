@@ -541,6 +541,16 @@ func _write_chunk(id: String, data: PoolByteArray) -> PoolByteArray:
 
 
 
+func get_tracks_number(midi_bytes: PoolByteArray) -> int :
+	var rd = _Reader.new(midi_bytes)
+	var header = _read_header(rd)
+	if header == null:
+		return 0
+	if header.ntrks != null:
+		return header.ntrks
+	else:
+		return 0
+
 func analyse_midi_file(midi_bytes: PoolByteArray) -> String:
 	var rd = _Reader.new(midi_bytes)
 	var header = _read_header(rd)
@@ -826,6 +836,197 @@ func humanize_chords(midi_bytes: PoolByteArray, track_number: int = 0, min_delta
 
 
 # --- Helpers pour humanize_chords ---
+
+
+func clean_track_for_melody(bytes: PoolByteArray, track_number: int, quantize: float = 0.25) -> PoolByteArray:
+	# Nettoie une piste MIDI pour n'en garder qu'une mélodie monophonique et legato
+	# Étapes:
+	# 1) clean: supprime les notes dont la durée < quantize
+	# 2) quantize: quantize start & end sur la grille quantize
+	# 3) monofy: si plusieurs notes ont le même start, conserve la plus aiguë
+	# 4) legato: toutes les notes restantes deviennent strictement legato
+
+	if quantize < 0.0:
+		quantize = 0.0
+
+	# Lire header + pistes
+	var rd = _Reader.new(bytes)
+	var header = _read_header(rd)
+	if header == null:
+		push_error("MIDI invalide: en-tête MThd manquant ou corrompu")
+		return bytes
+
+	var tracks: Array = []
+	for i in range(header.ntrks):
+		var chunk = _read_chunk(rd)
+		if chunk == null or chunk.id != MTRK_MAGIC:
+			push_error("Chunk de piste manquant ou invalide à l'index %d" % i)
+			return bytes
+		tracks.append(chunk)
+
+	if track_number < 0 or track_number >= tracks.size():
+		push_error("track_number hors limites: %d" % track_number)
+		return bytes
+
+	# Parser la piste cible
+	var events: Array = _parse_track_events(tracks[track_number].data)
+	if events.size() == 0:
+		# Piste vide ou parse impossible
+		return bytes
+
+	# Marquer note_on / note_off + appariement
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind == "ch":
+			_mark_note_flags(ev)
+	_pair_notes(events)
+
+	# Calcul des ticks par noire (TPQN) pour convertir quantize (en temps) en ticks
+	var ticks_per_beat = _calc_ticks_per_beat(header, tracks)
+	var quantize_ticks = 0
+	if ticks_per_beat > 0 and quantize > 0.0:
+		quantize_ticks = int(round(float(ticks_per_beat) * quantize))
+		if quantize_ticks < 1:
+			quantize_ticks = 1
+
+	# Supprimer les notes non appariées (sécurité)
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind != "ch":
+			continue
+		if ev.is_note_on and ev.pair_index < 0:
+			ev.delete = true
+		elif ev.is_note_off and ev.pair_index < 0:
+			ev.delete = true
+
+	# 1) clean: supprimer les notes trop courtes (avant quantize)
+	if quantize_ticks > 0:
+		for i in range(events.size()):
+			var ev = events[i]
+			if ev.kind == "ch" and ev.is_note_on and not ev.delete and ev.pair_index >= 0:
+				var off_ev = events[ev.pair_index]
+				var dur = int(off_ev.abs_time) - int(ev.abs_time)
+				if dur < quantize_ticks:
+					ev.delete = true
+					off_ev.delete = true
+
+	# 2) quantize: quantize start & end des notes restantes
+	if quantize_ticks > 0:
+		for i in range(events.size()):
+			var ev = events[i]
+			if ev.kind == "ch" and ev.is_note_on and not ev.delete and ev.pair_index >= 0:
+				var off_ev = events[ev.pair_index]
+				if off_ev.delete:
+					continue
+
+				var start_ticks = int(ev.abs_time)
+				var end_ticks = int(off_ev.abs_time)
+
+				var q_start = int(round(float(start_ticks) / float(quantize_ticks))) * quantize_ticks
+				var q_end = int(round(float(end_ticks) / float(quantize_ticks))) * quantize_ticks
+
+				if q_end <= q_start:
+					q_end = q_start + quantize_ticks
+
+				ev.abs_time = q_start
+				off_ev.abs_time = q_end
+
+	# 3) monofy: si plusieurs notes partent au même temps, garder la plus aiguë
+	var by_start = {}
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind == "ch" and ev.is_note_on and not ev.delete and ev.pair_index >= 0:
+			var t = int(ev.abs_time)
+			if not by_start.has(t):
+				by_start[t] = []
+			by_start[t].append(i)
+
+	for t in by_start.keys():
+		var idxs: Array = by_start[t]
+		if idxs.size() <= 1:
+			continue
+
+		var best_idx = int(idxs[0])
+		var best_pitch = events[best_idx].pitch
+		var best_vel = events[best_idx].velocity
+
+		for k in range(1, idxs.size()):
+			var idx = int(idxs[k])
+			var p = events[idx].pitch
+			var v = events[idx].velocity
+			if p > best_pitch:
+				best_pitch = p
+				best_vel = v
+				best_idx = idx
+			elif p == best_pitch and v > best_vel:
+				best_vel = v
+				best_idx = idx
+
+		# Supprimer toutes les autres
+		for k in range(idxs.size()):
+			var idx2 = int(idxs[k])
+			if idx2 == best_idx:
+				continue
+			var ev2 = events[idx2]
+			ev2.delete = true
+			if ev2.pair_index >= 0:
+				events[ev2.pair_index].delete = true
+
+	# 4) legato: note_off = start de la note suivante (strictement)
+	var on_idxs: Array = []
+	for i in range(events.size()):
+		var ev = events[i]
+		if ev.kind == "ch" and ev.is_note_on and not ev.delete and ev.pair_index >= 0:
+			on_idxs.append(i)
+
+	_cmp_events_ref = events
+	on_idxs.sort_custom(self, "_cmp_idx_by_time_then_index")
+
+	for k in range(on_idxs.size() - 1):
+		var idx_on = int(on_idxs[k])
+		var idx_next = int(on_idxs[k + 1])
+		var ev_on = events[idx_on]
+		var ev_next = events[idx_next]
+		var off_idx = ev_on.pair_index
+		if off_idx < 0:
+			continue
+		var ev_off = events[off_idx]
+		if ev_off.delete:
+			continue
+
+		var next_start = int(ev_next.abs_time)
+		var min_off = int(ev_on.abs_time) + 1
+		if next_start < min_off:
+			next_start = min_off
+
+		ev_off.abs_time = next_start
+
+	# Dernière note: s'assurer d'une durée > 0
+	if on_idxs.size() > 0:
+		var last_on_idx = int(on_idxs[on_idxs.size() - 1])
+		var last_on = events[last_on_idx]
+		if last_on.pair_index >= 0:
+			var last_off = events[last_on.pair_index]
+			if not last_off.delete:
+				var min_last_off = int(last_on.abs_time) + 1
+				if last_off.abs_time < min_last_off:
+					if quantize_ticks > 0:
+						last_off.abs_time = int(last_on.abs_time) + quantize_ticks
+					else:
+						last_off.abs_time = min_last_off
+
+	# Reconstruire la piste
+	var new_track_bytes: PoolByteArray = _rebuild_track(events)
+
+	# Reconstruire le fichier complet
+	var out: PoolByteArray = PoolByteArray()
+	out.append_array(_write_mthd(header))
+	for i in range(tracks.size()):
+		if i == track_number:
+			out.append_array(_write_chunk(MTRK_MAGIC, new_track_bytes))
+		else:
+			out.append_array(_write_chunk(MTRK_MAGIC, tracks[i].data))
+	return out
 
 func _calc_ticks_per_beat(header: _Header, tracks: Array) -> int:
 	# TPQN directement si non-SMPTE

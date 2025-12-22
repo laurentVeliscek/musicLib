@@ -67,13 +67,11 @@ var inversion:int = 0 setget set_inversion, get_inversion
 var length_beats:float = 4 setget set_length_beats, get_length_beats
 # func -> fonction harmonique "T" "PD" "D" "?"
 var harmonic_function:String ="T" setget set_harmonic_function, get_harmonic_function
-# plan_data pour stocker les infos du générateur
-#var plan_data:Dictionary  = {} setget set_plan_data, get_plan_data
 
 # variable _comment non affichée
 # Pour que le code de progression editor puisse tagger des degrés
 # ni vu ni connu...
-var _comment = ""
+var _comment:Dictionary = {}
 
 # adaptateur progressionGenerators
 #jazz_chord
@@ -90,7 +88,6 @@ var _is_secondary:bool = false
 # si kind "sus2" ou kind "sus4" -> sus = "sus2" ou "sus4"
 #var sus:String = ""
 
-var _secondary_roman_spelling = ""
 
 # right click current satb 
 var satb:Array= [] 
@@ -109,6 +106,8 @@ var satb_dictionary:Dictionary = {}
 
 var comment:String = ""
 
+var partimento_json:String = "" setget set_partimento_json, get_partimento_json
+
 var chord_voicing_index:int = 0
 
 
@@ -120,6 +119,12 @@ func set_velocity(v:int):
 	
 func get_velocity()-> int:
 	return velocity
+
+func set_partimento_json(txt:String):
+	partimento_json = str(txt)
+
+func get_partimento_json() -> String:
+	return partimento_json
 ########### CLONE ET TO STRING ##############
 
 func clone()-> Degree:
@@ -128,14 +133,12 @@ func clone()-> Degree:
 	d.velocity = velocity
 	d.key = key
 	d.degree_number = degree_number
-	d.realization = realization
+	d.realization = realization.duplicate()
 	d.kind = kind
-	d._alterations = _alterations
+	d._alterations = _alterations.duplicate(true)
 	d.inversion = inversion
 	d.length_beats = length_beats
 	d.harmonic_function = harmonic_function
-	#d.plan_data = plan_data
-	d._secondary_roman_spelling = _secondary_roman_spelling
 	d.override_jazz_chord = override_jazz_chord
 	d.override_chord_midi = override_chord_midi
 	d._octave = _octave
@@ -149,9 +152,10 @@ func clone()-> Degree:
 	d.satb_index = satb_index
 	
 	# String comment
+	d.partimento_json = partimento_json
 	d.comment = comment
 	d.chord_voicing_index = chord_voicing_index
-	d._comment = _comment
+	d._comment = _comment.duplicate(true)
 	return d
 	
 	
@@ -182,10 +186,7 @@ func to_dict() -> Dictionary:
 	d["length_beats"] = length_beats
 	d["harmonic_function"] = harmonic_function
 	
-	# Données du générateur / plan
-	# Si tu es sûr que plan_data ne contient que des types simples,
-	# tu peux décommenter la ligne suivante.
-	# d["plan_data"] = plan_data.duplicate()
+
 	
 	# Overrides éventuels
 	d["override_jazz_chord"] = override_jazz_chord
@@ -194,7 +195,6 @@ func to_dict() -> Dictionary:
 	# Contexte de hauteur / secondaire
 	d["octave"] = _octave
 	d["is_secondary"] = _is_secondary
-	d["secondary_roman_spelling"] = _secondary_roman_spelling
 	
 	# SATB + structures associées
 	d["satb"] = satb.duplicate(true)
@@ -204,8 +204,9 @@ func to_dict() -> Dictionary:
 	
 	# Commentaire texte
 	d["comment"] = comment
-	d["_comment"] = _comment
+	d["_comment"] = _comment.duplicate(true)
 	d["chord_voicing_index"] = chord_voicing_index
+	d["partimento_json"] = partimento_json
 	
 	return d
 
@@ -272,11 +273,6 @@ func from_dict(data:Dictionary) -> Degree:
 	if data.has("enharmonic_string"):
 		d.enharmonic_string = str(data["enharmonic_string"])
 	
-	# Données du générateur / plan (optionnel)
-	if data.has("plan_data"):
-		var pd = data["plan_data"]
-		if typeof(pd) == TYPE_DICTIONARY:
-			d.set_plan_data(pd.duplicate())
 	
 	# Overrides éventuels
 	if data.has("override_jazz_chord"):
@@ -293,10 +289,7 @@ func from_dict(data:Dictionary) -> Degree:
 	
 	if data.has("is_secondary"):
 		d._is_secondary = bool(data["is_secondary"])
-	
-	if data.has("secondary_roman_spelling"):
-		d._secondary_roman_spelling = str(data["secondary_roman_spelling"])
-	
+		
 	# SATB + structures associées
 	if data.has("satb"):
 		var s = data["satb"]
@@ -322,11 +315,17 @@ func from_dict(data:Dictionary) -> Degree:
 		# Commentaire texte
 
 	if data.has("_comment"):
-		d.comment = str(data["_comment"])
+		var c = data["_comment"]
+		if typeof(c) == TYPE_DICTIONARY:
+			d._comment = c.duplicate(true)
+		
 		
 	# Commentaire texte
 	if data.has("chord_voicing_index"):
 		d.chord_voicing_index = int(data["chord_voicing_index"])
+
+	if data.has("partimento_json"):
+		d.set_partimento_json(str(data["partimento_json"]))
 	
 	return d
 
@@ -345,7 +344,7 @@ func _get_alterations():
 
 func to_string() -> String:
 	var degree_roman = key.roman_triad(degree_number)
-	var txt = "Degree: " + degree_roman + " of key: " + key.to_string()
+	var txt = "Degree: " + degree_roman + " of key: " + key.to_string() + " (" + str(degree_number) + ")" 
 	txt += ", Duration: "+str(length_beats)+ " beats"
 	txt += ", harmonic function: "+harmonic_function + "\n"
 	
@@ -392,7 +391,10 @@ func to_string() -> String:
 #	txt += ", Guitar chords number: "+ str(gcs_number)	
 	# comment
 	if comment != "":
-		txt += "\n\n-> "+ comment
+		txt += "\n\n comment -> "+ comment
+	
+	if _comment.size() > 0 :
+		txt += "\n\n _comment -> "+ str(JSON.print(_comment,"\t"))
 	
 	return txt
 
@@ -434,7 +436,7 @@ func set_degree_number(d:int=1):
 		d = 1 + (d % 21)
 	# harmonic_function
 	var d_mod = 1 + ((d - 1) %7)
-	if kind == "diatonic" :
+	if kind == "diatonic" or  kind == "melodic":
 		if d_mod == 1 or d_mod == 6 or d_mod == 3:
 			harmonic_function = "T"
 		elif d_mod == 5 or d_mod == 7 :
@@ -453,12 +455,9 @@ func get_degree_number():
 func set_realization(arr:Array):
 	if arr.empty() or arr == null:
 		LogBus.error("Degree","set_realization with an empty or null array !")
-	elif (1 in arr) == false :
-		LogBus.error("Degree","set_realization is missing 1 !")
-		print(str(arr))
 		
 	else :
-		if arr.size() == 3 or arr.size() == 4:
+		if arr.size() == 3 or arr.size() == 4 or arr.size() == 1:
 			realization = arr
 			return
 		else: LogBus.error(TAG,"set_realization -> bad length, arr = " + str(arr))	
@@ -470,7 +469,7 @@ func get_realization():
 
 func set_kind(k:String):
 	# bérifie que le kind existe bien
-	var kinds = ["melodic","diatonic","secondary","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
+	var kinds = ["melodic","diatonic","It+6","Fr+6","Ger+6", "It+6inv","Fr+6inv","Ger+6inv", "N6","chrom.","cad64","sus2","sus4","add9","add11"]
 	if kinds.has(k):
 		kind = k
 		match kind:
@@ -481,7 +480,8 @@ func set_kind(k:String):
 			"Fr+6Inv": set_aug6_Fr_inv()
 			"Ger+6Inv": set_aug6_Ger_inv()
 			"N6": set_N6()
-			
+		if k == "melodic":
+			set_melodic()
 	else:
 		LogBus.error("Degree","set_kind of unknown kind ! -> "+ k)
 	
@@ -543,17 +543,7 @@ func set_harmonic_function(f:String = "?"):
 func get_harmonic_function() -> String:
 	return harmonic_function
 	
-#func set_plan_data(pd:Dictionary) :
-#	plan_data = pd
-#
-#func get_plan_data():
-#	return plan_data
-#
-## Convertit plan_data en texte
-#func get_plan_data_JSON() -> String:
-#	var PDText = JSON.print(plan_data, "\t")
-#	return PDText
-	
+
 ####################### Methodes #################
 
 
@@ -605,9 +595,8 @@ func set_add11():
 	degree_number = n
 
 func set_melodic():
-	realization = [1]
 	kind = "melodic"
-
+	
 # C'est le premier degré de la tonalité majeure un 1/2 ton au dessus	
 func set_cad64():
 	reset()
@@ -790,7 +779,7 @@ func get_jazz_chord() -> String :
 	var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
 	var gc_array = []
 	var basePitch =  key.degree_midi(degree_number) % 12 + get_chord_alteration(1)
-	var root_name = keys[basePitch]
+	var root_name = keys[basePitch%12]
 	var triton_root_name = keys[(basePitch + 6) %12]
 	var backdoor_root_name = keys[(basePitch + 3) %12]
 	var chord_name = ""
@@ -971,12 +960,12 @@ func get_roman_numeral() -> String:
 	if _is_secondary:
 		suffixe_secondary = "/"
 	
-
+	
 				
 	if kind == "N6" or kind == "It+6" or kind == "Fr+6" or kind == "Ger+6" or kind == "It+6inv" or kind == "Fr+6inv" or kind == "Ger+6inv" or kind == "cad64":
 		return kind  + suffixe_secondary
 
-	elif  kind == "diatonic" or kind == "sus2" or kind == "sus4" :
+	elif  kind == "diatonic" or kind == "melodic" or kind == "sus2" or kind == "sus4" :
 		
 		var sus = ""
 		if kind =="sus2":
@@ -986,8 +975,7 @@ func get_roman_numeral() -> String:
 		
 
 		
-		if realization.size() == 3 :
-
+		if realization.size() == 3 or realization == [1]:
 			return triad_string_with_alter() + chiffrage + sus + suffixe_secondary
 		elif realization.size() == 4 :
 			
@@ -1029,30 +1017,23 @@ func degre_dans_la_tonalite(degre_dans_l_accord):
 # -> application de l'inversion
 func get_chord_midi() -> Array:
 	
-	#if override_chord_midi != [] :
-	#	return override_chord_midi
-	
-#	if kind == "N6":
-#		var midi_pitches = [] 
-#		for n in realization:
-#		# n est le degre dans l'accord 
-#			var degre_dans_l_accord = n
-#			var degre_dans_la_tonalite = 1 + (degree_number + degre_dans_l_accord -2) 
-#			var m = key.degree_midi(degre_dans_la_tonalite)
-#			m += get_key_alteration(1 + ((degre_dans_la_tonalite + 6) % 7))
-#			m += _octave*12
-#			midi_pitches.append(m)
-#		# on gere les inversions
-#		for i in range(0,inversion) :
-#			midi_pitches = _renverse_midi_chord_array(midi_pitches,1)
-#
-#		return midi_pitches
+
 	
 
 	if realization.size() == 0 :
 			LogBus.warn("Degree","get_chord_midi: empty realization")
 			return []
 			
+	if kind == "melodic":
+		if realization.size() != 1:
+			LogBus.error(TAG,"get_chord_midi -> REALIZATION: "  + str(realization))
+		var degre_dans_l_accord = realization[0]
+		var degre_dans_la_tonalite = degree_number + degre_dans_l_accord -1
+		var m = key.degree_midi(degre_dans_la_tonalite)
+		m += get_key_alteration(degre_dans_la_tonalite % 7)
+		m += _octave*12
+		return[m]
+		
 	var midi_pitches = []
 	
 	for n in realization:
