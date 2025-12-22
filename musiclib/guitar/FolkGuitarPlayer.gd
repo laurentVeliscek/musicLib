@@ -1239,7 +1239,7 @@ func _calculate_fret_from_midi(midi_pitch: int, string_idx: int) -> int:
 func generate_track(transpose:int = 0)-> Track:
 	var notes = generate()
 	var guitar_track:Track = Track.new()
-	guitar_track.name = Song.RYTHM_GUITAR_TRACK
+	guitar_track.name = Track.RYTHM_GUITAR_TRACK
 	
 	for n in notes:
 		var note:Note = Note.new()
