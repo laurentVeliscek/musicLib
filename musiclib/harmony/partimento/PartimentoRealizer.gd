@@ -28,31 +28,6 @@ const RO_TABLE = {
 }
 
 
-class PartimentoHarmonizedEvent:
-	var bass_event = null
-	var bass_degree:int = 1
-	var figure:String = ""
-	var mode_variant:String = ""
-	var alterations:Dictionary = {}
-	var cadence_locked:bool = false
-	var direction:String = DIR_ASC
-	var source_rule:String = ""
-
-	func _init(event_ref = null):
-		bass_event = event_ref
-
-	func to_dict() -> Dictionary:
-		return {
-			"degree": bass_degree,
-			"figure": figure,
-			"mode_variant": mode_variant,
-			"alterations": alterations,
-			"cadence_locked": cadence_locked,
-			"direction": direction,
-			"source_rule": source_rule
-		}
-
-
 func realize(basso_events: Array, tonic_key) -> Array:
 	var harmonized: Array = []
 	if basso_events == null:
@@ -90,14 +65,7 @@ func realize(basso_events: Array, tonic_key) -> Array:
 			alterations = cadence_override["alterations"]
 			mode_variant = cadence_override["variant"]
 
-		var event = PartimentoHarmonizedEvent.new(bass_event)
-		event.bass_degree = degree
-		event.figure = figure
-		event.mode_variant = mode_variant
-		event.alterations = alterations
-		event.cadence_locked = cadence_active
-		event.direction = direction
-		event.source_rule = rule["rule"]
+		var event = _build_event(bass_event, degree, figure, mode_variant, alterations, cadence_active, direction, rule["rule"])
 		harmonized.append(event)
 
 		var message = "RO " + direction + " deg " + str(degree) + " -> " + figure
@@ -113,6 +81,20 @@ func realize(basso_events: Array, tonic_key) -> Array:
 			cadence_window -= 1
 
 	return harmonized
+
+
+func _build_event(bass_event, degree: int, figure: String, mode_variant: String, alterations: Dictionary, cadence: bool, direction: String, source_rule: String) -> Dictionary:
+	return {
+		"__type": "PartimentoHarmonizedEvent",
+		"bass_event": bass_event,
+		"degree": degree,
+		"figure": figure,
+		"mode_variant": mode_variant,
+		"alterations": alterations,
+		"cadence_locked": cadence,
+		"direction": direction,
+		"source_rule": source_rule
+	}
 
 
 func _lookup_rule_of_octave(degree: int, direction: String) -> Dictionary:
