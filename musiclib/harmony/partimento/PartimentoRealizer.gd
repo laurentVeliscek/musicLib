@@ -102,11 +102,11 @@ func _lookup_rule_of_octave(degree: int, direction: String) -> Dictionary:
 	var table = RO_TABLE.get(dir, RO_TABLE[DIR_ASC])
 	var normalized = ((degree - 1) % 7) + 1
 	var figure = table.get(normalized, "5-3")
-	return {
-		"figure": figure,
-		"rule": dir == DIR_ASC ? "RO_ASC" : "RO_DESC"
-	}
-
+	
+	if dir == DIR_ASC:
+		return {"figure": figure,"rule":"RO_ASC"}
+	else:
+		return {"figure": figure,"rule":"RO_DESC"}
 
 func _mode_variant_for_degree(degree: int, direction: String, is_minor: bool) -> Dictionary:
 	var alterations: Dictionary = {}
