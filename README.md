@@ -224,7 +224,7 @@ A free Dictionary _comment (with an underscore !) can be set:
 ```
 
 
-A Degree has also a property Degree.partimento_json:String that is dedicated to store any data has a JSON encoded dictionary.
+A Degree has also a property **Degree.partimento_json:String** that is dedicated to store any data has a JSON encoded dictionary.
 This property can be used to store and restore partimento data (TAGS, status, any debug information...)  
 The content of this partimento_json property has to be defined by the partimento objects and methods.
 
@@ -244,6 +244,40 @@ Velocity:
 ```gdscript
 d.velocity = 90
 ```
+
+A track can contains Note and Degree objects 
+To add a note, use **func add_note(start_beats: float, note) -> int:**
+
+```gdscript
+
+var track_notes:Track = Track.new()
+var note_Do:Note = Note.new()
+note_Do.length_beats = 1
+note_Do.midi = 60
+track_notes.add_note(2,note_Do) # 2 is the position
+```
+To add a Degree, **func add_degree(start_beats: float, d: Degree, clone: bool = true, as_lyric: bool = false) -> void:**
+
+You can retrieve notes events from a track as events using **track.get_note_events()->Array:**
+
+```
+var notes_events_from_track_notes = track_notes.get_note_events()
+var first_note_event = notes_events_from_track_notes[0]
+var first_note_start =  first_note_event["start"]
+var first_note = first_note_event["note"]
+var first_note_length_beats = first_note.length_beats
+var first_note_midi = first_note.midi
+```
+
+You can retrieve Degree events from track as well using **track.get_degree_events()->Array:**
+```
+var degree_events_from_track = track.get_degree_events()
+var first_degree_event = degree_events_from_track[0]
+var first_degree_start =  first_degree_event["start"]
+var first_degree = first_degree_event["degree"]
+var first_degree_length_beats = first_degree.length_beats
+```
+
 
 ---
 
