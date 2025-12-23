@@ -2122,26 +2122,20 @@ func multiply(n:int, clone:bool = false):
 
 
 # retourne tous les degrés de la Track avec leur start
-func get_degrees_with_start()->Array:
+func get_degree_events()->Array:
 	var arr = []
 	for e in events:
 		if e.has("degree"):
-			var d_dic = {}
-			d_dic["degree"] = e["degree"]
-			d_dic["start"] = e["start"]
-			arr.append(d_dic)
+			arr.append(e)
 	return arr
 		
 
-# retourne toutes les notes de la Track avec leur start
-func get_notes_with_start()->Array:
+# retourne toutes les degres de la Track avec leur start
+func get_note_events()->Array:
 	var arr = []
 	for e in events:
 		if e.has("note"):
-			var d_dic = {}
-			d_dic["note"] = e["note"]
-			d_dic["start"] = e["start"]
-			arr.append(d_dic)
+			arr.append(e)
 	return arr
 		
 ## return a track with an inserted track at position				

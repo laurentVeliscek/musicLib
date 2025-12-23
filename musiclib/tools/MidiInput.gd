@@ -5,15 +5,39 @@ signal note_on(pitch, velocity, time_msec)
 
 const TAG = "MidiInput"
 
+var keys = ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"]
+
+onready var midi_player:MidiPlayer 
+
+
+onready var scene:Control = $"../.."
+onready var midi_status:Label = $midi_status_label
+onready var note_label:Label = $note_label
+onready var midi_label_animation:AnimationPlayer = $midi_status_label/AnimationPlayer
+var midi_in_enabled:bool = false setget set_midi_in_enabled, get_midi_in_enabled
 var last_midi_note = 60
 
+func set_midi_in_enabled(v:bool):
+	midi_in_enabled = v
+	visible = v
+	if v:
+		midi_label_animation.play("flashing_midi_in")
+	else:
+		midi_label_animation.stop()
+
+func get_midi_in_enabled()-> bool:
+	return midi_in_enabled
+	
 func _ready():
+	visible = midi_in_enabled
 	OS.open_midi_inputs()
 	var midi_inputs = OS.get_connected_midi_inputs()
 	print(TAG, " MIDI inputs: ", midi_inputs)
-
+	midi_player= MusicLabGlobals.midi_player
+	
+	
 func _input(event):
-	if event is InputEventMIDI:
+	if event is InputEventMIDI and midi_in_enabled:
 		accept_event()
 		var midi_event = event
 
@@ -23,18 +47,18 @@ func _input(event):
 				last_midi_note = midi_event.pitch
 
 				var timestamp_msec = OS.get_ticks_msec()
-
+				update_display(last_midi_note)
 				emit_signal(
 					"note_on",
 					midi_event.pitch,
 					midi_event.velocity,
 					timestamp_msec
 				)
-	elif event is InputEventKey:
+	elif event is InputEventKey and midi_in_enabled:
 		if  event.is_released():
 			return
-		if event.shift == false or  event.alt == false :
-			return
+#		if event.shift == false or  event.alt == false :
+#			return
 		var midi_pitch = null
 		match event.scancode:
 			KEY_Q: midi_pitch = 60
@@ -60,7 +84,7 @@ func _input(event):
 			
 		var timestamp_msec = OS.get_ticks_msec()
 		last_midi_note = midi_pitch
-
+		update_display(last_midi_note)
 		emit_signal(
 			"note_on",
 			midi_pitch,
@@ -69,3 +93,18 @@ func _input(event):
 		)
 		
 		
+func update_display(pitch):		
+	last_midi_note = pitch
+	note_label.text = keys[last_midi_note % 12]
+	# play note !
+	scene.rewind()
+	var note:Note = Note.new()
+	note.midi = pitch
+	note.length_beats = 1
+	var track:Track = Track.new()
+	track.add_note(0,note)
+	var midi_in_song:Song = Song.new()
+	midi_in_song.add_track(track)
+	midi_player.load_from_bytes(midi_in_song.get_midi_bytes_type1())
+	scene.anim_songTrack_view = false
+	midi_player.play()	

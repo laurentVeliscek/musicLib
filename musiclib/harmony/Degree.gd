@@ -391,10 +391,13 @@ func to_string() -> String:
 #	txt += ", Guitar chords number: "+ str(gcs_number)	
 	# comment
 	if comment != "":
-		txt += "\n\n comment -> "+ comment
+		txt += "\n\ncomment -> "+ comment
 	
 	if _comment.size() > 0 :
-		txt += "\n\n _comment -> "+ str(JSON.print(_comment,"\t"))
+		txt += "\n\n_comment -> "+ str(JSON.print(_comment,"\t"))
+		
+	if partimento_json != null  and partimento_json !="":
+		txt += "\n\npartimento_json -> "+ str(JSON.print(partimento_json,"\t"))
 	
 	return txt
 
