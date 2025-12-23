@@ -275,6 +275,12 @@ A **Song** aggregates tracks:
 var mySong:Song = Song.new()
 ```
 
+You can add or remove a track by its name :
+```gdscript
+var my_named_track:Track = mySong.get_track_by_name("the name of the track") # add a track
+mySong.remove_track_by_name(my_named_track.name) # remove this track
+```
+
 ### Time signature
 
 ```gdscript
