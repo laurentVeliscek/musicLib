@@ -19,7 +19,9 @@ func test_single_note_do():
 
 	# Créer la Song et la Track
 	var song = Song.new()
-	var melody_track = song.get_track_by_name("midi_melody")
+	var melody_track = Track.new()
+	melody_track.name = Track.MELODY_TRACK
+	song.add_track(melody_track)
 
 	# Ajouter un Do (MIDI 60)
 	var note = Note.new()
@@ -52,9 +54,11 @@ func test_single_note_do():
 func test_chromatic_note():
 	print("\n=== Test 2: Note Do# en Do majeur ===")
 
+	# Créer la Song et la Track
 	var song = Song.new()
-	var melody_track = song.get_track_by_name("midi_melody")
-
+	var melody_track = Track.new()
+	melody_track.name = Track.MELODY_TRACK
+	song.add_track(melody_track)
 	# Ajouter un Do# (MIDI 61)
 	var note = Note.new()
 	note.midi = 61
@@ -85,9 +89,11 @@ func test_chromatic_note():
 func test_melody_sequence():
 	print("\n=== Test 3: Séquence Do-Mi-Sol en Do majeur ===")
 
+	# Créer la Song et la Track
 	var song = Song.new()
-	var melody_track = song.get_track_by_name("midi_melody")
-
+	var melody_track = Track.new()
+	melody_track.name = Track.MELODY_TRACK
+	song.add_track(melody_track)
 	# Ajouter Do-Mi-Sol
 	var notes_midi = [60, 64, 67]
 	for i in range(notes_midi.size()):

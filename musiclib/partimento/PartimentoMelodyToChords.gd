@@ -23,7 +23,7 @@ func _init():
 # reference_key: HarmonicKey majeure de référence
 # track_name: Nom de la track de mélodie (défaut: "midi_melody")
 # Retourne: Array de Track (chaque Track = une solution possible)
-func convert_melody_to_solutions(song: Song, reference_key: HarmonicKey, track_name: String = "midi_melody") -> Array:
+func convert_melody_to_solutions(song: Song, reference_key: HarmonicKey, track_name: String = Track.MELODY_TRACK) -> Array:
 	# Récupérer la track de mélodie
 	var melody_track = song.get_track_by_name(track_name)
 	if melody_track == null:
@@ -49,7 +49,7 @@ func convert_melody_to_solutions(song: Song, reference_key: HarmonicKey, track_n
 # Convertit une mélodie et retourne uniquement les interprétations brutes
 # (sans générer le produit cartésien)
 # Utile pour l'inspection ou le traitement personnalisé
-func get_melody_interpretations(song: Song, reference_key: HarmonicKey, track_name: String = "midi_melody") -> Array:
+func get_melody_interpretations(song: Song, reference_key: HarmonicKey, track_name: String = Track.MELODY_TRACK) -> Array:
 	var melody_track = song.get_track_by_name(track_name)
 	if melody_track == null:
 		LogBus.debug(TAG, "Track '%s' non trouvée dans la Song" % track_name)

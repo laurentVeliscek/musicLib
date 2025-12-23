@@ -171,7 +171,12 @@ func _get_n6_scale_interpretations(note: Note, start: float, pitch_class: int) -
 			if chord_entry.has("original_key"):
 				partimento_data["original_key_root"] = chord_entry["original_key"].root_midi
 				partimento_data["original_key_scale"] = chord_entry["original_key"].scale_name
-
+			
+			################ DEBUG ##############
+			LogBus.debug(TAG,"_get_n6_scale_interpretations")
+			LogBus.debug(TAG,d.to_string())
+			#####################################
+			
 			d.partimento_json = JSON.print(partimento_data)
 			interpretations.append(d)
 
@@ -183,7 +188,7 @@ func _get_aug6_scale_interpretations(note: Note, start: float, pitch_class: int)
 	var interpretations: Array = []
 
 	for chord_entry in _catalog.get_catalog():
-		if chord_entry["kind"] not in ["It+6", "Fr+6", "Ger+6"]:
+		if  ["It+6", "Fr+6", "Ger+6"].has(chord_entry["kind"] ) == false:
 			continue
 
 		if not chord_entry.has("altered_scale_pitch_classes"):
@@ -193,7 +198,7 @@ func _get_aug6_scale_interpretations(note: Note, start: float, pitch_class: int)
 
 		# Vérifier si le pitch_class est dans la gamme altérée mais PAS dans l'accord
 		# (les notes de l'accord sont déjà gérées par _get_interpretations_for_note)
-		if pitch_class in altered_scale and pitch_class not in chord_entry["pitch_classes"]:
+		if  altered_scale.has(pitch_class) and  chord_entry["pitch_classes"].has(pitch_class)== false:
 			var scale_degree = altered_scale.find(pitch_class) + 1
 
 			var d = Degree.new()
@@ -212,6 +217,11 @@ func _get_aug6_scale_interpretations(note: Note, start: float, pitch_class: int)
 			d.realization = [scale_degree]
 			d.length_beats = note.length_beats
 
+			################ DEBUG ##############
+			LogBus.debug(TAG,"_get_aug6_scale_interpretations")
+			LogBus.debug(TAG,d.to_string())
+			#####################################
+			
 			var partimento_data = {
 				"start": start,
 				"original_midi": note.midi,
