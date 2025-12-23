@@ -223,6 +223,11 @@ A free Dictionary _comment (with an underscore !) can be set:
 	d._comment["secondary_target_degree"]= 5
 ```
 
+
+A Degree has also a property Degree.partimento_json:String that is dedicated to store any data has a JSON encoded dictionary.
+This property can be used to store and restore partimento data (TAGS, status, any debug information...)  
+The content of this partimento_json property has to be defined by the partimento objects and methods.
+
 ---
 
 ## Tracks
