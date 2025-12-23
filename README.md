@@ -232,29 +232,15 @@ The content of this partimento_json property has to be defined by the partimento
 
 ## Tracks
 
-Degrees can be placed into a **Track**:
-
-```gdscript
-var tr:Track = Track.new()
-tr.add_degree(2, d)   # place on beat 3 (time 0 = beat 1)
-```
-
-Velocity:
-
-```gdscript
-d.velocity = 90
-```
-
-A track can contains Note and Degree objects 
+A track can contain Note and Degree objects 
 To add a note, use **func add_note(start_beats: float, note) -> int:**
 
 ```gdscript
-
 var track_notes:Track = Track.new()
 var note_Do:Note = Note.new()
 note_Do.length_beats = 1
 note_Do.midi = 60
-track_notes.add_note(2,note_Do) # 2 is the position
+track_notes.add_note(2,note_Do) # 2 is the start position. In music, position 0 is beat 1, so if start = 2, the note is on the 3rd beat of measure 1
 ```
 To add a Degree, **func add_degree(start_beats: float, d: Degree, clone: bool = true, as_lyric: bool = false) -> void:**
 
