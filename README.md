@@ -264,6 +264,33 @@ var first_degree = first_degree_event["degree"]
 var first_degree_length_beats = first_degree.length_beats
 ```
 
+You can set a name for a Track :
+
+```
+var tr = Track.new()
+tr.name = "my track"
+```
+
+Some constants are set in Track.gd as preset names for the Track :
+
+```
+# in Track.gd
+
+const PROGRESSION_TRACK_NAME:String= "Chord Progression"
+const SATB_TRACK_NAME:String= "SATB"
+const SATB_SOPRANO:String= "SATB Soprano"
+const SATB_ALTO:String= "SATB Alto"
+const SATB_TENOR:String= "SATB Tenor"
+const SATB_BASS:String= "SATB Bass"
+const RYTHM_GUITAR_TRACK:String= "Rythm Guitar"
+const MELODY_TRACK:String= "Melody"
+```
+
+So you can use these preset names if needed :
+```
+var tr = Track.new()
+tr.name = Track.MELODY_TRACK
+```
 
 ---
 
