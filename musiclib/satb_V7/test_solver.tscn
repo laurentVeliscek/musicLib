@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/musiclib/satb_V7/godot_satb_client.gd" type="Script" id=1]
+[ext_resource path="res://addons/musiclib/satb_V7/test_solver.gd" type="Script" id=2]
+
+[node name="test_solver" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+
+[node name="satb_client" type="Node" parent="."]
+script = ExtResource( 1 )
