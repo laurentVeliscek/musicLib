@@ -34,7 +34,7 @@ var debug_mode = false
 var TAG = "MusicLabGlobals"
 var GuitarBase = GuitarChordDatabase.new()
 var modulationDatabase 
-
+var midi_inputs
 
 var midi_player
 # -------------------------------------------------------------------
@@ -53,12 +53,22 @@ func _ready():
 	match platform:
 		"OSX": key_command = 16777239
 		_: key_command = KEY_CONTROL
+		
+	if OS.has_feature("editor"):
+		debug_mode = true
 	
+	
+	# midi inputs
+	OS.open_midi_inputs()
+	midi_inputs = OS.get_connected_midi_inputs()
 	
 	current_song = load_autosaved_song()
 	rng.randomize()
 	MusicLabGlobals.setup_midi_player()
-	MusicLabGlobals.set_sound_Font(MusicLabGlobals.SOUND_FONT_MUSICLAB)
+	if debug_mode:
+		MusicLabGlobals.set_sound_Font(MusicLabGlobals.SOUND_FONT_MUSICLAB)
+	else:
+		MusicLabGlobals.set_sound_Font(MusicLabGlobals.SOUND_FONT_MUSICLAB)
 
 # -------------------------------------------------------------------
 #	SONG MANAGEMENT
@@ -457,7 +467,7 @@ func wait_one_frame(current_scene):
 	yield(current_scene.get_tree(), "idle_frame") 
 
 	
-func save_text_to_file(path:String, text:String) -> bool:
+func _save_text_to_file(path:String, text:String) -> bool:
 	var f = File.new()
 	var base_dir := path.get_base_dir()
 
@@ -476,3 +486,13 @@ func save_text_to_file(path:String, text:String) -> bool:
 	return true
 	
 	
+func save_text_to_disk(content: String, filename: String) -> void:
+	# Écrit dans le dossier utilisateur (persistance locale)
+	
+	var path = get_text_export_path(filename)
+	#var path = (filename)
+	
+	var ok = _save_text_to_file(path, content)
+	if ok:
+		set_user_setting(MusicLabGlobals.LAST_TEXT_DIR_KEY, path.get_base_dir())
+		LogBus.info(TAG,"console.txt saved to "+ path)
